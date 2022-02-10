@@ -37,6 +37,15 @@
       "@s2h/ui/avatar": [
         "libs/ui/src/avatar/index.ts"
       ],
+      "@s2h/ui/flex": [
+        "libs/ui/src/flex/index.ts"
+      ],
+      "@s2h/ui/spinner": [
+        "libs/ui/src/spinner/index.ts"
+      ],
+      "@s2h/ui/spacer": [
+        "libs/ui/src/spacer/index.ts"
+      ],
       "@s2h/utils/constants": [
         "libs/utils/constants/src/index.ts"
       ],

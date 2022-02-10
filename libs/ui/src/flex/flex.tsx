@@ -1,4 +1,3 @@
-import Box from "../box";
 import styled from "styled-components";
 
 export interface FlexProps {
@@ -6,15 +5,6 @@ export interface FlexProps {
 	align?: "center" | "flex-start" | "flex-end" | "baseline" | "stretch";
 	direction?: "row" | "column" | "column-reverse" | "row-reverse";
 }
-
-export interface SpacerProps {
-	minWidth?: number;
-}
-
-export const Spacer = styled( Box )<SpacerProps>`
-	flex: 1;
-	minWidth: ${ ( { minWidth } ) => minWidth || "unset" }
-`;
 
 const Flex = styled.div<FlexProps>`
 	display: flex;
