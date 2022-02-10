@@ -1,5 +1,4 @@
 import { Appearance, theme } from "../utils";
-import Flex from "../flex/flex";
 import styled, { keyframes } from "styled-components";
 
 export interface SpinnerProps {
@@ -16,7 +15,7 @@ const spinAnimation = keyframes`
   	}
 `;
 
-const SpinnerDiv = styled.div<SpinnerProps>`
+const Spinner = styled.div<SpinnerProps>`
 	border-style: solid;
 	display: inline-block;
 	width: ${ ( { size } ) => size === "large" ? "32px" : size === "small" ? "16px" : "24px" };
@@ -29,10 +28,4 @@ const SpinnerDiv = styled.div<SpinnerProps>`
 	animation: ${ spinAnimation } 1s cubic-bezier(0, 0, 0.2, 1) infinite;
 `;
 
-export default function Spinner( props: SpinnerProps ) {
-	return (
-		<Flex justify={ "center" } align={ "center" }>
-			<SpinnerDiv { ...props }/>
-		</Flex>
-	);
-}
+export default Spinner;

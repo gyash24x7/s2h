@@ -46,6 +46,9 @@
       "@s2h/ui/spacer": [
         "libs/ui/src/spacer/index.ts"
       ],
+      "@s2h/ui/stack": [
+        "libs/ui/src/stack/index.ts"
+      ],
       "@s2h/utils/constants": [
         "libs/utils/constants/src/index.ts"
       ],
