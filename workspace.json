@@ -2,10 +2,12 @@
   "version": 2,
   "projects": {
     "backend": "apps/backend",
+    "literature": "apps/literature",
     "prisma": "libs/prisma",
     "routers-app": "libs/routers/app",
     "routers-literature": "libs/routers/literature",
     "routers-users": "libs/routers/users",
+    "ui": "libs/ui",
     "utils-constants": "libs/utils/constants",
     "utils-deck": "libs/utils/deck",
     "utils-sendgrid": "libs/utils/sendgrid",

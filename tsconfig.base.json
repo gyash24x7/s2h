@@ -31,6 +31,9 @@
       "@s2h/routers/users": [
         "libs/routers/users/src/index.ts"
       ],
+      "@s2h/ui/box": [
+        "libs/ui/src/box/index.ts"
+      ],
       "@s2h/utils/constants": [
         "libs/utils/constants/src/index.ts"
       ],
