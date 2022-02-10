@@ -34,6 +34,9 @@
       "@s2h/ui/box": [
         "libs/ui/src/box/index.ts"
       ],
+      "@s2h/ui/avatar": [
+        "libs/ui/src/avatar/index.ts"
+      ],
       "@s2h/utils/constants": [
         "libs/utils/constants/src/index.ts"
       ],
