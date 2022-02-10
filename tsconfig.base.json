@@ -5,13 +5,14 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
     "lib": [
-      "es2017",
+      "es2020",
       "dom"
     ],
     "skipLibCheck": true,
@@ -20,6 +21,18 @@
     "paths": {
       "@s2h/prisma": [
         "libs/prisma/src/index.ts"
+      ],
+      "@s2h/utils/constants": [
+        "libs/utils/constants/src/index.ts"
+      ],
+      "@s2h/utils/deck": [
+        "libs/utils/deck/src/index.ts"
+      ],
+      "@s2h/utils/sendgrid": [
+        "libs/utils/sendgrid/src/index.ts"
+      ],
+      "@s2h/utils/trpc": [
+        "libs/utils/trpc/src/index.ts"
       ]
     }
   },

@@ -1,0 +1,19 @@
+{
+  "root": "libs/utils/constants",
+  "sourceRoot": "libs/utils/constants/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/utils/constants",
+        "main": "libs/utils/constants/src/index.ts",
+        "tsConfig": "libs/utils/constants/tsconfig.lib.json"
+      }
+    }
+  },
+  "tags": []
+}

@@ -4,7 +4,7 @@
     "defaultBase": "main"
   },
   "cli": {
-    "defaultCollection": "@nxext/vite"
+    "defaultCollection": "@nxext/workspace"
   },
   "implicitDependencies": {
     "package.json": {

@@ -1,0 +1,19 @@
+{
+  "root": "libs/utils/sendgrid",
+  "sourceRoot": "libs/utils/sendgrid/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/utils/sendgrid",
+        "main": "libs/utils/sendgrid/src/index.ts",
+        "tsConfig": "libs/utils/sendgrid/tsconfig.lib.json"
+      }
+    }
+  },
+  "tags": []
+}

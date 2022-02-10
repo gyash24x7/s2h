@@ -1,0 +1,19 @@
+{
+  "root": "libs/utils/trpc",
+  "sourceRoot": "libs/utils/trpc/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/utils/trpc",
+        "main": "libs/utils/trpc/src/index.ts",
+        "tsConfig": "libs/utils/trpc/tsconfig.lib.json"
+      }
+    }
+  },
+  "tags": []
+}

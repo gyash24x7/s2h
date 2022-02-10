@@ -1,6 +1,11 @@
 {
   "version": 2,
   "projects": {
-    "prisma": "libs/prisma"
+    "backend": "apps/backend",
+    "prisma": "libs/prisma",
+    "utils-constants": "libs/utils/constants",
+    "utils-deck": "libs/utils/deck",
+    "utils-sendgrid": "libs/utils/sendgrid",
+    "utils-trpc": "libs/utils/trpc"
   }
 }

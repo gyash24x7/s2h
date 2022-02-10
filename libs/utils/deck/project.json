@@ -1,0 +1,19 @@
+{
+  "root": "libs/utils/deck",
+  "sourceRoot": "libs/utils/deck/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/utils/deck",
+        "main": "libs/utils/deck/src/index.ts",
+        "tsConfig": "libs/utils/deck/tsconfig.lib.json"
+      }
+    }
+  },
+  "tags": []
+}
