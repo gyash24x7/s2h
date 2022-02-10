@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountProvider {
+    LOCAL
+    GOOGLE
+}
+
+model Account {
+    id              String              @default(cuid()) @id
+    provider        AccountProvider
+    userId          String
+    user            User                @relation(fields:[userId], references:[id], onDelete: Cascade)
+    password        String?
+    salt            String              @unique
+}
+
+model User {
+    id                  String                  @default(cuid()) @id
+    name                String
+    email               String                  @unique
+    about               String                  @default("")
+    profilePic          String
+    verified            Boolean                 @default(false)
+
+    tokens              VerificationToken[]
+    accounts            Account[]
+    litPlayerAliases    LitPlayer[]             @relation("LitPlayerAliases")
+}
+
+model VerificationToken {
+    id          String      @id @default(cuid())
+    token       String      @unique
+    userId      String
+    user        User        @relation(fields:[userId], references:[id], onDelete: Cascade)
+}
+
+enum LitGameStatus {
+    NOT_STARTED
+    PLAYERS_READY
+    TEAMS_CREATED
+    IN_PROGRESS
+    COMPLETED
+}
+
+enum LitMoveType {
+    ASK
+    DECLINED
+    GIVEN
+    TURN
+    CALL
+    CALL_SUCCESS
+    CALL_FAIL
+}
+
+model LitTeam {
+    id          String          @id @default(cuid())
+    name        String
+    players     LitPlayer[]     @relation("TeamPartOf")
+    score       Int             @default(0)
+
+    // Not going to use below fields but required for prisma
+    game        LitGame         @relation("TeamOfGame", fields:[gameId], references:[id])
+    gameId      String
+}
+
+model LitPlayer {
+    id              String          @id @default(cuid())
+    name            String
+    hand            String[]
+    avatar          String
+
+    user            User            @relation("LitPlayerAliases", fields:[userId], references:[id])
+    userId          String
+
+    team            LitTeam?        @relation("TeamPartOf", fields:[teamId], references:[id])
+    teamId          String?
+
+    turnMoves       LitMove[]       @relation("TurnPlayer")
+    askedFromMoves  LitMove[]       @relation("AskedFrom")
+    askedByMoves    LitMove[]       @relation("AskedBy")
+    gamesPartOf     LitGame[]       @relation("GamesPartOf")
+}
+
+model LitMove {
+    id                String          @id @default(cuid())
+    type              LitMoveType
+    askedFor          String?
+
+    turn              LitPlayer?      @relation("TurnPlayer", fields:[turnId], references:[id])
+    turnId            String?
+
+    askedFrom         LitPlayer?      @relation("AskedFrom", fields:[askedFromId], references:[id])
+    askedFromId       String?
+
+    askedBy           LitPlayer?      @relation("AskedBy", fields:[askedById], references:[id])
+    askedById         String?
+
+    game              LitGame         @relation("GameMoves", fields:[gameId], references:[id])
+    gameId            String
+}
+
+model LitGame {
+    id            String          @id @default(cuid())
+    code          String          @unique
+    status        LitGameStatus   @default(NOT_STARTED)
+    playerCount   Int             @default(2)
+
+    players       LitPlayer[]     @relation("GamesPartOf")
+    teams         LitTeam[]       @relation("TeamOfGame")
+
+    moves         LitMove[]       @relation("GameMoves")
+}
