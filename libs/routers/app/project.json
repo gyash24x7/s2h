@@ -1,0 +1,22 @@
+{
+  "root": "libs/routers/app",
+  "sourceRoot": "libs/routers/app/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/routers/app",
+        "main": "libs/routers/app/src/index.ts",
+        "tsConfig": "libs/routers/app/tsconfig.lib.json",
+        "assets": [
+          "libs/routers/app/*.md"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

@@ -3,6 +3,9 @@
   "projects": {
     "backend": "apps/backend",
     "prisma": "libs/prisma",
+    "routers-app": "libs/routers/app",
+    "routers-literature": "libs/routers/literature",
+    "routers-users": "libs/routers/users",
     "utils-constants": "libs/utils/constants",
     "utils-deck": "libs/utils/deck",
     "utils-sendgrid": "libs/utils/sendgrid",

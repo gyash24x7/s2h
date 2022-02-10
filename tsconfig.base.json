@@ -22,6 +22,15 @@
       "@s2h/prisma": [
         "libs/prisma/src/index.ts"
       ],
+      "@s2h/routers/app": [
+        "libs/routers/app/src/index.ts"
+      ],
+      "@s2h/routers/literature": [
+        "libs/routers/literature/src/index.ts"
+      ],
+      "@s2h/routers/users": [
+        "libs/routers/users/src/index.ts"
+      ],
       "@s2h/utils/constants": [
         "libs/utils/constants/src/index.ts"
       ],
