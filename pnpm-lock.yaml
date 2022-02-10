@@ -3,6 +3,8 @@ lockfileVersion: 5.3
 specifiers:
   '@babel/core': 7.17.2
   '@babel/preset-typescript': 7.16.7
+  '@fontsource/fjalla-one': 4.5.1
+  '@fontsource/montserrat': 4.5.4
   '@nrwl/cli': 13.8.0
   '@nrwl/express': 13.8.0
   '@nrwl/js': 13.8.0
@@ -50,6 +52,8 @@ specifiers:
   zod: 3.11.6
 
 dependencies:
+  '@fontsource/fjalla-one': 4.5.1
+  '@fontsource/montserrat': 4.5.4
   '@prisma/client': 3.9.1_prisma@3.9.1
   '@trpc/server': 9.18.0
   bcryptjs: 2.4.3
@@ -1750,6 +1754,14 @@ packages:
   /@emotion/weak-memoize/0.2.5:
     resolution: {integrity: sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==}
     dev: true
+
+  /@fontsource/fjalla-one/4.5.1:
+    resolution: {integrity: sha512-NqZ9tR3FhT+mtzyVTnz+TigvbbMdKFr2JtHbT2x/ajbO/gl9esxyrdlXNTevKoCYqYWLgEXK+J+yScpmMo59yg==}
+    dev: false
+
+  /@fontsource/montserrat/4.5.4:
+    resolution: {integrity: sha512-oqNthItCJ4cB66rShKzrnyF624Gj+kcuKx1Xz5IdF5XQQpkiIYUbPx4L92vmxwgOkC+5G9vhg/bJnba5nWvKnw==}
+    dev: false
 
   /@gar/promisify/1.1.2:
     resolution: {integrity: sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==}

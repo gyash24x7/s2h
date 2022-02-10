@@ -4,7 +4,7 @@ type ColorShades = Record<string, string>;
 
 export const theme = {
 	fontFamily: {
-		sans: [ "Montserrat", "ui-sans-serif" ],
+		montserrat: "Montserrat",
 		fjalla: "Fjalla One"
 	},
 	colors: {
@@ -58,10 +58,10 @@ export const theme = {
 		},
 		default: {
 			"50": "#FFFFFF",
-			"100": "#FFFFFF",
-			"200": "#FFFFFF",
-			"300": "#FFFFFF",
-			"400": "#F6F6F8",
+			"100": "#FDFEFF",
+			"200": "#FAFBFC",
+			"300": "#F9FAFB",
+			"400": "#F6F7F8",
 			"500": "#DFE1E6",
 			"600": "#C0C3CD",
 			"700": "#A0A6B5",

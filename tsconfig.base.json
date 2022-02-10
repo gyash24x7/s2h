@@ -49,6 +49,9 @@
       "@s2h/ui/stack": [
         "libs/ui/src/stack/index.ts"
       ],
+      "@s2h/ui/card": [
+        "libs/ui/src/card/index.ts"
+      ],
       "@s2h/utils/constants": [
         "libs/utils/constants/src/index.ts"
       ],
