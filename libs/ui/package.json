@@ -1,0 +1,16 @@
+{
+  "name": "@s2h/ui",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.ts",
+  "types": "index.ts",
+  "author": "Yash Gupta",
+  "license": "ISC",
+  "dependencies": {
+    "@headlessui/react": "1.5.0",
+    "@heroicons/react": "1.0.5"
+  },
+  "devDependencies": {
+    "@s2h/config": "workspace:*"
+  }
+}

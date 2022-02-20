@@ -1,0 +1,60 @@
+.avatar-root {
+	@apply inline-flex rounded-full select-none;
+
+	div {
+		@apply w-full h-full flex items-center justify-center font-semibold rounded-full;
+		@apply bg-alt-100 text-alt dark:bg-alt-700 dark:text-alt-100;
+	}
+
+	img {
+		@apply w-full h-full object-cover rounded-full
+	}
+}
+
+.avatar-root.avatar-root--variant-size-xs {
+	@apply w-6 h-6;
+
+	div {
+		@apply text-xs
+	}
+}
+
+.avatar-root.avatar-root--variant-size-sm {
+	@apply w-8 h-8;
+
+	div {
+		@apply text-base
+	}
+}
+
+.avatar-root.avatar-root--variant-size-md {
+	@apply w-10 h-10;
+
+	div {
+		@apply text-lg
+	}
+}
+
+.avatar-root.avatar-root--variant-size-lg {
+	@apply w-12 h-12;
+
+	div {
+		@apply text-xl
+	}
+}
+
+.avatar-root.avatar-root--variant-size-xl {
+	@apply w-16 h-16;
+
+	div {
+		@apply text-2xl
+	}
+}
+
+.avatar-root.avatar-root--variant-size-2xl {
+	@apply w-20 h-20;
+
+	div {
+		@apply text-3xl
+	}
+}
