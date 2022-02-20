@@ -11,7 +11,7 @@
   "author": "Yash Gupta",
   "license": "ISC",
   "devDependencies": {
-    "@tsconfig/node16-strictest": "1.0.0",
+    "@s2h/config": "workspace:*",
     "@types/express": "4.17.13",
     "@types/node": "17.0.18",
     "@types/ws": "8.2.3",
@@ -19,7 +19,7 @@
     "ts-node": "10.5.0"
   },
   "dependencies": {
-    "express": "^4.17.3",
-    "ws": "^8.5.0"
+    "express": "4.17.3",
+    "ws": "8.5.0"
   }
 }

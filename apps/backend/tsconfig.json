@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/node16-strictest/tsconfig.json",
+  "extends": "@s2h/config/node.json",
   "compilerOptions": {
     "outDir": "dist"
   },
