@@ -42,3 +42,4 @@ Thumbs.db
 dist
 build
 .env
+node_modules
