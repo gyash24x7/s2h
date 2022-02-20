@@ -1,0 +1,12 @@
+{
+  "name": "@s2h/config",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "node.json",
+    "react-app.json",
+    "react-library.json",
+    "tailwind.json"
+  ]
+}
