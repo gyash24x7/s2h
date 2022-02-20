@@ -1,13 +1,19 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import url("https://fonts.googleapis.com/css2?family=Fjalla+One&family=Montserrat:wght@200;400;600;800&display=swap");
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+@import "tailwindcss/base.css";
+@import "tailwindcss/components.css";
+@import "tailwindcss/utilities.css";
+@import "tailwindcss/screens.css";
+@import "tailwindcss/variants.css";
+
+@import "@s2h/ui/avatar/avatar.css";
+/*@import "button/button.css";*/
+/*@import "checkbox/checkbox.css";*/
+/*@import "flex/flex.css";*/
+/*@import "input-message/input-message.css";*/
+/*@import "modal/modal.css";*/
+/*@import "radio/radio.css";*/
+/*@import "select/select.css";*/
+/*@import "spinner/spinner.css";*/
+/*@import "stack/stack.css";*/
+/*@import "text-input/text-input.css";*/

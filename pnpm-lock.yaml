@@ -16,19 +16,19 @@ importers:
 
   apps/backend:
     specifiers:
-      '@tsconfig/node16-strictest': 1.0.0
+      '@s2h/config': workspace:*
       '@types/express': 4.17.13
       '@types/node': 17.0.18
       '@types/ws': 8.2.3
-      express: ^4.17.3
+      express: 4.17.3
       nodemon: 2.0.15
       ts-node: 10.5.0
-      ws: ^8.5.0
+      ws: 8.5.0
     dependencies:
       express: 4.17.3
       ws: 8.5.0
     devDependencies:
-      '@tsconfig/node16-strictest': 1.0.0
+      '@s2h/config': link:../../libs/config
       '@types/express': 4.17.13
       '@types/node': 17.0.18
       '@types/ws': 8.2.3
@@ -37,7 +37,7 @@ importers:
 
   apps/literature:
     specifiers:
-      '@s2h/tsconfig': workspace:*
+      '@s2h/config': workspace:*
       '@s2h/ui': workspace:*
       '@types/node': 17.0.18
       '@types/react': 17.0.39
@@ -50,11 +50,11 @@ importers:
       tailwindcss: 3.0.23
       vite: 2.8.4
     dependencies:
-      '@s2h/tsconfig': link:../../libs/tsconfig
       '@s2h/ui': link:../../libs/ui
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
     devDependencies:
+      '@s2h/config': link:../../libs/config
       '@types/node': 17.0.18
       '@types/react': 17.0.39
       '@types/react-dom': 17.0.11
@@ -64,18 +64,19 @@ importers:
       tailwindcss: 3.0.23_autoprefixer@10.4.2
       vite: 2.8.4
 
-  libs/tsconfig:
+  libs/config:
     specifiers: {}
 
   libs/ui:
     specifiers:
       '@headlessui/react': 1.5.0
       '@heroicons/react': 1.0.5
-      '@s2h/tsconfig': workspace:*
-    devDependencies:
+      '@s2h/config': workspace:*
+    dependencies:
       '@headlessui/react': 1.5.0
       '@heroicons/react': 1.0.5
-      '@s2h/tsconfig': link:../tsconfig
+    devDependencies:
+      '@s2h/config': link:../config
 
 packages:
 
@@ -365,13 +366,13 @@ packages:
     peerDependencies:
       react: ^16 || ^17 || ^18
       react-dom: ^16 || ^17 || ^18
-    dev: true
+    dev: false
 
   /@heroicons/react/1.0.5:
     resolution: {integrity: sha512-UDMyLM2KavIu2vlWfMspapw9yii7aoLwzI2Hudx4fyoPwfKfxU8r3cL8dEBXOjcLG0/oOONZzbT14M1HoNtEcg==}
     peerDependencies:
       react: '>= 16'
-    dev: true
+    dev: false
 
   /@jridgewell/resolve-uri/3.0.5:
     resolution: {integrity: sha512-VPeQ7+wH0itvQxnG+lIzWgkysKIr3L9sslimFW55rHMdGu/qCQ5z5h9zq4gI8uBtqkpHhsF4Z/OwExufUCThew==}
@@ -440,10 +441,6 @@ packages:
 
   /@tsconfig/node14/1.0.1:
     resolution: {integrity: sha512-509r2+yARFfHHE7T6Puu2jjkoycftovhXRqW328PDXTVGKihlb1P8Z9mMZH04ebyajfRY7dedfGynlrFHJUQCg==}
-    dev: true
-
-  /@tsconfig/node16-strictest/1.0.0:
-    resolution: {integrity: sha512-MTrFOCoWfjjhFpAoeHmWXFnYeRPxMBMgaNVszBYXJgPFi7XHYdRrDatgyk+Nb0ht7jWP3j/J3xXfvSXIjzRVKA==}
     dev: true
 
   /@tsconfig/node16/1.0.2:

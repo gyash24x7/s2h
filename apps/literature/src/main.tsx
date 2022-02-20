@@ -2,9 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
+import { Avatar } from "@s2h/ui/avatar";
+
 ReactDOM.render(
 	<React.StrictMode>
-		<div>HMR is super cool</div>
+		<Avatar name={ "Yash Gupta" }/>
 	</React.StrictMode>,
 	document.getElementById( "root" )
 );
