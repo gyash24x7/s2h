@@ -10,7 +10,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "literature:dev": "turbo run dev --parallel --scope=literature"
   },
   "repository": {
     "type": "git",

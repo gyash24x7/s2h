@@ -1,0 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Fjalla+One&family=Montserrat:wght@200;400;600;800&display=swap");
+
+@import "tailwindcss/base.css";
+@import "tailwindcss/components.css";
+@import "tailwindcss/utilities.css";
+@import "tailwindcss/screens.css";
+@import "tailwindcss/variants.css";
+
+@import "@s2h/ui/avatar/avatar.css";
