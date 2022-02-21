@@ -1,0 +1,39 @@
+.radio-root {
+	@apply flex items-center mr-6;
+
+	& > label {
+		@apply text-base ml-2;
+	}
+
+	& > input[type="radio"] {
+		@apply appearance-none bg-light-100 m-0 border border-light-700 rounded-full;
+		@apply grid place-content-center;
+		@apply w-3.5 h-3.5;
+
+		&::before {
+			@apply rounded-full;
+			@apply w-3.5 h-3.5;
+			content: "";
+			transform: scale(0);
+			transition: 200ms transform ease-in-out;
+			box-shadow: inset 40px 40px #0052CC;
+		}
+
+		&:checked::before {
+			transform: scale(1);
+		}
+	}
+
+	&.radio-root--variant-valid {
+		& > input[type="radio"] {
+			@apply border-success;
+		}
+	}
+
+	&.radio-root--variant-invalid {
+		& > input[type="radio"] {
+			@apply border-danger;
+		}
+	}
+
+}

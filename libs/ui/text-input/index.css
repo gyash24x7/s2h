@@ -1,0 +1,17 @@
+.input-root {
+	@apply flex items-center border-2 rounded-md border-light-700 text-dark;
+	@apply p-2 text-base;
+
+	& > input, & > textarea {
+		all: unset;
+		@apply flex-1;
+	}
+
+	&.input-root--variant-valid {
+		@apply border-success;
+	}
+
+	&.input-root--variant-invalid {
+		@apply border-danger;
+	}
+}

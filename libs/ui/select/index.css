@@ -1,0 +1,53 @@
+.select-wrapper {
+	@apply w-full;
+
+	.select-root {
+		@apply flex w-full text-left rounded-md cursor-default;
+		@apply focus:outline-none focus-visible:ring-0 overflow-hidden;
+		@apply border-2 border-light-700 text-dark p-2 text-base;
+
+		&.select-root--variant-valid {
+			@apply border-success;
+		}
+
+		&.select-root--variant-invalid {
+			@apply border-danger;
+		}
+
+		& > input {
+			@apply w-full border-none focus:outline-none text-base leading-5 text-dark;
+		}
+
+		& > button {
+			@apply w-5 h-5 text-light-700;
+		}
+	}
+
+	.options-root {
+		@apply absolute w-full py-1 mt-1 bg-light-100 rounded-md border border-light-700 max-h-60 text-base;
+
+		& > .no-option-match {
+			@apply cursor-default select-none relative py-2 px-4 text-dark;
+		}
+
+		& > .option {
+			@apply cursor-default select-none relative py-2 pl-10 pr-4 text-dark;
+
+			& > .option-text {
+				@apply block truncate;
+			}
+
+			& > .option-icon {
+				@apply absolute inset-y-0 left-0 flex items-center pl-3 text-dark;
+			}
+
+			&.option--variant-active {
+				@apply text-primary bg-primary-100;
+
+				& > .option-icon {
+					@apply text-primary;
+				}
+			}
+		}
+	}
+}

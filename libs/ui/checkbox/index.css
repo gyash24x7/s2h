@@ -1,0 +1,43 @@
+.checkbox-root {
+	@apply flex items-center;
+
+	& > label {
+		@apply text-base ml-2;
+	}
+
+	& > .check-icon {
+		@apply text-light-100 absolute pointer-events-none;
+		@apply w-3.5 h-3.5;
+	}
+
+	& > input[type="checkbox"] {
+		@apply appearance-none bg-light-100 m-0 border border-light-700 rounded-sm;
+		@apply grid place-content-center;
+		@apply w-3.5 h-3.5;
+
+		&::before {
+			@apply rounded-sm;
+			@apply w-3.5 h-3.5;
+			content: "";
+			transform: scale(0);
+			transition: 200ms transform ease-in-out;
+			box-shadow: inset 40px 40px #0052CC;
+		}
+
+		&:checked::before {
+			transform: scale(1);
+		}
+	}
+
+	&.checkbox-root--variant-valid {
+		& > input[type="checkbox"] {
+			@apply border-success;
+		}
+	}
+
+	&.checkbox-root--variant-invalid {
+		& > input[type="checkbox"] {
+			@apply border-danger;
+		}
+	}
+}

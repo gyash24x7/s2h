@@ -1,0 +1,20 @@
+.label-root {
+	@apply text-sm text-dark-100 font-semibold;
+}
+
+.input-message-root {
+	@apply text-sm text-dark-100 mt-1;
+
+	& .input-message-icon {
+		@apply w-3 h-3;
+	}
+
+	&.input-message-root--variant-valid {
+		@apply text-success;
+	}
+
+	&.input-message-root--variant-invalid {
+		@apply text-danger;
+	}
+
+}

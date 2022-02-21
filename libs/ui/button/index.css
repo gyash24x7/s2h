@@ -1,0 +1,62 @@
+.button-root {
+	@apply font-semibold rounded-md cursor-pointer focus:outline-none;
+	@apply flex justify-center items-center font-sans;
+
+
+	&.button-root--variant-appearance-primary {
+		@apply bg-primary hover:bg-primary-500 text-light;
+	}
+
+	&.button-root--variant-appearance-default {
+		@apply bg-light-400 hover:bg-light-500 text-dark dark:bg-dark dark:hover:bg-dark-500;
+	}
+
+	&.button-root--variant-appearance-warning {
+		@apply bg-warning hover:bg-warning-500 text-dark;
+	}
+
+	&.button-root--variant-appearance-danger {
+		@apply bg-danger hover:bg-danger-500 text-light;
+	}
+
+	&.button-root--variant-appearance-success {
+		@apply bg-success hover:bg-success-500 text-light;
+	}
+
+	&.button-root--variant-appearance-alt {
+		@apply bg-alt hover:bg-alt-500 text-light;
+	}
+
+	&.button-root--variant-appearance-info {
+		@apply bg-info hover:bg-info-500 text-light;
+	}
+
+	&.button-root--variant-size-xs {
+		@apply h-6 px-4 text-xs;
+	}
+
+	&.button-root--variant-size-sm {
+		@apply h-8 px-6 text-sm;
+	}
+
+	&.button-root--variant-size-md {
+		@apply h-10 px-8 text-base;
+	}
+
+	&.button-root--variant-size-lg {
+		@apply h-12 px-10 text-lg;
+	}
+
+	&.button-root--variant-size-xl {
+		@apply h-16 px-12 text-xl;
+	}
+
+	&.button-root--variant-size-2xl {
+		@apply h-20 px-14 text-2xl;
+	}
+
+	&.button-root--variant-fullWidth {
+		@apply w-full;
+	}
+
+}

@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.17.4",
+    "@heroicons/react": "1.0.5",
     "@s2h/config": "workspace:*",
     "@storybook/addon-essentials": "6.4.19",
     "@storybook/builder-webpack5": "6.4.19",

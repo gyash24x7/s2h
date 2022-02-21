@@ -1,0 +1,60 @@
+.modal-root {
+	@apply fixed inset-0 z-10 overflow-y-auto;
+
+	.overlay-transition--enter {
+		@apply ease-out duration-300;
+	}
+
+	.overlay-transition--leave {
+		@apply ease-in duration-200;
+	}
+
+	.overlay-transition--enter-from, .overlay-transition--leave-to {
+		@apply opacity-0;
+	}
+
+	.overlay-transition--enter-to, .overlay-transition--leave-from {
+		@apply opacity-100;
+	}
+
+	.modal-content-transition--enter {
+		@apply ease-out duration-300;
+	}
+
+	.modal-content-transition--leave {
+		@apply ease-in duration-200;
+	}
+
+	.modal-content-transition--enter-from, .modal-content-transition--leave-to {
+		@apply opacity-0 scale-90;
+	}
+
+	.modal-content-transition--enter-to, .modal-content-transition--leave-from {
+		@apply opacity-100 scale-100;
+	}
+
+	& > div {
+		@apply min-h-screen px-4 text-center;
+	}
+
+	.modal-backdrop {
+		@apply fixed inset-0 bg-dark-700/50;
+	}
+
+	.modal-align {
+		@apply inline-block h-screen align-middle;
+	}
+
+	.modal-content {
+		@apply inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle;
+		@apply transition-all transform bg-light-100 shadow-xl rounded-md;
+
+		.modal-title {
+			@apply text-xl font-semibold leading-6 mb-4;
+		}
+
+		.modal-body {
+			@apply mt-4 mb-6 text-base;
+		}
+	}
+}
