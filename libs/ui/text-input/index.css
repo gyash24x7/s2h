@@ -1,6 +1,14 @@
 .input-root {
-	@apply flex items-center border-2 rounded-md border-light-700 text-dark;
+	@apply flex items-center border-2 rounded-md border-light-700 text-dark w-full;
 	@apply p-2 text-base;
+
+	.input-before-icon {
+		@apply w-4 h-4 mr-3 text-light-700;
+	}
+
+	.input-after-icon {
+		@apply w-4 h-4 ml-3 text-light-700;
+	}
 
 	& > input, & > textarea {
 		all: unset;

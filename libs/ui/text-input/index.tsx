@@ -26,7 +26,7 @@ export function TextInput( props: TextInputProps ) {
 					{ valid: props.appearance === "success", invalid: props.appearance === "danger" }
 				) }
 			>
-				{ IconBefore!! && <IconBefore className={ "w-4 h-4 mr-3 text-light-700" }/> }
+				{ IconBefore!! && <IconBefore className={ "input-before-icon" }/> }
 				<input
 					type={ props.type || "text" }
 					name={ props.name }
@@ -34,7 +34,7 @@ export function TextInput( props: TextInputProps ) {
 					value={ props.value }
 					onChange={ ( e: any ) => props.onChange && props.onChange( e.target.value ) }
 				/>
-				{ IconAfter!! && <IconAfter className={ "w-4 h-4 ml-3 text-light-700" }/> }
+				{ IconAfter!! && <IconAfter className={ "input-after-icon" }/> }
 			</div>
 			{ props.message && <InputMessage text={ props.message } appearance={ props.appearance }/> }
 		</Fragment>

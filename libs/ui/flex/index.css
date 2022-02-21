@@ -1,6 +1,16 @@
 .flex-root {
 	@apply flex;
 
+	&.flex-root--variant-expand {
+		&.flex-root--variant-direction-row, &.flex-root--variant-direction-row-reverse {
+			@apply w-full;
+		}
+
+		&.flex-root--variant-direction-col, &.flex-root--variant-direction-col-reverse {
+			@apply h-full;
+		}
+	}
+
 	&.flex-root--variant-direction-row {
 		@apply flex-row;
 	}

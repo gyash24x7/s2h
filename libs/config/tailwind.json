@@ -5,6 +5,12 @@
     "./src/**/*.tsx"
   ],
   "theme": {
+    "fontWeight": {
+      "light": 200,
+      "normal": 400,
+      "semibold": 600,
+      "bold": 800
+    },
     "fontSize": {
       "base": [
         "14px",
