@@ -6,4 +6,4 @@
 @import "tailwindcss/screens.css";
 @import "tailwindcss/variants.css";
 
-@import "@s2h/ui/avatar/avatar.css";
+@import "@s2h/ui/avatar/index.css";
