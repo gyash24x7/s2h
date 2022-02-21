@@ -1,0 +1,9 @@
+{
+  "extends": "@s2h/config/node.json",
+  "include": [
+    "index.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

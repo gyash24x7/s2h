@@ -19,6 +19,7 @@
     "ts-node": "10.5.0"
   },
   "dependencies": {
+    "@s2h/prisma": "workspace:*",
     "express": "4.17.3",
     "ws": "8.5.0"
   }

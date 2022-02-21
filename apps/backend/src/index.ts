@@ -1,18 +1,19 @@
 import express from "express";
 import http from "http";
 import ws from "ws";
+import { PrismaClient } from "@s2h/prisma";
 
 const port = process.env[ "PORT" ] || 8000;
 
 const app = express();
 const server = http.createServer( app );
 const wss = new ws.Server( { server } );
-// const prisma = new PrismaClient( { log: [ "query" ] } );
+const prisma = new PrismaClient( { log: [ "query" ] } );
 
 // app.use( "/trpc", createTrpcMiddleware( prisma ) );
 
 app.get( "/", async ( _req, res ) => {
-	// await prisma.account.findMany();
+	await prisma.account.findMany();
 	res.send( { hello: false } );
 } );
 

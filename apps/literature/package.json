@@ -1,5 +1,5 @@
 {
-  "name": "literature",
+  "name": "@s2h/literature",
   "private": true,
   "version": "0.0.0",
   "scripts": {
