@@ -1,0 +1,18 @@
+{
+  "name": "@s2h/dtos",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.ts",
+  "types": "index.ts",
+  "author": "Yash Gupta",
+  "license": "ISC",
+  "dependencies": {
+    "@s2h/utils": "workspace:*",
+    "superstruct": "0.15.3"
+  },
+  "devDependencies": {
+    "@s2h/config": "workspace:*",
+    "@s2h/prisma": "workspace:*",
+    "@types/node": "17.0.19"
+  }
+}
