@@ -1,4 +1,6 @@
 {
   "extends": "@s2h/config/react-app.json",
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }
