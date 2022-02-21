@@ -18,6 +18,7 @@ importers:
     specifiers:
       '@s2h/config': workspace:*
       '@s2h/prisma': workspace:*
+      '@s2h/routers': workspace:*
       '@types/express': 4.17.13
       '@types/node': 17.0.18
       '@types/ws': 8.2.3
@@ -31,6 +32,7 @@ importers:
       ws: 8.5.0
     devDependencies:
       '@s2h/config': link:../../libs/config
+      '@s2h/routers': link:../../libs/routers
       '@types/express': 4.17.13
       '@types/node': 17.0.18
       '@types/ws': 8.2.3
