@@ -1,9 +1,5 @@
 {
   "darkMode": "class",
-  "content": [
-    "./src/*.tsx",
-    "./src/**/*.tsx"
-  ],
   "theme": {
     "fontWeight": {
       "light": 200,
