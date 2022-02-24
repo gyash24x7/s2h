@@ -34,3 +34,5 @@ export const literatureRouter = trpc.router<TrpcContext>()
 	.mutation( "create-lit-teams", { input: createTeamsInputStruct, resolve: createTeamsResolver } )
 	.mutation( "join-lit-game", { input: joinGameInputStruct, resolve: joinGameResolver } )
 	.mutation( "create-lit-game", { input: createGameInputStruct, resolve: createGameResolver } );
+
+export type LiteratureRouter = typeof literatureRouter;
