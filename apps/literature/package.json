@@ -1,0 +1,31 @@
+{
+  "name": "@s2h/literature",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@s2h/dtos": "workspace:*",
+    "@s2h/prisma": "workspace:*",
+    "@s2h/routers": "workspace:*",
+    "@s2h/ui": "workspace:*",
+    "@s2h/utils": "workspace:*",
+    "next": "12.1.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@s2h/config": "workspace:*",
+    "@types/node": "17.0.21",
+    "@types/react": "17.0.39",
+    "autoprefixer": "10.4.2",
+    "next-transpile-modules": "9.0.0",
+    "postcss": "8.4.6",
+    "postcss-import": "14.0.2",
+    "tailwindcss": "3.0.22",
+    "typescript": "4.5.5"
+  }
+}
