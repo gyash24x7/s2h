@@ -1,5 +1,8 @@
 {
   "extends": "@s2h/config/nextjs.json",
+  "compilerOptions": {
+    "baseUrl": "./"
+  },
   "include": [
     "next-env.d.ts",
     "**/*.ts",

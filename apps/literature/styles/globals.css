@@ -17,3 +17,14 @@
 @import "@s2h/ui/spinner/index.css";
 @import "@s2h/ui/stack/index.css";
 @import "@s2h/ui/text-input/index.css";
+
+.king-yna-bg {
+	background: #1a2a6c;
+	background: -webkit-linear-gradient(to bottom, #fdbb2d, #b21f1f, #1a2a6c);
+	background: linear-gradient(to bottom, #fdbb2d, #b21f1f, #1a2a6c);
+}
+
+.literature-bg {
+	background-image: url("/assets/literature-bg.jpeg");
+	background-size: cover;
+}

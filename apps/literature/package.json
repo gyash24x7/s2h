@@ -9,13 +9,20 @@
   },
   "dependencies": {
     "@s2h/dtos": "workspace:*",
-    "@s2h/prisma": "workspace:*",
     "@s2h/routers": "workspace:*",
     "@s2h/ui": "workspace:*",
     "@s2h/utils": "workspace:*",
+    "@trpc/client": "9.20.0",
+    "@trpc/next": "9.20.0",
+    "@trpc/react": "9.20.0",
+    "@trpc/server": "9.20.0",
     "next": "12.1.0",
+    "next-auth": "4.2.1",
+    "nodemailer": "6.7.2",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-query": "3.34.16",
+    "react-use": "17.3.2"
   },
   "devDependencies": {
     "@s2h/config": "workspace:*",
