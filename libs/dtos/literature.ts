@@ -1,10 +1,7 @@
 import type { Describe, Infer } from "superstruct";
 import * as s from "superstruct";
-import type { LitGame } from "@prisma/client";
 import type { GameCard } from "@s2h/utils";
 import { CARD_SETS, RANKS, SUITS } from "@s2h/utils";
-
-export type GameResponse = { error?: string, data?: LitGame };
 
 export const gameCardStruct: Describe<GameCard> = s.object( { rank: s.enums( RANKS ), suit: s.enums( SUITS ) } );
 

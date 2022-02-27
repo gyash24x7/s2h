@@ -1,39 +1,48 @@
-import type { TrpcResolver } from "@s2h/utils";
-import { cardSetMap, getCardSet, getCardString, includesAll, includesSome, removeIfPresent } from "@s2h/utils";
+import {
+	cardSetMap,
+	getCardSet,
+	getCardString,
+	includesAll,
+	includesSome,
+	Messages,
+	removeIfPresent
+} from "@s2h/utils";
 import type { LitPlayer } from "@prisma/client";
 import { LitMoveType } from "@prisma/client";
-import type { CallSetInput, GameResponse } from "@s2h/dtos";
+import type { CallSetInput } from "@s2h/dtos";
+import type { LitResolver } from "./index";
+import { TRPCError } from "@trpc/server";
 
-export const callSetResolver: TrpcResolver<CallSetInput, GameResponse> = async ( { input, ctx } ) => {
-	const loggedInUserId = ctx.session?.userId! as string;
+export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx } ) => {
+	const loggedInUserEmail = ctx.session?.user?.email!;
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { id: input.gameId },
 		include: { players: true }
 	} );
 
 	if ( !game ) {
-		return { error: "Game Not Found!!" };
+		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
 	}
 
-	const loggedInPlayer = game.players.find( player => player.userId === loggedInUserId );
+	const loggedInPlayer = game.players.find( player => player.userEmail === loggedInUserEmail );
 
 	if ( !loggedInPlayer ) {
-		return { error: "You are not part of the game. Cannot perform action!" };
+		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
 	}
 
 	const cardsCalled = Array.from( input.data.values() ).flat();
 	if ( cardsCalled.length !== 6 ) {
-		return { error: "Select all cards of the set to call!" };
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.CALL_ALL_CARDS } );
 	}
 
 	const cardSet = getCardSet( cardsCalled[ 0 ]! );
 
 	if ( !includesAll( cardSetMap[ cardSet ], cardsCalled ) ) {
-		return { error: "All cards don't belong to the same set!" };
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.CALL_CARDS_OF_SAME_SET } );
 	}
 
 	if ( input.set !== cardSet ) {
-		return { error: "Cards and Set don't match!" };
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.CALL_CARDS_OF_MENTIONED_SET } );
 	}
 
 	const myTeamPlayers = game.players.filter( player => player.teamId === loggedInPlayer.teamId );
@@ -42,7 +51,7 @@ export const callSetResolver: TrpcResolver<CallSetInput, GameResponse> = async (
 
 	const playerIdsWithCards = Array.from( input.data.keys() );
 	if ( !includesAll( myTeamPlayers.map( player => player.id ), playerIdsWithCards ) ) {
-		return { error: "You can only call set from within your team!" };
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.CALL_WITHIN_YOUR_TEAM } );
 	}
 
 	let cardsCalledCorrect = 0;
@@ -83,10 +92,8 @@ export const callSetResolver: TrpcResolver<CallSetInput, GameResponse> = async (
 		data: { hand: { set: removeIfPresent( player.hand, cardsCalled.map( getCardString ) ) } }
 	} ) ) );
 
-	const updatedGame = await ctx.prisma.litGame.update( {
+	return ctx.prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: { moves: { create: [ moveData ] } }
 	} );
-
-	return { data: updatedGame };
 };

@@ -1,10 +1,12 @@
-import type { TrpcResolver } from "@s2h/utils";
+import { Messages } from "@s2h/utils";
 import { LitGameStatus } from "@prisma/client";
-import type { GameResponse, JoinGameInput } from "@s2h/dtos";
+import type { JoinGameInput } from "@s2h/dtos";
+import { TRPCError } from "@trpc/server";
+import type { LitResolver } from "./index";
 
-export const joinGameResolver: TrpcResolver<JoinGameInput, GameResponse> = async ( { ctx, input } ) => {
-	const userId = ctx.session?.userId! as string;
-	const userAvatar = ctx.session?.profilePic as string;
+export const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input } ) => {
+	const userEmail = ctx.session?.user?.email!;
+	const avatar = ctx.session?.user?.image!;
 
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { code: input.code },
@@ -12,21 +14,21 @@ export const joinGameResolver: TrpcResolver<JoinGameInput, GameResponse> = async
 	} );
 
 	if ( !game ) {
-		return { error: "Game not found!" };
+		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
 	}
 
 	if ( game.players.length >= game.playerCount ) {
-		return { error: `Game already has ${ game.playerCount } players. Cannot join!` };
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.PLAYER_CAPACITY_FULL } );
 	}
 
-	const userAlreadyInGame = !!game.players.find( player => player.userId === userId );
+	const userAlreadyInGame = !!game.players.find( player => player.userEmail === userEmail );
 	if ( userAlreadyInGame ) {
-		return { error: "You have already joined the game!" };
+		return game;
 	}
 
-	const player = await ctx.prisma.litPlayer.create( { data: { name: input.name, userId, avatar: userAvatar } } );
+	const player = await ctx.prisma.litPlayer.create( { data: { name: input.name, userEmail, avatar } } );
 
-	const updatedGame = await ctx.prisma.litGame.update( {
+	return ctx.prisma.litGame.update( {
 		where: { id: game.id },
 		data: {
 			status: game.players.length === game.playerCount - 1
@@ -35,6 +37,4 @@ export const joinGameResolver: TrpcResolver<JoinGameInput, GameResponse> = async
 			players: { connect: [ { id: player.id } ] }
 		}
 	} );
-
-	return { data: updatedGame };
 };

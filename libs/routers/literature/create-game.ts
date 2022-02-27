@@ -1,18 +1,16 @@
-import type { TrpcResolver } from "@s2h/utils";
 import cuid from "cuid";
-import type { CreateGameInput, GameResponse } from "@s2h/dtos";
+import type { CreateGameInput } from "@s2h/dtos";
+import type { LitResolver } from "./index";
 
-export const createGameResolver: TrpcResolver<CreateGameInput, GameResponse> = async ( { ctx, input } ) => {
-	const userId = ctx.session!.userId as string;
-	const userAvatar = ctx.session!.profilePic as string;
-	const player = await ctx.prisma.litPlayer.create( { data: { name: input.name, userId, avatar: userAvatar } } );
+export const createGameResolver: LitResolver<CreateGameInput> = async ( { ctx, input } ) => {
+	const userEmail = ctx.session?.user?.email!;
+	const avatar = ctx.session?.user?.image!;
+	const player = await ctx.prisma.litPlayer.create( { data: { name: input.name, userEmail, avatar } } );
 
-	const game = await ctx.prisma.litGame.create( {
+	return ctx.prisma.litGame.create( {
 		data: {
 			code: cuid.slug().toUpperCase(),
 			players: { connect: [ { id: player.id } ] }
 		}
 	} );
-
-	return { data: game };
 };

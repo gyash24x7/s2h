@@ -1,32 +1,33 @@
-import type { TrpcResolver } from "@s2h/utils";
-import { getCardString } from "@s2h/utils";
+import { getCardString, Messages } from "@s2h/utils";
 import { LitMoveType } from "@prisma/client";
-import type { DeclineCardInput, GameResponse } from "@s2h/dtos";
+import type { DeclineCardInput } from "@s2h/dtos";
+import { TRPCError } from "@trpc/server";
+import type { LitResolver } from "./index";
 
-export const declineCardResolver: TrpcResolver<DeclineCardInput, GameResponse> = async ( { ctx, input } ) => {
-	const loggedInUserId = ctx.session?.userId! as string;
-	const game = await ctx.prisma.litGame.findUnique( { where: { id: input.gameId }, include: { players: true } } );
+export const declineCardResolver: LitResolver<DeclineCardInput> = async ( { ctx, input } ) => {
+	const loggedInUserEmail = ctx.session?.user?.email!;
+	const game = await ctx.prisma.litGame.findUnique( {
+		where: { id: input.gameId },
+		include: { players: true }
+	} );
 
 	if ( !game ) {
-		return { error: "Game Not Found!" };
+		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
 	}
 
-	const loggedInPlayer = game.players.find( player => player.userId === loggedInUserId );
+	const loggedInPlayer = game.players.find( player => player.userEmail === loggedInUserEmail );
 
 	if ( !loggedInPlayer ) {
-		return { error: "You are not part of the game. Cannot perform action!" };
+		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
 	}
 
 	const playerHasCard = loggedInPlayer.hand.includes( getCardString( input.cardDeclined ) );
-
 	if ( playerHasCard ) {
-		return { error: "You cannot decline a card that you have!" };
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.INVALID_DECLINE_CARD } );
 	}
 
-	const updatedGame = await ctx.prisma.litGame.update( {
+	return ctx.prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: { moves: { create: [ { type: LitMoveType.DECLINED, turn: loggedInPlayer } ] } }
 	} );
-
-	return { data: updatedGame };
 };

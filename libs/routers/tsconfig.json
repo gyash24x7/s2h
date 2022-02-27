@@ -1,5 +1,8 @@
 {
   "extends": "@s2h/config/node.json",
+  "compilerOptions": {
+    "baseUrl": "./"
+  },
   "include": [
     "./"
   ],

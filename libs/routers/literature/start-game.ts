@@ -1,10 +1,11 @@
 import { LitGameStatus, LitMoveType } from "@prisma/client";
-import type { TrpcResolver } from "@s2h/utils";
-import { Deck, getCardString, Rank } from "@s2h/utils";
-import type { GameResponse, StartGameInput } from "@s2h/dtos";
+import { Deck, getCardString, Messages, Rank } from "@s2h/utils";
+import type { StartGameInput } from "@s2h/dtos";
+import type { LitResolver } from "./index";
+import { TRPCError } from "@trpc/server";
 
-export const startGameResolver: TrpcResolver<StartGameInput, GameResponse> = async ( { input, ctx } ) => {
-	const loggedInUserId = ctx.session?.userId! as string;
+export const startGameResolver: LitResolver<StartGameInput> = async ( { input, ctx } ) => {
+	const loggedInUserEmail = ctx.session?.user?.email!;
 
 	const game = await ctx.prisma.litGame.findFirst( {
 		where: { id: input.gameId, status: LitGameStatus.TEAMS_CREATED },
@@ -12,13 +13,13 @@ export const startGameResolver: TrpcResolver<StartGameInput, GameResponse> = asy
 	} );
 
 	if ( !game ) {
-		return { error: "Game not found!" };
+		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
 	}
 
-	const loggedInPlayer = game.players.find( player => player.userId === loggedInUserId );
+	const loggedInPlayer = game.players.find( player => player.userEmail === loggedInUserEmail );
 
 	if ( !loggedInPlayer ) {
-		return { error: "You are not part of the game. Cannot perform action!" };
+		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
 	}
 
 	const deck = new Deck();
@@ -33,13 +34,11 @@ export const startGameResolver: TrpcResolver<StartGameInput, GameResponse> = asy
 		)
 	);
 
-	const updatedGame = await ctx.prisma.litGame.update( {
+	return ctx.prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: {
 			status: LitGameStatus.IN_PROGRESS,
 			moves: { create: [ { type: LitMoveType.TURN, turnId: loggedInPlayer.id } ] }
 		}
 	} );
-
-	return { data: updatedGame };
 };

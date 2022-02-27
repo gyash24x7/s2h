@@ -1,27 +1,29 @@
-import type { TrpcResolver } from "@s2h/utils";
+import { Messages } from "@s2h/utils";
 import type { LitPlayer } from "@prisma/client";
 import { LitGameStatus, LitMoveType } from "@prisma/client";
-import type { GameResponse, TransferTurnInput } from "@s2h/dtos";
+import type { TransferTurnInput } from "@s2h/dtos";
+import type { LitResolver } from "./index";
+import { TRPCError } from "@trpc/server";
 
-export const transferTurnResolver: TrpcResolver<TransferTurnInput, GameResponse> = async ( { input, ctx } ) => {
-	const loggedInUserId = ctx.session?.userId! as string;
+export const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { input, ctx } ) => {
+	const loggedInUserEmail = ctx.session?.user?.email!;
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { id: input.gameId },
 		include: { players: true }
 	} );
 
 	if ( !game ) {
-		return { error: "Game Not Found!" };
+		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
 	}
 
-	const loggedInPlayer = game.players.find( player => player.userId === loggedInUserId );
+	const loggedInPlayer = game.players.find( player => player.userEmail === loggedInUserEmail );
 
 	if ( !loggedInPlayer ) {
-		return { error: "You are not part of the game. Cannot perform action!" };
+		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
 	}
 
 	if ( loggedInPlayer.hand.length !== 0 ) {
-		return { error: "You can transfer chance only when you don't have cards!" };
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.INVALID_TRANSFER } );
 	}
 
 	const myTeamPlayersWithCards: LitPlayer[] = [];
@@ -38,22 +40,18 @@ export const transferTurnResolver: TrpcResolver<TransferTurnInput, GameResponse>
 	} );
 
 	if ( myTeamPlayersWithCards.length === 0 && otherTeamPlayersWithCards.length === 0 ) {
-		const updatedGame = await ctx.prisma.litGame.update( {
+		return ctx.prisma.litGame.update( {
 			where: { id: input.gameId },
 			data: { status: LitGameStatus.COMPLETED }
 		} );
-
-		return { data: updatedGame };
 	}
 
 	const nextPlayer = myTeamPlayersWithCards.length === 0
 		? otherTeamPlayersWithCards[ 0 ]!
 		: myTeamPlayersWithCards[ 0 ]!;
 
-	const updatedGame = await ctx.prisma.litGame.update( {
+	return ctx.prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: { moves: { create: [ { type: LitMoveType.TURN, turnId: nextPlayer.id } ] } }
 	} );
-
-	return { data: updatedGame };
 };

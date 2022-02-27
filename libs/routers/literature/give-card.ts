@@ -1,26 +1,35 @@
-import type { TrpcResolver } from "@s2h/utils";
-import { getCardString } from "@s2h/utils";
+import { getCardString, Messages } from "@s2h/utils";
 import { LitMoveType } from "@prisma/client";
-import type { GameResponse, GiveCardInput } from "@s2h/dtos";
+import type { GiveCardInput } from "@s2h/dtos";
+import type { LitResolver } from "./index";
+import { TRPCError } from "@trpc/server";
 
-export const giveCardResolver: TrpcResolver<GiveCardInput, GameResponse> = async ( { input, ctx } ) => {
-	const userId = ctx.session?.userId! as string;
-	const game = await ctx.prisma.litGame.findUnique( { where: { id: input.gameId }, include: { players: true } } );
+export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx } ) => {
+	const userEmail = ctx.session?.user?.email!;
+	const game = await ctx.prisma.litGame.findUnique( {
+		where: { id: input.gameId },
+		include: { players: true }
+	} );
 
 	if ( !game ) {
-		return { error: "Game Not Found!" };
+		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
+	}
+
+	const givingPlayer = game.players.find( player => player.userEmail === userEmail );
+
+	if ( !givingPlayer ) {
+		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
 	}
 
 	const takingPlayer = game.players.find( player => player.id === input.giveTo );
-	const givingPlayer = game.players.find( player => player.id === userId );
 
-	if ( !takingPlayer || !givingPlayer ) {
-		return { error: "Player not found!" };
+	if ( !takingPlayer ) {
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.PLAYER_NOT_FOUND } );
 	}
 
 	const cardToGiveIndex = givingPlayer.hand.indexOf( getCardString( input.cardToGive ) );
 	if ( cardToGiveIndex < 0 ) {
-		return { error: "You cannot give a card that you don't have!" };
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.INVALID_GIVE_CARD } );
 	}
 
 	await Promise.all( [
@@ -34,10 +43,8 @@ export const giveCardResolver: TrpcResolver<GiveCardInput, GameResponse> = async
 		} )
 	] );
 
-	const updatedGame = await ctx.prisma.litGame.update( {
+	return ctx.prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: { moves: { create: [ { type: LitMoveType.GIVEN, turn: takingPlayer } ] } }
 	} );
-
-	return { data: updatedGame };
 };

@@ -1,8 +1,10 @@
-import type { TrpcResolver } from "@s2h/utils";
-import type { GameResponse, GetGameInput } from "@s2h/dtos";
+import { Messages } from "@s2h/utils";
+import type { GetGameInput } from "@s2h/dtos";
+import { TRPCError } from "@trpc/server";
+import type { LitResolver } from "./index";
 
-export const getGameResolver: TrpcResolver<GetGameInput, GameResponse> = async ( { input, ctx } ) => {
-	const loggedInUserId = ctx.session?.userId! as string;
+export const getGameResolver: LitResolver<GetGameInput> = async ( { input, ctx } ) => {
+	const loggedInUserEmail = ctx.session?.user?.email!;
 
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { id: input.gameId },
@@ -10,14 +12,14 @@ export const getGameResolver: TrpcResolver<GetGameInput, GameResponse> = async (
 	} );
 
 	if ( !game ) {
-		return { error: "Game Not Found!" };
+		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
 	}
 
-	const loggedInPlayer = game.players.find( player => player.userId === loggedInUserId );
+	const loggedInPlayer = game.players.find( player => player.userEmail === loggedInUserEmail );
 
 	if ( !loggedInPlayer ) {
-		return { error: "You are not part of the game. Cannot perform action!" };
+		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
 	}
 
-	return { data: game };
+	return game;
 };

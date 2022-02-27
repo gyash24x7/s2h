@@ -1,10 +1,11 @@
-import type { TrpcResolver } from "@s2h/utils";
-import { splitArray } from "@s2h/utils";
+import { Messages, splitArray } from "@s2h/utils";
 import { LitGameStatus } from "@prisma/client";
-import type { CreateTeamsInput, GameResponse } from "@s2h/dtos";
+import type { CreateTeamsInput } from "@s2h/dtos";
+import type { LitResolver } from "./index";
+import { TRPCError } from "@trpc/server";
 
-export const createTeamsResolver: TrpcResolver<CreateTeamsInput, GameResponse> = async ( { input, ctx } ) => {
-	const loggedInUserId = ctx.session?.userId! as string;
+export const createTeamsResolver: LitResolver<CreateTeamsInput> = async ( { input, ctx } ) => {
+	const loggedInUserEmail = ctx.session?.user?.email!;
 
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { id: input.gameId },
@@ -12,22 +13,22 @@ export const createTeamsResolver: TrpcResolver<CreateTeamsInput, GameResponse> =
 	} );
 
 	if ( !game ) {
-		return { error: "Game not found!" };
+		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
 	}
 
-	const loggedInPlayer = game.players.find( player => player.userId === loggedInUserId );
+	const loggedInPlayer = game.players.find( player => player.userEmail === loggedInUserEmail );
 
 	if ( !loggedInPlayer ) {
-		return { error: "You are not part of the game. Cannot perform action!" };
+		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
 	}
 
 	if ( game.players.length !== game.playerCount ) {
-		return { error: "A game needs to have 6 players. Not enough players!" };
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.NOT_ENOUGH_PLAYERS } );
 	}
 
 	const playerGroups = splitArray( game.players );
 
-	const updatedGame = await ctx.prisma.litGame.update( {
+	return ctx.prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: {
 			status: LitGameStatus.TEAMS_CREATED,
@@ -45,6 +46,4 @@ export const createTeamsResolver: TrpcResolver<CreateTeamsInput, GameResponse> =
 			}
 		}
 	} );
-
-	return { data: updatedGame };
 };
