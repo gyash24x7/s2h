@@ -11,9 +11,8 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "literature:dev": "turbo run dev --parallel --scope=literature",
-    "backend:dev": "turbo run dev --parallel --scope=@s2h/backend",
-    "ui-storybook:dev": "turbo run dev --parallel --scope=ui-storybook"
+    "literature:dev": "turbo run dev --parallel --scope=@s2h/literature",
+    "ui-storybook:dev": "turbo run dev --parallel --scope=@s2h/ui-storybook"
   },
   "repository": {
     "type": "git",
