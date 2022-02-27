@@ -1,5 +1,6 @@
 import type { TrpcResolver } from "@s2h/utils";
-import { LitGameStatus, LitMoveType, LitPlayer } from "@s2h/prisma";
+import type { LitPlayer } from "@prisma/client";
+import { LitGameStatus, LitMoveType } from "@prisma/client";
 import type { GameResponse, TransferTurnInput } from "@s2h/dtos";
 
 export const transferTurnResolver: TrpcResolver<TransferTurnInput, GameResponse> = async ( { input, ctx } ) => {

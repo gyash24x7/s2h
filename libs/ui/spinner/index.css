@@ -46,7 +46,7 @@
 		@apply w-12 h-12;
 	}
 
-	&.spinner-root--variant-size-2xl {
+	&.spinner-root--variant-size-xxl {
 		@apply w-16 h-16;
 	}
 

@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@s2h/prisma";
+import type { PrismaClient } from "@prisma/client";
 import type { Session } from "next-auth";
 import type { NextApiRequest, NextApiResponse } from "next";
 

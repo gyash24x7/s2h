@@ -1,6 +1,6 @@
 import type { TrpcResolver } from "@s2h/utils";
 import { splitArray } from "@s2h/utils";
-import { LitGameStatus } from "@s2h/prisma";
+import { LitGameStatus } from "@prisma/client";
 import type { CreateTeamsInput, GameResponse } from "@s2h/dtos";
 
 export const createTeamsResolver: TrpcResolver<CreateTeamsInput, GameResponse> = async ( { input, ctx } ) => {

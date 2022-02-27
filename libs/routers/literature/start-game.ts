@@ -1,4 +1,4 @@
-import { LitGameStatus, LitMoveType } from "@s2h/prisma";
+import { LitGameStatus, LitMoveType } from "@prisma/client";
 import type { TrpcResolver } from "@s2h/utils";
 import { Deck, getCardString, Rank } from "@s2h/utils";
 import type { GameResponse, StartGameInput } from "@s2h/dtos";

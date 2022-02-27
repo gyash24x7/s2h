@@ -1,5 +1,5 @@
 import type { TrpcResolver } from "@s2h/utils";
-import { LitGameStatus } from "@s2h/prisma";
+import { LitGameStatus } from "@prisma/client";
 import type { GameResponse, JoinGameInput } from "@s2h/dtos";
 
 export const joinGameResolver: TrpcResolver<JoinGameInput, GameResponse> = async ( { ctx, input } ) => {

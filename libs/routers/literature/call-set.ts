@@ -1,6 +1,7 @@
 import type { TrpcResolver } from "@s2h/utils";
 import { cardSetMap, getCardSet, getCardString, includesAll, includesSome, removeIfPresent } from "@s2h/utils";
-import { LitMoveType, LitPlayer } from "@s2h/prisma";
+import type { LitPlayer } from "@prisma/client";
+import { LitMoveType } from "@prisma/client";
 import type { CallSetInput, GameResponse } from "@s2h/dtos";
 
 export const callSetResolver: TrpcResolver<CallSetInput, GameResponse> = async ( { input, ctx } ) => {

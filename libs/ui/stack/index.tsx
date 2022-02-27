@@ -7,19 +7,21 @@ export interface StackProps {
 	align?: "center" | "start" | "end" | "baseline" | "stretch";
 	spacing?: Size;
 	centered?: boolean;
+	className?: string;
 }
 
 function getValidChildren( children: ReactNode ) {
 	return Children.toArray( children ).filter( ( child ) => isValidElement( child ) ) as ReactElement[];
 }
 
-export const Stack: FC<StackProps> = function ( { orientation, centered, children, spacing, align } ) {
+export const Stack: FC<StackProps> = function ( { orientation, centered, children, spacing, align, className } ) {
 	const validChildren = getValidChildren( children );
 	return (
 		<Flex
 			direction={ orientation === "vertical" ? "col" : "row" }
 			justify={ centered ? "center" : "start" }
 			align={ align }
+			className={ className }
 		>
 			{ validChildren.map( ( child, index ) => (
 				<Fragment key={ child.key }>

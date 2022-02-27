@@ -1,6 +1,6 @@
 import type { TrpcResolver } from "@s2h/utils";
 import { getCardString } from "@s2h/utils";
-import { LitMoveType } from "@s2h/prisma";
+import { LitMoveType } from "@prisma/client";
 import type { DeclineCardInput, GameResponse } from "@s2h/dtos";
 
 export const declineCardResolver: TrpcResolver<DeclineCardInput, GameResponse> = async ( { ctx, input } ) => {
