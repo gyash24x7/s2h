@@ -1,17 +1,14 @@
 import NextAuth from "next-auth";
-import Auth0Provider from "next-auth/providers/auth0";
+import GoogleProvider from "next-auth/providers/google";
 import type { NextApiHandler } from "next";
 
 const authHandler: NextApiHandler = NextAuth( {
-	pages: {
-		signIn: "/login"
-	},
 	secret: process.env[ "SECRET" ],
 	providers: [
-		Auth0Provider( {
-			clientId: process.env[ "AUTH0_CLIENT_ID" ]!,
-			clientSecret: process.env[ "AUTH0_CLIENT_SECRET" ]!,
-			issuer: process.env[ "AUTH0_ISSUER" ]
+		GoogleProvider( {
+			clientId: process.env.GOOGLE_CLIENT_ID!,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+			authorization: { params: { scope: "openid email profile" } }
 		} )
 	]
 } );

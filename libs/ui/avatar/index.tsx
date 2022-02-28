@@ -2,8 +2,8 @@ import { getClassname, Size } from "../utils";
 
 export interface AvatarProps {
 	size?: Size;
-	src?: string;
-	name?: string;
+	src?: string | null;
+	name?: string | null;
 }
 
 const randomChar = () => {

@@ -17,7 +17,7 @@ export const CreateGame = function ( props: CreateGameProps ) {
 	const { mutateAsync, isLoading } = trpc.useMutation( "create-lit-game", {
 		async onSuccess( data ) {
 			const { id } = data as LitGame;
-			await push( `/games/literature/${ id }` );
+			await push( `/play/${ id }` );
 		},
 		onError( error ) {
 			console.log( error );

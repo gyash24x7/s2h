@@ -21,6 +21,7 @@ importers:
 
   apps/literature:
     specifiers:
+      '@heroicons/react': 1.0.5
       '@s2h/config': workspace:*
       '@s2h/dtos': workspace:*
       '@s2h/routers': workspace:*
@@ -33,10 +34,11 @@ importers:
       '@types/node': 17.0.21
       '@types/react': 17.0.39
       autoprefixer: 10.4.2
+      eva-icons: 1.1.3
+      ionicons: 6.0.1
       next: 12.1.0
       next-auth: 4.2.1
       next-transpile-modules: 9.0.0
-      nodemailer: 6.7.2
       postcss: 8.4.6
       postcss-import: 14.0.2
       react: 17.0.2
@@ -46,6 +48,7 @@ importers:
       tailwindcss: 3.0.22
       typescript: 4.5.5
     dependencies:
+      '@heroicons/react': 1.0.5_react@17.0.2
       '@s2h/dtos': link:../../libs/dtos
       '@s2h/routers': link:../../libs/routers
       '@s2h/ui': link:../../libs/ui
@@ -54,9 +57,10 @@ importers:
       '@trpc/next': 9.20.0_7948e95d24d70109f73547da45746c20
       '@trpc/react': 9.20.0_a14e5d50ecbbd026824ab78a4b4266ab
       '@trpc/server': 9.20.0
+      eva-icons: 1.1.3
+      ionicons: 6.0.1
       next: 12.1.0_react-dom@17.0.2+react@17.0.2
-      next-auth: 4.2.1_a5abe9a782f257b98b0228cd6e151b08
-      nodemailer: 6.7.2
+      next-auth: 4.2.1_react-dom@17.0.2+react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-query: 3.34.16_react-dom@17.0.2+react@17.0.2
@@ -1844,7 +1848,6 @@ packages:
       react: '>= 16'
     dependencies:
       react: 17.0.2
-    dev: true
 
   /@istanbuljs/load-nyc-config/1.1.0:
     resolution: {integrity: sha512-VjeHSlIzpv/NyD3N0YuHfXOPDIixcA1q2ZV98wsMqcYlPmv2n3Yb2lYP9XMElnaFVXg5A7YLTeLu6V84uQDjmQ==}
@@ -2167,6 +2170,12 @@ packages:
     resolution: {integrity: sha512-LjRssaWu9w2SrXitofnutRIyURI7l0veQYIALz7uY4shygM9nMcK3omXcObRm7TAcw3Z+9ytfK1B+ySOsOesxQ==}
     requiresBuild: true
     dev: true
+
+  /@stencil/core/2.12.1:
+    resolution: {integrity: sha512-u24TZ+FEvjnZt5ZgIkLjLpUNsO6Ml3mUZqwmqk81w6RWWz75hgB5p4RFI5rvuErFeh2xvMIGo+pNdG24XUBz1A==}
+    engines: {node: '>=12.10.0', npm: '>=6.0.0'}
+    hasBin: true
+    dev: false
 
   /@storybook/addon-actions/6.4.19_b8fdba992ce7d797017dc07106486496:
     resolution: {integrity: sha512-GpSvP8xV8GfNkmtGJjfCgaOx6mbjtyTK0aT9FqX9pU0s+KVMmoCTrBh43b7dWrwxxas01yleBK9VpYggzhi/Fw==}
@@ -6408,6 +6417,10 @@ packages:
     engines: {node: '>= 0.6'}
     dev: true
 
+  /eva-icons/1.1.3:
+    resolution: {integrity: sha512-QBSEWNbEx1H0numXP1qgxKVCZHonRaky5ft4pGzQBcO4cy7mEja6TuJ8rc7BqX2pmkvetVQWKDH+DK/8y7GTag==}
+    dev: false
+
   /events/3.3.0:
     resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
     engines: {node: '>=0.8.x'}
@@ -7530,6 +7543,12 @@ packages:
     dependencies:
       loose-envify: 1.4.0
     dev: true
+
+  /ionicons/6.0.1:
+    resolution: {integrity: sha512-xQekOJsxH82O7oB+3F60zeRggCdND9pJ/k0E6IJDVUGGlCj5mlyFqNgxUimytKgstPGv3S+3EmCxjefvtGgWUg==}
+    dependencies:
+      '@stencil/core': 2.12.1
+    dev: false
 
   /ip/1.1.5:
     resolution: {integrity: sha1-vd7XARQpCCjAoDnnLvJfWq7ENUo=}
@@ -8722,7 +8741,7 @@ packages:
       uuid: 8.3.2
     dev: true
 
-  /next-auth/4.2.1_a5abe9a782f257b98b0228cd6e151b08:
+  /next-auth/4.2.1_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha512-XDtt7nqevkNf4EJ2zKAKkI+MFsURf11kx11vPwxrBYA1MHeqWwaWbGOUOI2ekNTvfAg4nTEJJUH3LV2cLrH3Tg==}
     engines: {node: ^12.19.0 || ^14.15.0 || ^16.13.0}
     peerDependencies:
@@ -8737,7 +8756,6 @@ packages:
       '@panva/hkdf': 1.0.1
       cookie: 0.4.2
       jose: 4.5.1
-      nodemailer: 6.7.2
       oauth: 0.9.15
       openid-client: 5.1.3
       preact: 10.6.6
@@ -8901,11 +8919,6 @@ packages:
   /node-releases/2.0.2:
     resolution: {integrity: sha512-XxYDdcQ6eKqp/YjI+tb2C5WM2LgjnZrfYg4vgQt49EK268b6gYCHsBLrK2qvJo4FmCtqmKezb0WZFK4fkrZNsg==}
     dev: true
-
-  /nodemailer/6.7.2:
-    resolution: {integrity: sha512-Dz7zVwlef4k5R71fdmxwR8Q39fiboGbu3xgswkzGwczUfjp873rVxt1O46+Fh0j1ORnAC6L9+heI8uUpO6DT7Q==}
-    engines: {node: '>=6.0.0'}
-    dev: false
 
   /normalize-package-data/2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}

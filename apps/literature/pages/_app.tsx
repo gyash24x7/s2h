@@ -16,5 +16,5 @@ export default withTRPC<LiteratureRouter>( {
 	config: () => (
 		{ url: "http://localhost:3000/api" }
 	),
-	ssr: true
+	ssr: false
 } )( App );

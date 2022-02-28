@@ -19,7 +19,7 @@ export const JoinGame = function ( props: JoinGameProps ) {
 	const { mutateAsync, isLoading } = trpc.useMutation( "join-lit-game", {
 		async onSuccess( data ) {
 			const { id } = data as LitGame;
-			await push( `/games/literature/${ id }` );
+			await push( `/play/${ id }` );
 		},
 		onError( error ) {
 			console.log( error );
