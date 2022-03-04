@@ -1,40 +1,34 @@
 {
   "name": "@s2h/literature",
   "private": true,
+  "version": "0.0.0",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@heroicons/react": "1.0.5",
     "@s2h/dtos": "workspace:*",
-    "@s2h/routers": "workspace:*",
     "@s2h/ui": "workspace:*",
-    "@s2h/utils": "workspace:*",
-    "@trpc/client": "9.20.0",
-    "@trpc/next": "9.20.0",
-    "@trpc/react": "9.20.0",
-    "@trpc/server": "9.20.0",
-    "eva-icons": "1.1.3",
-    "ionicons": "6.0.1",
-    "next": "12.1.0",
-    "next-auth": "4.2.1",
+    "@trpc/client": "9.19.0",
+    "@trpc/react": "9.19.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-query": "3.34.16",
+    "react-router-dom": "6.2.1",
     "react-use": "17.3.2"
   },
   "devDependencies": {
     "@s2h/config": "workspace:*",
-    "@types/node": "17.0.21",
+    "@s2h/routers": "workspace:*",
+    "@types/node": "17.0.18",
     "@types/react": "17.0.39",
+    "@types/react-dom": "17.0.11",
+    "@vitejs/plugin-react": "1.2.0",
     "autoprefixer": "10.4.2",
-    "next-transpile-modules": "9.0.0",
     "postcss": "8.4.6",
-    "postcss-import": "14.0.2",
-    "tailwindcss": "3.0.22",
-    "typescript": "4.5.5"
+    "tailwindcss": "3.0.23",
+    "vite": "2.8.5"
   }
 }

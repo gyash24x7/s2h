@@ -1,14 +1,11 @@
 {
-  "extends": "@s2h/config/nextjs.json",
-  "compilerOptions": {
-    "baseUrl": "./"
-  },
+  "extends": "@s2h/config/react-app.json",
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
+    "src"
   ],
-  "exclude": [
-    "node_modules"
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

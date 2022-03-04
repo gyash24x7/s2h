@@ -25,6 +25,6 @@
 }
 
 .literature-bg {
-	background-image: url("/assets/literature-bg.jpeg");
+	background-image: url("../assets/literature-bg.jpeg");
 	background-size: cover;
 }
