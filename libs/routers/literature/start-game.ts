@@ -1,11 +1,11 @@
 import { LitGameStatus, LitMoveType } from "@prisma/client";
+import type { LitResolver } from "@s2h/utils";
 import { Deck, getCardString, Messages, Rank } from "@s2h/utils";
 import type { StartGameInput } from "@s2h/dtos";
-import type { LitResolver } from "./index";
 import { TRPCError } from "@trpc/server";
 
 export const startGameResolver: LitResolver<StartGameInput> = async ( { input, ctx } ) => {
-	const loggedInUserEmail = ctx.session?.user?.email!;
+	const userId = ctx.res.locals.userId as string;
 
 	const game = await ctx.prisma.litGame.findFirst( {
 		where: { id: input.gameId, status: LitGameStatus.TEAMS_CREATED },
@@ -16,7 +16,7 @@ export const startGameResolver: LitResolver<StartGameInput> = async ( { input, c
 		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
 	}
 
-	const loggedInPlayer = game.players.find( player => player.userEmail === loggedInUserEmail );
+	const loggedInPlayer = game.players.find( player => player.userId === userId );
 
 	if ( !loggedInPlayer ) {
 		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );

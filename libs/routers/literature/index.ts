@@ -1,5 +1,5 @@
 import * as trpc from "@trpc/server";
-import type { TrpcContext, TrpcResolver } from "@s2h/utils";
+import type { TrpcContext } from "@s2h/utils";
 import { createGameResolver } from "./create-game";
 import { joinGameResolver } from "./join-game";
 import { createTeamsResolver } from "./create-teams";
@@ -22,7 +22,6 @@ import {
 	startGameInputStruct,
 	transferTurnInputStruct
 } from "@s2h/dtos";
-import type { LitGame } from "@prisma/client";
 
 export const literatureRouter = trpc.router<TrpcContext>()
 	.query( "get-game", { input: getGameInputStruct, resolve: getGameResolver } )
@@ -37,5 +36,3 @@ export const literatureRouter = trpc.router<TrpcContext>()
 	.mutation( "create-lit-game", { input: createGameInputStruct, resolve: createGameResolver } );
 
 export type LiteratureRouter = typeof literatureRouter;
-
-export type LitResolver<I> = TrpcResolver<I, LitGame>;

@@ -1,11 +1,12 @@
+import type { LitResolver } from "@s2h/utils";
 import { getCardString, Messages } from "@s2h/utils";
 import { LitMoveType } from "@prisma/client";
 import type { GiveCardInput } from "@s2h/dtos";
-import type { LitResolver } from "./index";
 import { TRPCError } from "@trpc/server";
 
 export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx } ) => {
-	const userEmail = ctx.session?.user?.email!;
+	const userId = ctx.res.locals.userId as string;
+
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { id: input.gameId },
 		include: { players: true }
@@ -15,7 +16,7 @@ export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx
 		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
 	}
 
-	const givingPlayer = game.players.find( player => player.userEmail === userEmail );
+	const givingPlayer = game.players.find( player => player.userId === userId );
 
 	if ( !givingPlayer ) {
 		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
