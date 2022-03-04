@@ -94,6 +94,7 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 	} ) ) );
 
 	return ctx.prisma.litGame.update( {
+		include: { players: true, teams: true, moves: true },
 		where: { id: input.gameId },
 		data: { moves: { create: [ moveData ] } }
 	} );

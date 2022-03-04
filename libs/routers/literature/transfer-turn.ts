@@ -42,6 +42,7 @@ export const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { in
 
 	if ( myTeamPlayersWithCards.length === 0 && otherTeamPlayersWithCards.length === 0 ) {
 		return ctx.prisma.litGame.update( {
+			include: { players: true, teams: true, moves: true },
 			where: { id: input.gameId },
 			data: { status: LitGameStatus.COMPLETED }
 		} );
@@ -52,6 +53,7 @@ export const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { in
 		: myTeamPlayersWithCards[ 0 ]!;
 
 	return ctx.prisma.litGame.update( {
+		include: { players: true, teams: true, moves: true },
 		where: { id: input.gameId },
 		data: { moves: { create: [ { type: LitMoveType.TURN, turnId: nextPlayer.id } ] } }
 	} );

@@ -9,7 +9,7 @@ export const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input
 
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { code: input.code },
-		include: { players: true }
+		include: { players: true, teams: true, moves: true }
 	} );
 
 	if ( !game ) {
@@ -26,6 +26,7 @@ export const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input
 	}
 
 	return ctx.prisma.litGame.update( {
+		include: { players: true, teams: true, moves: true },
 		where: { id: game.id },
 		data: {
 			status: game.players.length === game.playerCount - 1

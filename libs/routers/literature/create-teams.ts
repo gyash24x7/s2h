@@ -29,6 +29,7 @@ export const createTeamsResolver: LitResolver<CreateTeamsInput> = async ( { inpu
 	const playerGroups = splitArray( game.players );
 
 	return ctx.prisma.litGame.update( {
+		include: { players: true, teams: true, moves: true },
 		where: { id: input.gameId },
 		data: {
 			status: LitGameStatus.TEAMS_CREATED,
