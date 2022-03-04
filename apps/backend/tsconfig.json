@@ -1,0 +1,12 @@
+{
+  "extends": "@s2h/config/node.json",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
