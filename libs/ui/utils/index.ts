@@ -4,7 +4,7 @@ export type IconType = ( props: ComponentProps<"svg"> ) => JSX.Element;
 
 export type Appearance = "primary" | "default" | "warning" | "danger" | "success" | "info" | "alt"
 
-export type Size = "xs" | "sm" | "md" | "lg" | "xl" | "xxl"
+export type Size = "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
 
 export function getIconWidthHeightFromSize( size: Size ) {
 	const sizeMap = {
@@ -13,7 +13,7 @@ export function getIconWidthHeightFromSize( size: Size ) {
 		md: { width: 14, height: 14 },
 		lg: { width: 16, height: 16 },
 		xl: { width: 20, height: 20 },
-		xxl: { width: 24, height: 24 }
+		"2xl": { width: 24, height: 24 }
 	};
 	return sizeMap[ size ];
 }
