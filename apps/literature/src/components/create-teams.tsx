@@ -1,16 +1,13 @@
 import { TextInput } from "@s2h/ui/text-input";
 import { Flex } from "@s2h/ui/flex";
 import { Modal } from "@s2h/ui/modal";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { trpc } from "../utils/trpc";
 import { useParams } from "react-router-dom";
+import { Button } from "@s2h/ui/button";
 
-export interface CreateTeamsProps {
-	isModalOpen: boolean;
-	closeModal: () => any;
-}
-
-export const CreateTeams = function ( props: CreateTeamsProps ) {
+export const CreateTeams = function () {
+	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const [ team1, setTeam1 ] = useState( "" );
 	const [ team2, setTeam2 ] = useState( "" );
 	const params = useParams<{ gameId: string }>();
@@ -23,34 +20,41 @@ export const CreateTeams = function ( props: CreateTeamsProps ) {
 	} );
 
 	return (
-		<Modal
-			isOpen={ props.isModalOpen }
-			onClose={ props.closeModal }
-			title={ "Create Teams" }
-			actions={ [
-				{
-					appearance: "primary",
-					fullWidth: true,
-					onClick: () => mutateAsync( { teams: [ team1, team2 ], gameId: params.gameId! } ),
-					buttonText: "Submit",
-					isLoading
-				}
-			] }
-		>
-			<Flex direction={ "col" } className={ "space-y-2" }>
-				<TextInput
-					name={ "team1" }
-					value={ team1 }
-					onChange={ setTeam1 }
-					placeholder={ "Enter Name for Team 1" }
-				/>
-				<TextInput
-					name={ "alias" }
-					value={ team2 }
-					onChange={ setTeam2 }
-					placeholder={ "Enter Name for Team 2" }
-				/>
-			</Flex>
-		</Modal>
+		<Fragment>
+			<Modal
+				isOpen={ isModalOpen }
+				onClose={ () => setIsModalOpen( false ) }
+				title={ "Create Teams" }
+				actions={ [
+					{
+						appearance: "primary",
+						fullWidth: true,
+						onClick: () => mutateAsync( { teams: [ team1, team2 ], gameId: params.gameId! } ),
+						buttonText: "Submit",
+						isLoading
+					}
+				] }
+			>
+				<Flex direction={ "col" } className={ "space-y-2" }>
+					<TextInput
+						name={ "team1" }
+						value={ team1 }
+						onChange={ setTeam1 }
+						placeholder={ "Enter Name for Team 1" }
+					/>
+					<TextInput
+						name={ "alias" }
+						value={ team2 }
+						onChange={ setTeam2 }
+						placeholder={ "Enter Name for Team 2" }
+					/>
+				</Flex>
+			</Modal>
+			<Button
+				buttonText={ "Create Teams" }
+				appearance={ "primary" }
+				onClick={ () => setIsModalOpen( true ) }
+			/>
+		</Fragment>
 	);
 };
