@@ -22,7 +22,7 @@ export const callSetInputStruct = s.object( {
 export type CallSetInput = Infer<typeof callSetInputStruct>;
 
 export const createGameInputStruct = s.object( {
-	name: s.nonempty( s.string() )
+	playerCount: s.integer()
 } );
 
 export type CreateGameInput = Infer<typeof createGameInputStruct>;
@@ -56,8 +56,7 @@ export const giveCardInputStruct = s.object( {
 export type GiveCardInput = Infer<typeof giveCardInputStruct>;
 
 export const joinGameInputStruct = s.object( {
-	code: s.size( s.nonempty( s.string() ), 7 ),
-	name: s.nonempty( s.string() )
+	code: s.size( s.nonempty( s.string() ), 7 )
 } );
 
 export type JoinGameInput = Infer<typeof joinGameInputStruct>;
