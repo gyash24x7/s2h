@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+    id              String          @id @default(cuid())
+    name            String
+    email           String          @unique
+    avatar          String
+    salt            String          @unique
+
+    litPlayer       LitPlayer?      @relation("LitProfile")
+}
+
 enum LitGameStatus {
     NOT_STARTED
     PLAYERS_READY
@@ -42,7 +52,8 @@ model LitPlayer {
     hand            String[]
     avatar          String
 
-    userEmail       String
+    user            User            @relation("LitProfile", fields:[userId], references:[id])
+    userId          String
 
     team            LitTeam?        @relation("TeamPartOf", fields:[teamId], references:[id])
     teamId          String?
