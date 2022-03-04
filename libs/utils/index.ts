@@ -1,4 +1,4 @@
 export * from "./constants";
-export * from "./trpc";
+export * from "./types";
 export * from "./array-utils";
 export * from "./card-utils";

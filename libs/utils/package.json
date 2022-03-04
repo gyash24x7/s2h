@@ -7,10 +7,9 @@
   "author": "Yash Gupta",
   "license": "ISC",
   "devDependencies": {
-    "@s2h/config": "workspace:*",
     "@prisma/client": "3.10.0",
-    "@types/node": "17.0.19",
-    "next": "12.1.0",
-    "next-auth": "4.2.1"
+    "@s2h/config": "workspace:*",
+    "@types/express": "4.17.13",
+    "@types/node": "17.0.19"
   }
 }
