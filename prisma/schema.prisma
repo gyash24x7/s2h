@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-    id              String          @id @default(cuid())
-    name            String
-    email           String          @unique
-    avatar          String
-    salt            String          @unique
+    id                  String          @id @default(cuid())
+    name                String
+    email               String          @unique
+    avatar              String
+    salt                String          @unique
 
-    litPlayer       LitPlayer?      @relation("LitProfile")
+    litGamesCreated     LitGame[]       @relation("LitGameCreatedBy")
+    litPlayers          LitPlayer[]     @relation("LitProfile")
 }
 
 enum LitGameStatus {
@@ -38,11 +39,11 @@ enum LitMoveType {
 model LitTeam {
     id          String          @id @default(cuid())
     name        String
-    players     LitPlayer[]     @relation("TeamPartOf")
+    players     LitPlayer[]     @relation("LitTeamPartOf")
     score       Int             @default(0)
 
     // Not going to use below fields but required for prisma
-    game        LitGame         @relation("TeamOfGame", fields:[gameId], references:[id])
+    game        LitGame         @relation("TeamOfLitGame", fields:[gameId], references:[id])
     gameId      String
 }
 
@@ -52,16 +53,18 @@ model LitPlayer {
     hand            String[]
     avatar          String
 
+    game            LitGame         @relation("LitGamePartOf", fields:[gameId], references:[id])
+    gameId          String
+
     user            User            @relation("LitProfile", fields:[userId], references:[id])
     userId          String
 
-    team            LitTeam?        @relation("TeamPartOf", fields:[teamId], references:[id])
+    team            LitTeam?        @relation("LitTeamPartOf", fields:[teamId], references:[id])
     teamId          String?
 
-    turnMoves       LitMove[]       @relation("TurnPlayer")
-    askedFromMoves  LitMove[]       @relation("AskedFrom")
-    askedByMoves    LitMove[]       @relation("AskedBy")
-    gamesPartOf     LitGame[]       @relation("GamesPartOf")
+    turnMoves       LitMove[]       @relation("LitTurnPlayer")
+    askedFromMoves  LitMove[]       @relation("LitAskedFrom")
+    askedByMoves    LitMove[]       @relation("LitAskedBy")
 }
 
 model LitMove {
@@ -69,17 +72,19 @@ model LitMove {
     type              LitMoveType
     askedFor          String?
 
-    turn              LitPlayer?      @relation("TurnPlayer", fields:[turnId], references:[id])
+    turn              LitPlayer?      @relation("LitTurnPlayer", fields:[turnId], references:[id])
     turnId            String?
 
-    askedFrom         LitPlayer?      @relation("AskedFrom", fields:[askedFromId], references:[id])
+    askedFrom         LitPlayer?      @relation("LitAskedFrom", fields:[askedFromId], references:[id])
     askedFromId       String?
 
-    askedBy           LitPlayer?      @relation("AskedBy", fields:[askedById], references:[id])
+    askedBy           LitPlayer?      @relation("LitAskedBy", fields:[askedById], references:[id])
     askedById         String?
 
-    game              LitGame         @relation("GameMoves", fields:[gameId], references:[id])
+    game              LitGame         @relation("LitGameMoves", fields:[gameId], references:[id])
     gameId            String
+
+    createdAt         DateTime        @default(now())
 }
 
 model LitGame {
@@ -88,8 +93,11 @@ model LitGame {
     status        LitGameStatus   @default(NOT_STARTED)
     playerCount   Int             @default(2)
 
-    players       LitPlayer[]     @relation("GamesPartOf")
-    teams         LitTeam[]       @relation("TeamOfGame")
+    createdBy     User            @relation("LitGameCreatedBy", fields:[createdById], references:[id])
+    createdById   String
 
-    moves         LitMove[]       @relation("GameMoves")
+    players       LitPlayer[]     @relation("LitGamePartOf")
+    teams         LitTeam[]       @relation("TeamOfLitGame")
+
+    moves         LitMove[]       @relation("LitGameMoves")
 }
