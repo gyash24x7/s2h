@@ -1,20 +1,5 @@
-import { shuffle, splitArray } from "./array-utils";
-
-export enum Rank {
-	ACE = "ACE",
-	TWO = "TWO",
-	THREE = "THREE",
-	FOUR = "FOUR",
-	FIVE = "FIVE",
-	SIX = "SIX",
-	SEVEN = "SEVEN",
-	EIGHT = "EIGHT",
-	NINE = "NINE",
-	TEN = "TEN",
-	JACK = "JACK",
-	QUEEN = "QUEEN",
-	KING = "KING"
-}
+import { GameCard, Rank, Suit } from "./types";
+import { shuffle } from "./array-utils";
 
 export const RANKS = [
 	Rank.ACE,
@@ -31,13 +16,6 @@ export const RANKS = [
 	Rank.QUEEN,
 	Rank.KING
 ] as const;
-
-export enum Suit {
-	HEARTS = "HEARTS",
-	CLUBS = "CLUBS",
-	SPADES = "SPADES",
-	DIAMONDS = "DIAMONDS"
-}
 
 export const SUITS = [ Suit.HEARTS, Suit.CLUBS, Suit.DIAMONDS, Suit.SPADES ] as const;
 
@@ -63,13 +41,36 @@ export const CARD_SETS = [
 	CardSet.SMALL_HEARTS
 ] as const;
 
-export type GameCard = {
-	rank: Rank;
-	suit: Suit;
+export function getGameCard( cardString: string ): GameCard {
+	return {
+		rank: RANKS.find( rank => cardString.indexOf( rank ) > -1 )!,
+		suit: SUITS.find( suit => cardString.indexOf( suit ) > -1 )!
+	};
 }
 
 export function getCardString( card: GameCard ) {
 	return card.rank + " OF " + card.suit;
+}
+
+export function getCardId( card: GameCard ) {
+	return card.rank.toLowerCase() + "_" + card.suit.toLowerCase();
+}
+
+export function getCardSetsFromHand( hand: GameCard[] ): CardSet[] {
+	const setOfCardSet = new Set<CardSet>();
+	hand.forEach( card => setOfCardSet.add( getCardSet( card ) ) );
+	return Array.from( setOfCardSet );
+}
+
+export function getCardSuitsFromHand( hand: GameCard[] ): Suit[] {
+	const cardSuitSet = new Set<Suit>();
+	hand.forEach( card => cardSuitSet.add( card.suit ) );
+	return Array.from( cardSuitSet );
+}
+
+export function isCardInHand( hand: GameCard[], { rank, suit }: GameCard ) {
+	const found = hand.find( card => card.rank === rank && card.suit === suit );
+	return !!found;
 }
 
 export class Deck {
@@ -128,19 +129,19 @@ export const cardSuitMap: Record<Suit, GameCard[]> = {
 };
 
 export const cardSetMap: Record<CardSet, GameCard[]> = {
-	SMALL_CLUBS: splitArray( cardSuitMap.CLUBS.splice( 6, 1 ) )[ 0 ],
-	SMALL_SPADES: splitArray( cardSuitMap.SPADES.splice( 6, 1 ) )[ 0 ],
-	SMALL_DIAMONDS: splitArray( cardSuitMap.DIAMONDS.splice( 6, 1 ) )[ 0 ],
-	SMALL_HEARTS: splitArray( cardSuitMap.HEARTS.splice( 6, 1 ) )[ 0 ],
-	BIG_CLUBS: splitArray( cardSuitMap.CLUBS.splice( 6, 1 ) )[ 1 ],
-	BIG_SPADES: splitArray( cardSuitMap.SPADES.splice( 6, 1 ) )[ 1 ],
-	BIG_DIAMONDS: splitArray( cardSuitMap.DIAMONDS.splice( 6, 1 ) )[ 1 ],
-	BIG_HEARTS: splitArray( cardSuitMap.HEARTS.splice( 6, 1 ) )[ 1 ]
+	SMALL_CLUBS: cardSuitMap.CLUBS.slice( 0, 6 ),
+	SMALL_SPADES: cardSuitMap.SPADES.slice( 0, 6 ),
+	SMALL_DIAMONDS: cardSuitMap.DIAMONDS.slice( 0, 6 ),
+	SMALL_HEARTS: cardSuitMap.HEARTS.slice( 0, 6 ),
+	BIG_CLUBS: cardSuitMap.CLUBS.slice( 7 ),
+	BIG_SPADES: cardSuitMap.SPADES.slice( 7 ),
+	BIG_DIAMONDS: cardSuitMap.DIAMONDS.slice( 7 ),
+	BIG_HEARTS: cardSuitMap.HEARTS.slice( 7 )
 };
 
 export function getCardSet( card: GameCard ): CardSet {
 	return CardSet[ (
-		RANKS.indexOf( card.rank ) < 6 ? "SMALL_" : "BIG_" + card.suit.toString()
+		RANKS.indexOf( card.rank ) < 6 ? "SMALL_" + card.suit.toString() : "BIG_" + card.suit.toString()
 	) as keyof typeof CardSet ];
 
 }

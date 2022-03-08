@@ -1,10 +1,40 @@
-import type { LitGame, LitMove, LitPlayer, LitTeam, PrismaClient } from "@prisma/client";
+import type { LitGame, LitMove, LitPlayer, LitTeam, PrismaClient, User } from "@prisma/client";
+import type { EventEmitter } from "events";
 import type { NextFunction, Request, Response } from "express";
 
 export type TrpcContext = {
-	req: Request;
-	res: Response;
-	prisma: PrismaClient
+	req?: Request;
+	res?: Response;
+	prisma: PrismaClient;
+	ee: EventEmitter;
+}
+
+export enum Rank {
+	ACE = "ACE",
+	TWO = "TWO",
+	THREE = "THREE",
+	FOUR = "FOUR",
+	FIVE = "FIVE",
+	SIX = "SIX",
+	SEVEN = "SEVEN",
+	EIGHT = "EIGHT",
+	NINE = "NINE",
+	TEN = "TEN",
+	JACK = "JACK",
+	QUEEN = "QUEEN",
+	KING = "KING"
+}
+
+export enum Suit {
+	HEARTS = "HEARTS",
+	CLUBS = "CLUBS",
+	SPADES = "SPADES",
+	DIAMONDS = "DIAMONDS"
+}
+
+export type GameCard = {
+	rank: Rank;
+	suit: Suit;
 }
 
 export type TrpcResolverOptions<I = any> = {
@@ -14,7 +44,12 @@ export type TrpcResolverOptions<I = any> = {
 
 export type TrpcResolver<I = any, R = any> = ( options: TrpcResolverOptions<I> ) => R | Promise<R>
 
-export type LitGameData = LitGame & { players: LitPlayer[] } & { teams: LitTeam[] } & { moves: LitMove[] }
+export type LitGameData =
+	LitGame
+	& { players: LitPlayer[] }
+	& { teams: LitTeam[] }
+	& { moves: LitMove[] }
+	& { createdBy: User }
 
 export type LitResolver<I = unknown> = TrpcResolver<I, LitGameData>;
 
