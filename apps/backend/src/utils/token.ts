@@ -20,17 +20,21 @@ export function verifyJwt( token: string ): { valid: boolean, expired: boolean, 
 export async function reIssueAccessToken( refreshToken: string ) {
 	const { subject } = verifyJwt( refreshToken );
 
-	if ( !subject ) return;
+	if ( !subject ) {
+		return;
+	}
 
 	const user = await prisma.user.findUnique( { where: { salt: subject } } );
 
-	if ( !user ) return;
+	if ( !user ) {
+		return;
+	}
 
 	return signJwt( user.id, "access" );
 }
 
 export const accessTokenCookieOptions: CookieOptions = {
-	maxAge: 900000,
+	maxAge: 9000000,
 	httpOnly: true,
 	domain: "localhost",
 	path: "/",

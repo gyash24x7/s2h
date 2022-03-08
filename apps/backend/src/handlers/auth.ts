@@ -3,10 +3,10 @@ import { AVATAR_BASE_URL, ExpressHandler } from "@s2h/utils";
 import { getGoogleToken, getGoogleUser } from "../utils/oauth";
 import { accessTokenCookieOptions, refreshTokenCookieOptions, signJwt } from "../utils/token";
 import * as bcrypt from "bcryptjs";
+import type { User } from "@prisma/client";
 
 export const getLoggedInUser: ExpressHandler = async function ( _req, res ) {
-	const userId = res.locals.userId as string;
-	const user = await prisma.user.findUnique( { where: { id: userId } } );
+	const user = res.locals.user as User;
 	return res.send( user );
 };
 
@@ -31,7 +31,7 @@ export const handleAuthCallback: ExpressHandler = async function ( req, res ) {
 		const avatar = `${ AVATAR_BASE_URL }/${ id }.svg?r=50`;
 		const salt = await bcrypt.genSalt( 10 );
 		user = await prisma.user.create( {
-			data: { email, name, avatar, salt, litPlayer: { create: { name, avatar } } }
+			data: { email, name, avatar, salt }
 		} );
 	}
 

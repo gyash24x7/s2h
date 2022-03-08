@@ -9,6 +9,10 @@ import deserializeUser from "./middleware/deserialize-user";
 import { getLoggedInUser, handleAuthCallback, handleLogout } from "./handlers/auth";
 import requireUser from "./middleware/require-user";
 import handleTrpc from "./middleware/trpc";
+import { applyWSSHandler } from "@trpc/server/adapters/ws";
+import { literatureRouter as router, LiteratureRouter } from "@s2h/routers";
+import ee from "./utils/events";
+import prisma from "./utils/prisma";
 
 dotenv.config();
 
@@ -36,14 +40,12 @@ app.get( "/api/auth/callback/google", handleAuthCallback );
 
 app.use( "/api/trpc", [ requireUser, handleTrpc ] );
 
-wss.on( "connection", ( ws ) => {
-
-	ws.on( "message", ( message: string ) => {
-		console.log( "received: %s", message );
-		ws.send( JSON.stringify( { message: `Hello, you sent -> ${ message }` } ) );
-	} );
-
-	ws.send( JSON.stringify( { message: "Hi there, I am a WebSocket server" } ) );
+applyWSSHandler<LiteratureRouter>( {
+	wss,
+	router,
+	createContext: () => (
+		{ prisma, ee }
+	)
 } );
 
 server.listen( port, () => {
