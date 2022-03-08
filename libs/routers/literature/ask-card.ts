@@ -4,7 +4,7 @@ import type { AskCardInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
 export const askCardResolver: LitResolver<AskCardInput> = async ( { input, ctx } ) => {
-	const userId = ctx.res.locals.userId as string;
+	const userId = ctx.res?.locals.userId as string;
 
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { id: input.gameId },
@@ -21,8 +21,8 @@ export const askCardResolver: LitResolver<AskCardInput> = async ( { input, ctx }
 		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
 	}
 
-	return ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: true },
+	const updatedGame = await ctx.prisma.litGame.update( {
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
 		where: { id: input.gameId },
 		data: {
 			moves: {
@@ -37,4 +37,7 @@ export const askCardResolver: LitResolver<AskCardInput> = async ( { input, ctx }
 			}
 		}
 	} );
+
+	ctx.ee.emit( updatedGame.id, updatedGame );
+	return updatedGame;
 };

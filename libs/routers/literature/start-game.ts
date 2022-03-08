@@ -5,7 +5,7 @@ import type { StartGameInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
 export const startGameResolver: LitResolver<StartGameInput> = async ( { input, ctx } ) => {
-	const userId = ctx.res.locals.userId as string;
+	const userId = ctx.res?.locals.userId as string;
 
 	const game = await ctx.prisma.litGame.findFirst( {
 		where: { id: input.gameId, status: LitGameStatus.TEAMS_CREATED },
@@ -34,12 +34,15 @@ export const startGameResolver: LitResolver<StartGameInput> = async ( { input, c
 		)
 	);
 
-	return ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: true },
+	const updatedGame = await ctx.prisma.litGame.update( {
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
 		where: { id: input.gameId },
 		data: {
 			status: LitGameStatus.IN_PROGRESS,
 			moves: { create: [ { type: LitMoveType.TURN, turnId: loggedInPlayer.id } ] }
 		}
 	} );
+
+	ctx.ee.emit( updatedGame.id, updatedGame );
+	return updatedGame;
 };

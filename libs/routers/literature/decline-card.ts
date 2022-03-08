@@ -5,7 +5,7 @@ import type { DeclineCardInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
 export const declineCardResolver: LitResolver<DeclineCardInput> = async ( { ctx, input } ) => {
-	const userId = ctx.res.locals.userId as string;
+	const userId = ctx.res?.locals.userId as string;
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { id: input.gameId },
 		include: { players: true }
@@ -26,9 +26,12 @@ export const declineCardResolver: LitResolver<DeclineCardInput> = async ( { ctx,
 		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.INVALID_DECLINE_CARD } );
 	}
 
-	return ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: true },
+	const updatedGame = await ctx.prisma.litGame.update( {
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
 		where: { id: input.gameId },
 		data: { moves: { create: [ { type: LitMoveType.DECLINED, turn: loggedInPlayer } ] } }
 	} );
+
+	ctx.ee.emit( updatedGame.id, updatedGame );
+	return updatedGame;
 };

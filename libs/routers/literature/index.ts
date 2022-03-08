@@ -22,6 +22,7 @@ import {
 	startGameInputStruct,
 	transferTurnInputStruct
 } from "@s2h/dtos";
+import { gameUpdateResolver } from "./game-update";
 
 export const literatureRouter = trpc.router<TrpcContext>()
 	.query( "get-game", { input: getGameInputStruct, resolve: getGameResolver } )
@@ -33,6 +34,7 @@ export const literatureRouter = trpc.router<TrpcContext>()
 	.mutation( "start-lit-game", { input: startGameInputStruct, resolve: startGameResolver } )
 	.mutation( "create-lit-teams", { input: createTeamsInputStruct, resolve: createTeamsResolver } )
 	.mutation( "join-lit-game", { input: joinGameInputStruct, resolve: joinGameResolver } )
-	.mutation( "create-lit-game", { input: createGameInputStruct, resolve: createGameResolver } );
+	.mutation( "create-lit-game", { input: createGameInputStruct, resolve: createGameResolver } )
+	.subscription( "lit-game", { input: getGameInputStruct, resolve: gameUpdateResolver } );
 
 export type LiteratureRouter = typeof literatureRouter;

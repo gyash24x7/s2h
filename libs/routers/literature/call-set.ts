@@ -14,7 +14,7 @@ import type { CallSetInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
 export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx } ) => {
-	const userId = ctx.res.locals.userId as string;
+	const userId = ctx.res?.locals.userId as string;
 
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { id: input.gameId },
@@ -93,9 +93,12 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 		data: { hand: { set: removeIfPresent( player.hand, cardsCalled.map( getCardString ) ) } }
 	} ) ) );
 
-	return ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: true },
+	const updatedGame = await ctx.prisma.litGame.update( {
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
 		where: { id: input.gameId },
 		data: { moves: { create: [ moveData ] } }
 	} );
+
+	ctx.ee.emit( updatedGame.id, updatedGame );
+	return updatedGame;
 };

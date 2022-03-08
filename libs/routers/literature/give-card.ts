@@ -5,7 +5,7 @@ import type { GiveCardInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
 export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx } ) => {
-	const userId = ctx.res.locals.userId as string;
+	const userId = ctx.res?.locals.userId as string;
 
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { id: input.gameId },
@@ -44,9 +44,12 @@ export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx
 		} )
 	] );
 
-	return ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: true },
+	const updatedGame = await ctx.prisma.litGame.update( {
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
 		where: { id: input.gameId },
 		data: { moves: { create: [ { type: LitMoveType.GIVEN, turn: takingPlayer } ] } }
 	} );
+
+	ctx.ee.emit( updatedGame.id, updatedGame );
+	return updatedGame;
 };
