@@ -1,7 +1,18 @@
 import { Meta, Story } from "@storybook/react";
 import { Modal, ModalProps } from "@s2h/ui/modal";
 
-export default { component: Modal, title: "Modal" } as Meta<ModalProps>;
+export default {
+	component: Modal,
+	title: "Modal",
+	argTypes: {
+		size: {
+			description: "Sets the size of the modal",
+			options: [ "xs", "sm", "md", "lg", "xl", "2xl" ],
+			control: { type: "inline-radio" },
+			defaultValue: "medium"
+		}
+	}
+} as Meta<ModalProps>;
 
 const Template: Story<ModalProps> = args => <Modal { ...args } />;
 
