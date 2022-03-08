@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment, useState } from "react";
 import { Flex } from "@s2h/ui/flex";
 import { Spinner } from "@s2h/ui/spinner";
 import { trpc } from "../utils/trpc";
@@ -6,15 +6,49 @@ import { CreateTeams } from "../components/create-teams";
 import { useParams } from "react-router-dom";
 import literatureIcon from "../assets/literature-icon.png";
 import { StartGame } from "../components/start-game";
-import { PlayerCard } from "../components/player-card";
 import { Stack } from "@s2h/ui/stack";
-import { Button } from "@s2h/ui/button";
+import { PlayerLobby } from "../components/player-lobby";
+import type { LitGameData } from "@s2h/utils";
+import { GameDescription } from "../components/game-description";
+import { DisplayTeams } from "../components/display-teams";
+import { LitGameStatus, LitMoveType } from "@prisma/client";
+import { DisplayHand } from "../components/display-hand";
+import { useAuth } from "../utils/auth";
+import { MessageBanner } from "../components/message-banner";
+import { AskCard } from "../components/ask-card";
+import { GameContext } from "../utils/game-context";
+
+const statusMap: Record<LitGameStatus, number> = {
+	NOT_STARTED: 1,
+	PLAYERS_READY: 2,
+	TEAMS_CREATED: 3,
+	IN_PROGRESS: 4,
+	COMPLETED: 5
+};
 
 export default function () {
+	const { user } = useAuth();
+	const [ game, setGame ] = useState<LitGameData>();
 	const params = useParams<{ gameId: string }>();
-	const { data, isLoading } = trpc.useQuery( [ "get-game", { gameId: params.gameId! } ] );
 
-	if ( isLoading ) {
+	const mePlayer = game?.players.find( player => player.userId === user?.id )!;
+	const meTeam = game?.teams.find( team => team.id === mePlayer?.teamId );
+	const lastMove = game?.moves[ 0 ];
+	// const secondLastMove = game?.moves.reverse()[ 1 ];
+
+	const { isLoading } = trpc.useQuery( [ "get-game", { gameId: params.gameId! } ], {
+		onSuccess( data ) {
+			setGame( data );
+		}
+	} );
+
+	trpc.useSubscription( [ "lit-game", { gameId: params.gameId! } ], {
+		onNext( data: LitGameData ) {
+			setGame( data );
+		}
+	} );
+
+	if ( isLoading || !game ) {
 		return (
 			<Flex className={ "h-screen w-screen" } align={ "center" } justify={ "center" }>
 				<Spinner size={ "xl" } appearance={ "primary" }/>
@@ -23,44 +57,49 @@ export default function () {
 	}
 
 	return (
-		<Stack orientation={ "vertical" } className={ "w-screen min-h-screen p-5 king-yna-bg" }>
-			<Flex
-				expand
-				justify={ "space-between" }
-				align={ "center" }
-				className={ "bg-light-300/50 rounded-md px-5 w-full border border-light-700" }
-			>
+		<GameContext.Provider value={ { game, mePlayer, meTeam } }>
+			<Stack orientation={ "vertical" } className={ "w-screen min-h-screen p-5" }>
 				<img alt="" src={ literatureIcon } width={ 100 } height={ 100 }/>
-				<Stack align={ "center" } spacing={ "xl" }>
-					<h1 className={ "text-6xl font-fjalla my-2" }>Code: { data?.code }</h1>
-					<Button buttonText={ "Copy Code" } size={ "lg" }/>
-				</Stack>
-			</Flex>
-			<div className={ "bg-light-300/50 rounded-md p-5 w-full border border-light-700" }>
-				<h2 className={ "text-xl mb-2 font-semibold" }>Players Joined</h2>
-				<Stack>
-					{ data?.players.map( player => (
-						<PlayerCard player={ player } key={ player.id }/>
-					) ) }
-					{ data?.players.map( player => (
-						<PlayerCard player={ player } key={ player.id }/>
-					) ) }
-					{ data?.players.map( player => (
-						<PlayerCard player={ player } key={ player.id }/>
-					) ) }
-					{ data?.players.map( player => (
-						<PlayerCard player={ player } key={ player.id }/>
-					) ) }
-					{ data?.players.map( player => (
-						<PlayerCard player={ player } key={ player.id }/>
-					) ) }
-					{ data?.players.map( player => (
-						<PlayerCard player={ player } key={ player.id }/>
-					) ) }
-				</Stack>
-			</div>
-			{ data?.status === "PLAYERS_READY" && <CreateTeams/> }
-			{ data?.status === "TEAMS_CREATED" && <StartGame/> }
-		</Stack>
+				{ statusMap[ game.status ] === 1 && <GameDescription game={ game }/> }
+				{ statusMap[ game.status ] <= 2 && <PlayerLobby game={ game }/> }
+				{ statusMap[ game.status ] >= 3 && <DisplayTeams game={ game }/> }
+				{ game.status === "IN_PROGRESS" && <DisplayHand game={ game }/> }
+				{ statusMap[ game.status ] <= 3 && (
+					<Fragment>
+						{ game.createdBy.id === user?.id ? (
+							<Fragment>
+								{ game.status === "PLAYERS_READY" && <CreateTeams/> }
+								{ game.status === "TEAMS_CREATED" && <StartGame/> }
+							</Fragment>
+						) : (
+							<Fragment>
+								{ game.status === "PLAYERS_READY" && (
+									<MessageBanner
+										message={ `Waiting for ${ game.createdBy.name } to create teams...` }/>
+								) }
+								{ game.status === "TEAMS_CREATED" && (
+									<MessageBanner
+										message={ `Waiting for ${ game.createdBy.name } to start the game...` }/>
+								) }
+							</Fragment>
+						) }
+					</Fragment>
+				) }
+				{ lastMove?.type === LitMoveType.TURN && (
+					<Fragment>
+						{ lastMove?.turnId === mePlayer?.id && (
+							<AskCard/>
+						) }
+					</Fragment>
+				) }
+				{ lastMove?.type === LitMoveType.ASK && (
+					<Fragment>
+						{ lastMove?.askedFromId === mePlayer?.id && (
+							<AskCard/>
+						) }
+					</Fragment>
+				) }
+			</Stack>
+		</GameContext.Provider>
 	);
 };

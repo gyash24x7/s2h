@@ -34,22 +34,22 @@ export const JoinGame = function () {
 				isOpen={ isModalOpen }
 				onClose={ () => setIsModalOpen( false ) }
 				title={ "Join Game" }
-				actions={ [
-					{
-						appearance: "primary",
-						fullWidth: true,
-						onClick: () => mutateAsync( { code } ),
-						buttonText: "Submit",
-						isLoading
-					}
-				] }
 			>
 				<TextInput
 					name={ "gameCode" }
 					value={ code }
-					onChange={ setCode }
+					onChange={ ( v ) => setCode( v.toUpperCase() ) }
 					placeholder={ "Enter the 6-digit Game Code" }
 				/>
+				<div className={ "mt-6" }>
+					<Button
+						buttonText={ "Submit" }
+						appearance={ "primary" }
+						fullWidth
+						isLoading={ isLoading }
+						onClick={ () => mutateAsync( { code } ) }
+					/>
+				</div>
 			</Modal>
 		</Fragment>
 	);

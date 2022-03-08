@@ -25,15 +25,6 @@ export const CreateTeams = function () {
 				isOpen={ isModalOpen }
 				onClose={ () => setIsModalOpen( false ) }
 				title={ "Create Teams" }
-				actions={ [
-					{
-						appearance: "primary",
-						fullWidth: true,
-						onClick: () => mutateAsync( { teams: [ team1, team2 ], gameId: params.gameId! } ),
-						buttonText: "Submit",
-						isLoading
-					}
-				] }
 			>
 				<Flex direction={ "col" } className={ "space-y-2" }>
 					<TextInput
@@ -48,6 +39,15 @@ export const CreateTeams = function () {
 						onChange={ setTeam2 }
 						placeholder={ "Enter Name for Team 2" }
 					/>
+					<div className={ "mt-6" }>
+						<Button
+							buttonText={ "Submit" }
+							appearance={ "primary" }
+							fullWidth
+							isLoading={ isLoading }
+							onClick={ () => mutateAsync( { teams: [ team1, team2 ], gameId: params.gameId! } ) }
+						/>
+					</div>
 				</Flex>
 			</Modal>
 			<Button

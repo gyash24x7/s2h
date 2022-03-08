@@ -8,23 +8,29 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "1.5.0",
     "@heroicons/react": "1.0.5",
     "@s2h/dtos": "workspace:*",
     "@s2h/ui": "workspace:*",
     "@trpc/client": "9.19.0",
     "@trpc/react": "9.19.0",
+    "classnames": "^2.3.1",
+    "gsap": "3.9.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-query": "3.34.16",
     "react-router-dom": "6.2.1",
-    "react-use": "17.3.2"
+    "react-use": "17.3.2",
+    "ws": "8.5.0"
   },
   "devDependencies": {
     "@s2h/config": "workspace:*",
     "@s2h/routers": "workspace:*",
+    "@s2h/utils": "workspace:*",
     "@types/node": "17.0.18",
     "@types/react": "17.0.39",
     "@types/react-dom": "17.0.11",
+    "@types/ws": "8.2.3",
     "@vitejs/plugin-react": "1.2.0",
     "autoprefixer": "10.4.2",
     "postcss": "8.4.6",

@@ -7,6 +7,9 @@
     "apps/*",
     "packages/*"
   ],
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
@@ -32,6 +35,7 @@
     "npm-run-all": "4.1.5",
     "prisma": "3.10.0",
     "rimraf": "3.0.2",
+    "ts-node": "10.5.0",
     "turbo": "latest",
     "typescript": "4.5.5"
   }
