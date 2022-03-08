@@ -31,28 +31,34 @@
 	}
 
 	&.spinner-root--variant-size-sm {
-		@apply w-6 h-6;
+		@apply w-5 h-5;
 	}
 
 	&.spinner-root--variant-size-md {
-		@apply w-8 h-8;
+		@apply w-6 h-6;
 	}
 
 	&.spinner-root--variant-size-lg {
-		@apply w-10 h-10;
+		@apply w-8 h-8;
 	}
 
 	&.spinner-root--variant-size-xl {
-		@apply w-12 h-12;
+		@apply w-10 h-10;
 	}
 
 	&.spinner-root--variant-size-2xl {
-		@apply w-16 h-16;
+		@apply w-14 h-14;
 	}
 
 	&.spinner-root--variant-appearance-default {
 		& > circle {
 			@apply stroke-light;
+		}
+	}
+
+	&.spinner-root--variant-appearance-dark {
+		& > circle {
+			@apply stroke-dark-700;
 		}
 	}
 

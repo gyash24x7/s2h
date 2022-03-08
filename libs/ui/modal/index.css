@@ -46,7 +46,7 @@
 	}
 
 	.modal-content {
-		@apply inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle;
+		@apply inline-block p-6 my-8 overflow-hidden text-left align-middle;
 		@apply transition-all transform bg-light-100 shadow-xl rounded-md;
 
 		.modal-title {
@@ -54,7 +54,43 @@
 		}
 
 		.modal-body {
-			@apply mt-4 mb-6 text-base;
+			@apply mt-4 text-base;
+		}
+	}
+
+	&.modal-root--variant-size-xs {
+		.modal-content {
+			@apply w-2/5;
+		}
+	}
+
+	&.modal-root--variant-size-sm {
+		.modal-content {
+			@apply w-1/2;
+		}
+	}
+
+	&.modal-root--variant-size-md {
+		.modal-content {
+			@apply w-3/5;
+		}
+	}
+
+	&.modal-root--variant-size-lg {
+		.modal-content {
+			@apply w-2/3;
+		}
+	}
+
+	&.modal-root--variant-size-xl {
+		.modal-content {
+			@apply w-3/4;
+		}
+	}
+
+	&.modal-root--variant-size-2xl {
+		.modal-content {
+			@apply w-5/6;
 		}
 	}
 }

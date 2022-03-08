@@ -59,4 +59,8 @@
 		@apply w-full;
 	}
 
+	&.button-root--variant-disabled {
+		@apply pointer-events-none cursor-default text-dark-200;
+	}
+
 }

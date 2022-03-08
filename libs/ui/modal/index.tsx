@@ -1,20 +1,19 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, ReactNode } from "react";
-import { Button, ButtonProps } from "../button";
-import { Stack } from "../stack";
+import { getClassname, Size } from "../utils";
 
 export interface ModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	title?: string;
-	actions?: ButtonProps[];
+	size?: Size;
 	children?: ReactNode;
 }
 
-export function Modal( { isOpen, onClose, children, title, actions }: ModalProps ) {
+export function Modal( { isOpen, onClose, children, title, size }: ModalProps ) {
 	return (
 		<Transition appear show={ isOpen } as={ Fragment }>
-			<Dialog as="div" className={ "modal-root" } onClose={ onClose }>
+			<Dialog as="div" className={ getClassname( "modal-root", { size: size || "md" } ) } onClose={ onClose }>
 				<div>
 					<Transition.Child
 						as={ Fragment }
@@ -40,11 +39,6 @@ export function Modal( { isOpen, onClose, children, title, actions }: ModalProps
 						<div className={ "modal-content" }>
 							{ title && <Dialog.Title as="h3" className={ "modal-title" }>{ title }</Dialog.Title> }
 							{ children && <div className={ "modal-body" }>{ children }</div> }
-							<Stack spacing={ "sm" }>
-								{ actions?.map( ( btnProps ) => (
-									<Button key={ btnProps.buttonText } { ...btnProps } size={ "sm" }/>
-								) ) }
-							</Stack>
 						</div>
 					</Transition.Child>
 				</div>

@@ -3,13 +3,19 @@ import React from "react";
 
 export interface SpinnerProps {
 	size?: Size;
-	appearance?: Appearance;
+	appearance?: Appearance | "dark";
 }
 
-export function Spinner( { size = "md", appearance = "default" }: SpinnerProps ) {
+export function Spinner( props: SpinnerProps ) {
 	return (
-		<svg viewBox="0 0 50 50" className={ getClassname( "spinner-root", { size, appearance } ) }>
-			<circle cx={ 25 } cy={ 25 } r={ 20 } />
+		<svg
+			viewBox="0 0 50 50"
+			className={ getClassname( "spinner-root", {
+				size: props.size || "md",
+				appearance: props.appearance || "default"
+			} ) }
+		>
+			<circle cx={ 25 } cy={ 25 } r={ 20 }/>
 		</svg>
 	);
 }

@@ -1,26 +1,50 @@
-.stack-space {
+.stack-flex {
 
-	&.stack-space--variant-size-xs {
-		@apply w-1 h-1;
+	&.stack-flex--variant-size-xs {
+		@apply -mx-1;
+
+		.stack-item {
+			@apply m-1;
+		}
 	}
 
-	&.stack-space--variant-size-sm {
-		@apply w-3 h-3;
+	&.stack-flex--variant-size-sm {
+		@apply -mx-1.5;
+
+		.stack-item {
+			@apply m-1.5;
+		}
 	}
 
-	&.stack-space--variant-size-md {
-		@apply w-5 h-5;
+	&.stack-flex--variant-size-md {
+		@apply -mx-2;
+
+		.stack-item {
+			@apply m-2;
+		}
 	}
 
-	&.stack-space--variant-size-lg {
-		@apply w-8 h-8;
+	&.stack-flex--variant-size-lg {
+		@apply -mx-2.5;
+
+		.stack-item {
+			@apply m-2.5;
+		}
 	}
 
-	&.stack-space--variant-size-xl {
-		@apply w-10 h-10;
+	&.stack-flex--variant-size-xl {
+		@apply -mx-3;
+
+		.stack-item {
+			@apply m-3;
+		}
 	}
 
-	&.stack-space--variant-size-2xl {
-		@apply w-12 h-12;
+	&.stack-flex--variant-size-2xl {
+		@apply -mx-4;
+
+		.stack-item {
+			@apply m-4;
+		}
 	}
 }

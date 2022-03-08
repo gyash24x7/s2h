@@ -17,9 +17,8 @@ export interface SelectProps {
 	message?: string;
 }
 
-export function Select( { options, label, name, message, appearance, placeholder }: SelectProps ) {
+export function Select( { options, label, name, message, appearance, placeholder, value, onChange }: SelectProps ) {
 	const [ query, setQuery ] = useState( "" );
-	const [ selected, setSelected ] = useState<SelectOption>();
 
 	const filteredOptions = query === "" ? options : options.filter(
 		( option ) => option.label.toLowerCase().replace( /\s+/g, "" )
@@ -28,7 +27,7 @@ export function Select( { options, label, name, message, appearance, placeholder
 
 	return (
 		<div className={ "select-wrapper" }>
-			<Combobox value={ selected } onChange={ setSelected }>
+			<Combobox value={ value } onChange={ onChange }>
 				{ label && <label className={ "label-root" } htmlFor={ name }>{ label }</label> }
 				<div className={ "select-root" }>
 					<Combobox.Input

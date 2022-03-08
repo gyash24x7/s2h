@@ -4,6 +4,7 @@ import { Spinner } from "../spinner";
 import { Stack } from "../stack";
 
 export interface ButtonProps {
+	disabled?: boolean;
 	type?: "submit" | "reset";
 	onClick?: () => any | Promise<any>;
 
@@ -25,17 +26,26 @@ function renderButtonIcon( Icon: IconType, size: Size = "md" ) {
 export function Button( props: ButtonProps ) {
 	return (
 		<button
+			disabled={ props.disabled }
 			onClick={ props.onClick }
 			type={ props.type }
 			className={ getClassname( "button-root", {
 				appearance: props.appearance || "primary",
 				size: props.size || "md",
-				fullWidth: props.fullWidth || false
+				fullWidth: props.fullWidth || false,
+				disabled: props.disabled || props.isLoading || false
 			} ) }
 		>
 			{
-				props.isLoading!!
-					? <Spinner size={ props.size } appearance={ "default" }/>
+				!!props.isLoading
+					? (
+						<Spinner
+							size={ props.size }
+							appearance={ props.appearance === "warning" || props.appearance === "default"
+								? "dark"
+								: "default" }
+						/>
+					)
 					: (
 						<Stack align={ "center" } spacing={ "sm" }>
 							{ props.iconBefore && renderButtonIcon( props.iconBefore, props.size ) }

@@ -1,6 +1,10 @@
 .flex-root {
 	@apply flex;
 
+	&.flex-root--variant-wrap {
+		@apply flex-wrap;
+	}
+
 	&.flex-root--variant-expand {
 		&.flex-root--variant-direction-row, &.flex-root--variant-direction-row-reverse {
 			@apply w-full;

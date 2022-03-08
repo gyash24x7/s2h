@@ -1,0 +1,31 @@
+.banner-root {
+	@apply p-2 rounded-md w-full border font-semibold;
+
+	&.banner-root--variant-appearance-default {
+		@apply bg-light-300 border-light-700 text-dark;
+	}
+
+	&.banner-root--variant-appearance-primary {
+		@apply bg-primary border-primary-700 text-light;
+	}
+
+	&.banner-root--variant-appearance-danger {
+		@apply bg-danger border-danger-700 text-light;
+	}
+
+	&.banner-root--variant-appearance-success {
+		@apply bg-success border-success-700 text-light;
+	}
+
+	&.banner-root--variant-appearance-warning {
+		@apply bg-warning border-warning-700 text-dark;
+	}
+
+	&.banner-root--variant-appearance-info {
+		@apply bg-info border-info-700 text-light;
+	}
+
+	&.banner-root--variant-appearance-alt {
+		@apply bg-alt border-alt-700 text-light;
+	}
+}
