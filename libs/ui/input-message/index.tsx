@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { getClassname } from "../utils";
-import { Stack } from "../stack";
+import { HStack } from "../stack";
 import { CheckCircleIcon, ExclamationCircleIcon } from "@heroicons/react/solid";
 
 export interface InputMessageProps {
@@ -19,10 +19,10 @@ export function InputMessage( { appearance, text }: InputMessageProps ) {
 				{ valid: appearance === "success", invalid: appearance === "danger" }
 			) }
 		>
-			<Stack spacing={ "xs" } align={ "center" }>
+			<HStack spacing={ "xs" }>
 				{ Icon && <Icon className={ "input-message-icon" }/> }
 				<Fragment>{ text }</Fragment>
-			</Stack>
+			</HStack>
 		</div>
 	);
 }

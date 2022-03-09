@@ -1,7 +1,7 @@
 import { Appearance, getClassname, getIconWidthHeightFromSize, IconType, Size } from "../utils";
 import React from "react";
 import { Spinner } from "../spinner";
-import { Stack } from "../stack";
+import { HStack } from "../stack";
 
 export interface ButtonProps {
 	disabled?: boolean;
@@ -47,11 +47,11 @@ export function Button( props: ButtonProps ) {
 						/>
 					)
 					: (
-						<Stack align={ "center" } spacing={ "sm" }>
+						<HStack spacing={ "sm" }>
 							{ props.iconBefore && renderButtonIcon( props.iconBefore, props.size ) }
 							{ props.buttonText && <span>{ props.buttonText }</span> }
 							{ props.iconAfter && renderButtonIcon( props.iconAfter, props.size ) }
-						</Stack>
+						</HStack>
 					)
 			}
 		</button>

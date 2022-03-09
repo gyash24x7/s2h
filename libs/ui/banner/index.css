@@ -1,5 +1,5 @@
 .banner-root {
-	@apply p-2 rounded-md w-full border font-semibold;
+	@apply p-4 rounded-md border font-semibold;
 
 	&.banner-root--variant-appearance-default {
 		@apply bg-light-300 border-light-700 text-dark;

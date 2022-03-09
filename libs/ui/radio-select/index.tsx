@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { RadioGroup } from "@headlessui/react";
-import { Stack } from "../stack";
+import { HStack } from "../stack";
 import { getClassname } from "../utils";
 
 export interface RadioSelectProps<T> {
@@ -13,7 +13,7 @@ export interface RadioSelectProps<T> {
 export function RadioSelect<T>( props: RadioSelectProps<T> ) {
 	return (
 		<RadioGroup value={ props.value } onChange={ props.onChange }>
-			<Stack>
+			<HStack wrap spacing={ "xs" }>
 				{ props.options.map( ( option, index ) => (
 					<RadioGroup.Option
 						value={ option }
@@ -23,7 +23,7 @@ export function RadioSelect<T>( props: RadioSelectProps<T> ) {
 						{ ( { checked } ) => props.renderOption( option, checked ) }
 					</RadioGroup.Option>
 				) ) }
-			</Stack>
+			</HStack>
 		</RadioGroup>
 	);
 }

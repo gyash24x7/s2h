@@ -5,7 +5,7 @@ import Clubs from "../assets/suits/clubs.png";
 import Diamonds from "../assets/suits/diamonds.png";
 import Hearts from "../assets/suits/hearts.png";
 import React from "react";
-import { Stack } from "@s2h/ui/stack";
+import { VStack } from "@s2h/ui/stack";
 
 export interface PlayingCardProps {
 	card: GameCard;
@@ -28,15 +28,12 @@ export function PlayingCard( { card }: PlayingCardProps ) {
 	const colorClass = card.suit === Suit.SPADES || card.suit === Suit.CLUBS ? "text-dark-700" : "text-danger";
 
 	return (
-		<Stack
-			orientation={ "vertical" }
-			align={ "center" }
-			className={ "py-3 px-6 border border-light-700 rounded rounded-lg m-2 bg-light-100" }
-			spacing={ "xs" }
-		>
-			<h2 className={ `font-fjalla text-6xl ${ colorClass }` }>{ rankTextMap[ card.rank ] }</h2>
-			<img src={ suitSrcMap[ card.suit ] } alt={ getCardId( card ) } width={ 50 } height={ 68 }/>;
-		</Stack>
+		<div className={ "border border-light-700 rounded rounded-lg bg-light-100 h-36 w-24 p-3" }>
+			<VStack spacing={ "xs" } centered>
+				<h2 className={ `font-fjalla text-6xl ${ colorClass }` }>{ rankTextMap[ card.rank ] }</h2>
+				<img src={ suitSrcMap[ card.suit ] } alt={ getCardId( card ) } width={ 50 } height={ 50 }/>;
+			</VStack>
+		</div>
 	);
 
 }

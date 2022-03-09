@@ -2,34 +2,61 @@ import { getClassname, Size } from "../utils";
 import React, { Children, FC, isValidElement, ReactElement, ReactNode } from "react";
 import { Flex } from "../flex";
 
-export interface StackProps {
-	orientation?: "horizontal" | "vertical";
-	align?: "center" | "start" | "end" | "baseline" | "stretch";
+interface BaseStackProps {
 	spacing?: Size;
-	centered?: boolean;
-	wrap?: boolean;
 	className?: string;
+	centered?: boolean;
+	stackItemClassName?: string;
+}
+
+export interface VStackProps extends BaseStackProps {
+}
+
+export interface HStackProps extends BaseStackProps {
+	wrap?: boolean;
+	stackItemExpand?: boolean;
 }
 
 function getValidChildren( children: ReactNode ) {
 	return Children.toArray( children ).filter( ( child ) => isValidElement( child ) ) as ReactElement[];
 }
 
-export const Stack: FC<StackProps> = function ( props ) {
+export const HStack: FC<HStackProps> = function ( props ) {
 	const validChildren = getValidChildren( props.children );
 	return (
 		<Flex
-			direction={ props.orientation === "vertical" ? "col" : "row" }
 			justify={ props.centered ? "center" : "start" }
-			align={ props.align }
-			className={ `${ getClassname( "stack-flex", { size: props.spacing || "md" } ) } ${ props.className }` }
+			align={ "center" }
+			className={ `${ getClassname( "h-stack-flex", { size: props.spacing || "md" } ) } ${ props.className }` }
 			wrap={ props.wrap }
 		>
 			{ validChildren.map( ( child ) => (
-				<div key={ child.key } className={ "stack-item" }>
+				<div
+					key={ child.key }
+					className={ `
+						${ getClassname( "stack-item", { expand: props.stackItemExpand || false } ) }
+						${ props.stackItemClassName }
+					` }
+				>
 					{ child }
 				</div>
 			) ) }
 		</Flex>
+	);
+};
+
+export const VStack: FC<VStackProps> = function ( props ) {
+	const validChildren = getValidChildren( props.children );
+	return (
+		<div className={ `${ getClassname( "v-stack-flex", { size: props.spacing || "md" } ) } ${ props.className }` }>
+			{ validChildren.map( ( child ) => (
+				<div
+					key={ child.key }
+					className={ getClassname( "stack-item", { centered: props.centered || false } ) }
+				>
+					{ child }
+				</div>
+			) ) }
+		</div>
 	);
 };

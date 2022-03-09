@@ -23,7 +23,7 @@ export const startGameResolver: LitResolver<StartGameInput> = async ( { input, c
 	}
 
 	const deck = new Deck();
-	const hands = deck.removeCardsOfRank( Rank.SEVEN ).generateHands( 6 );
+	const hands = deck.removeCardsOfRank( Rank.SEVEN ).generateHands( game.playerCount );
 
 	await Promise.all(
 		game.players.map(

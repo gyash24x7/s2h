@@ -1,7 +1,7 @@
 import React, { Fragment, ReactNode, useState } from "react";
 import { Button } from "../button";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid";
-import { Stack } from "../stack";
+import { HStack } from "../stack";
 
 export interface StepperStep {
 	name: string;
@@ -64,15 +64,15 @@ export function Stepper( props: StepperProps ) {
 		<Fragment>
 			{ stepMap[ activeStep ] }
 			{ activeStep === stepNames[ stepNames.length - 1 ] ? (
-				<Stack>
+				<HStack className={ "mt-6" } spacing={ "sm" }>
 					<PreviousButton onClick={ handlePrevious }/>
 					<EndButton onClick={ props.onEnd }/>
-				</Stack>
+				</HStack>
 			) : (
-				<Stack>
+				<HStack className={ "mt-6" } spacing={ "sm" }>
 					<PreviousButton onClick={ handlePrevious } disabled={ stepNames[ 0 ] === activeStep }/>
 					<NextButton onClick={ handleNext }/>
-				</Stack>
+				</HStack>
 			) }
 		</Fragment>
 	);

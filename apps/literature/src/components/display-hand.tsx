@@ -1,31 +1,28 @@
 import React from "react";
-import type { LitGameData } from "@s2h/utils";
-import { getCardString, getGameCard, SORTED_DECK } from "@s2h/utils";
-import { useAuth } from "../utils/auth";
-import { Flex } from "@s2h/ui/flex";
+import { getCardString, SORTED_DECK } from "@s2h/utils";
 import { PlayingCard } from "./playing-card";
+import { useGame } from "../utils/game-context";
+import { HStack } from "@s2h/ui/stack";
+import { Card } from "@s2h/ui/card";
 
-export interface DisplayHandProps {
-	game: LitGameData;
-}
 
-
-export const DisplayHand = function ( { game }: DisplayHandProps ) {
-	const { user } = useAuth();
-	const player = game.players.find( player => player.userId === user!.id )!;
+export const DisplayHand = function () {
+	const { mePlayer } = useGame();
 
 	return (
-		<div className={ "bg-light-200 rounded-md p-5 w-full border border-light-700" }>
-			<h2 className={ "text-xl mb-2 font-semibold" }>Your Hand</h2>
-			<Flex className={ "flex-wrap -mx-2" }>
-				{ SORTED_DECK
-					.map( getCardString )
-					.filter( card => player.hand.includes( card ) )
-					.map( getGameCard )
-					.map( card => (
-						<PlayingCard card={ card } key={ getCardString( card ) }/>
-					) ) }
-			</Flex>
-		</div>
+		<Card
+			title={ "Your Hand" }
+			content={ (
+				<HStack wrap spacing={ "sm" } stackItemClassName={ "my-2" }>
+					{
+						SORTED_DECK
+							.filter( card => mePlayer.hand.includes( getCardString( card ) ) )
+							.map( card => (
+								<PlayingCard card={ card } key={ getCardString( card ) }/>
+							) )
+					}
+				</HStack>
+			) }
+		/>
 	);
 };

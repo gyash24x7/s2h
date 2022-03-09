@@ -6,7 +6,7 @@ import { CreateTeams } from "../components/create-teams";
 import { useParams } from "react-router-dom";
 import literatureIcon from "../assets/literature-icon.png";
 import { StartGame } from "../components/start-game";
-import { Stack } from "@s2h/ui/stack";
+import { VStack } from "@s2h/ui/stack";
 import { PlayerLobby } from "../components/player-lobby";
 import type { LitGameData } from "@s2h/utils";
 import { GameDescription } from "../components/game-description";
@@ -14,9 +14,9 @@ import { DisplayTeams } from "../components/display-teams";
 import { LitGameStatus, LitMoveType } from "@prisma/client";
 import { DisplayHand } from "../components/display-hand";
 import { useAuth } from "../utils/auth";
-import { MessageBanner } from "../components/message-banner";
 import { AskCard } from "../components/ask-card";
 import { GameContext } from "../utils/game-context";
+import { Banner } from "@s2h/ui/banner";
 
 const statusMap: Record<LitGameStatus, number> = {
 	NOT_STARTED: 1,
@@ -58,12 +58,15 @@ export default function () {
 
 	return (
 		<GameContext.Provider value={ { game, mePlayer, meTeam } }>
-			<Stack orientation={ "vertical" } className={ "w-screen min-h-screen p-5" }>
+			<VStack className={ "p-4" } spacing={ "lg" }>
 				<img alt="" src={ literatureIcon } width={ 100 } height={ 100 }/>
 				{ statusMap[ game.status ] === 1 && <GameDescription game={ game }/> }
 				{ statusMap[ game.status ] <= 2 && <PlayerLobby game={ game }/> }
-				{ statusMap[ game.status ] >= 3 && <DisplayTeams game={ game }/> }
-				{ game.status === "IN_PROGRESS" && <DisplayHand game={ game }/> }
+				{ statusMap[ game.status ] === 1 && (
+					<Banner message={ "Waiting for All Players to Join..." } isLoading/>
+				) }
+				{ statusMap[ game.status ] >= 3 && <DisplayTeams/> }
+				{ game.status === "IN_PROGRESS" && <DisplayHand/> }
 				{ statusMap[ game.status ] <= 3 && (
 					<Fragment>
 						{ game.createdBy.id === user?.id ? (
@@ -74,12 +77,16 @@ export default function () {
 						) : (
 							<Fragment>
 								{ game.status === "PLAYERS_READY" && (
-									<MessageBanner
-										message={ `Waiting for ${ game.createdBy.name } to create teams...` }/>
+									<Banner
+										isLoading
+										message={ `Waiting for ${ game.createdBy.name } to create teams...` }
+									/>
 								) }
 								{ game.status === "TEAMS_CREATED" && (
-									<MessageBanner
-										message={ `Waiting for ${ game.createdBy.name } to start the game...` }/>
+									<Banner
+										isLoading
+										message={ `Waiting for ${ game.createdBy.name } to start the game...` }
+									/>
 								) }
 							</Fragment>
 						) }
@@ -99,7 +106,7 @@ export default function () {
 						) }
 					</Fragment>
 				) }
-			</Stack>
+			</VStack>
 		</GameContext.Provider>
 	);
 };

@@ -1,5 +1,5 @@
 import { Appearance, getClassname, IconType } from "../utils";
-import { Stack } from "../stack";
+import { HStack } from "../stack";
 import { Spinner } from "../spinner";
 
 export interface BannerProps {
@@ -9,20 +9,19 @@ export interface BannerProps {
 	isLoading?: boolean;
 }
 
-export function Banner( props: BannerProps ) {
+export function Banner( { appearance = "default", isLoading, icon: Icon, message }: BannerProps ) {
 	return (
-		<Stack
-			align={ "center" }
-			className={ getClassname( "banner-root", { appearance: props.appearance || "default" } ) }
-		>
-			{ props.isLoading && (
-				<Spinner
-					size={ "sm" }
-					appearance={ props.appearance === "warning" || props.appearance === "default" ? "dark" : "default" }
-				/>
-			) }
-			{ props.icon && !props.isLoading && <props.icon width={ 20 } height={ 20 }/> }
-			<h2>{ props.message }</h2>
-		</Stack>
+		<div className={ getClassname( "banner-root", { appearance } ) }>
+			<HStack>
+				{ isLoading && (
+					<Spinner
+						size={ "sm" }
+						appearance={ appearance === "warning" || appearance === "default" ? "dark" : "default" }
+					/>
+				) }
+				{ Icon && !isLoading && <Icon width={ 20 } height={ 20 }/> }
+				<h2>{ message }</h2>
+			</HStack>
+		</div>
 	);
 }
