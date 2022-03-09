@@ -9,7 +9,7 @@ export const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input
 
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { code: input.code },
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true }
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true }
 	} );
 
 	if ( !game ) {
@@ -26,7 +26,7 @@ export const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input
 	}
 
 	const updatedGame = await ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 		where: { id: game.id },
 		data: {
 			status: game.players.length === game.playerCount - 1

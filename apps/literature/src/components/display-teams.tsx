@@ -8,7 +8,7 @@ export const DisplayTeams = function () {
 	const { game } = useGame();
 
 	return (
-		<HStack stackItemExpand>
+		<HStack stackItemExpand spacing={ "sm" }>
 			{ game.teams.map( team => (
 				<Card
 					key={ team.id }

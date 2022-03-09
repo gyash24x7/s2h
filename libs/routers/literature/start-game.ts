@@ -35,7 +35,7 @@ export const startGameResolver: LitResolver<StartGameInput> = async ( { input, c
 	);
 
 	const updatedGame = await ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 		where: { id: input.gameId },
 		data: {
 			status: LitGameStatus.IN_PROGRESS,

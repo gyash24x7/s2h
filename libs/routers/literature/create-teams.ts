@@ -29,7 +29,7 @@ export const createTeamsResolver: LitResolver<CreateTeamsInput> = async ( { inpu
 	const playerGroups = splitArray( game.players );
 
 	const updatedGame = await ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 		where: { id: input.gameId },
 		data: {
 			status: LitGameStatus.TEAMS_CREATED,

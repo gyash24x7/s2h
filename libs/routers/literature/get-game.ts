@@ -8,7 +8,7 @@ export const getGameResolver: LitResolver<GetGameInput> = async ( { input, ctx }
 
 	const game = await ctx.prisma.litGame.findUnique( {
 		where: { id: input.gameId },
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true }
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true }
 	} );
 
 	if ( !game ) {

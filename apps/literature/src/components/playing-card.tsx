@@ -1,5 +1,5 @@
 import type { GameCard } from "@s2h/utils";
-import { getCardId, Rank, Suit } from "@s2h/utils";
+import { CardSet, getCardId, Rank, Suit } from "@s2h/utils";
 import Spades from "../assets/suits/spades.png";
 import Clubs from "../assets/suits/clubs.png";
 import Diamonds from "../assets/suits/diamonds.png";
@@ -16,6 +16,17 @@ export const suitSrcMap: Record<Suit, string> = {
 	SPADES: Spades,
 	HEARTS: Hearts,
 	DIAMONDS: Diamonds
+};
+
+export const cardSetSrcMap: Record<CardSet, string> = {
+	BIG_CLUBS: Clubs,
+	BIG_DIAMONDS: Diamonds,
+	BIG_HEARTS: Hearts,
+	BIG_SPADES: Spades,
+	SMALL_CLUBS: Clubs,
+	SMALL_DIAMONDS: Diamonds,
+	SMALL_HEARTS: Hearts,
+	SMALL_SPADES: Spades
 };
 
 export const rankTextMap: Record<Rank, string> = {

@@ -27,9 +27,9 @@ export const declineCardResolver: LitResolver<DeclineCardInput> = async ( { ctx,
 	}
 
 	const updatedGame = await ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 		where: { id: input.gameId },
-		data: { moves: { create: [ { type: LitMoveType.DECLINED, turn: loggedInPlayer } ] } }
+		data: { moves: { create: [ { type: LitMoveType.DECLINED, turnId: loggedInPlayer.id } ] } }
 	} );
 
 	ctx.ee.emit( updatedGame.id, updatedGame );

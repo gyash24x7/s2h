@@ -10,10 +10,22 @@ export interface ModalProps {
 	children?: ReactNode;
 }
 
+export function ModalTitle( props: { title: string } ) {
+	return <Dialog.Title as="h3" className={ "modal-title" }>{ props.title }</Dialog.Title>;
+}
+
+export const useModal = ( props: Omit<ModalProps, "children"> ) => {
+	return { Render: ( { children }: { children: ReactNode } ) => <Modal { ...props }>{ children }</Modal> };
+};
+
 export function Modal( { isOpen, onClose, children, title, size }: ModalProps ) {
 	return (
 		<Transition appear show={ isOpen } as={ Fragment }>
-			<Dialog as="div" className={ getClassname( "modal-root", { size: size || "md" } ) } onClose={ onClose }>
+			<Dialog
+				as="div"
+				className={ getClassname( "modal-root", { size: size || "md", withTitle: !!title } ) }
+				onClose={ onClose }
+			>
 				<div>
 					<Transition.Child
 						as={ Fragment }
@@ -37,7 +49,7 @@ export function Modal( { isOpen, onClose, children, title, size }: ModalProps ) 
 						leaveTo="modal-content-transition--leave-to"
 					>
 						<div className={ "modal-content" }>
-							{ title && <Dialog.Title as="h3" className={ "modal-title" }>{ title }</Dialog.Title> }
+							{ !!title && <ModalTitle title={ title }/> }
 							{ children && <div className={ "modal-body" }>{ children }</div> }
 						</div>
 					</Transition.Child>

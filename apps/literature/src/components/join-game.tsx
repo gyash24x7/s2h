@@ -34,12 +34,13 @@ export const JoinGame = function () {
 				isOpen={ isModalOpen }
 				onClose={ () => setIsModalOpen( false ) }
 				title={ "Join Game" }
+				size={ "xs" }
 			>
 				<TextInput
 					name={ "gameCode" }
 					value={ code }
 					onChange={ ( v ) => setCode( v.toUpperCase() ) }
-					placeholder={ "Enter the 6-digit Game Code" }
+					placeholder={ "Enter the 7-digit Game Code" }
 				/>
 				<div className={ "mt-6" }>
 					<Button

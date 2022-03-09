@@ -22,7 +22,7 @@ export const askCardResolver: LitResolver<AskCardInput> = async ( { input, ctx }
 	}
 
 	const updatedGame = await ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 		where: { id: input.gameId },
 		data: {
 			moves: {

@@ -1,6 +1,12 @@
 .modal-root {
 	@apply fixed inset-0 z-10 overflow-y-auto;
 
+	.modal-root--variant-withTitle {
+		.modal-body {
+			@apply mt-4;
+		}
+	}
+
 	.overlay-transition--enter {
 		@apply ease-out duration-300;
 	}
@@ -54,7 +60,7 @@
 		}
 
 		.modal-body {
-			@apply mt-4 text-base;
+			@apply text-base;
 		}
 	}
 

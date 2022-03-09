@@ -8,7 +8,6 @@ import {
 	Messages,
 	removeIfPresent
 } from "@s2h/utils";
-import type { LitPlayer } from "@prisma/client";
 import { LitMoveType } from "@prisma/client";
 import type { CallSetInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
@@ -55,6 +54,15 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.CALL_WITHIN_YOUR_TEAM } );
 	}
 
+	await ctx.prisma.litMove.create( {
+		data: {
+			type: LitMoveType.CALL,
+			callingSet: input.set,
+			gameId: input.gameId,
+			turnId: loggedInPlayer.id
+		}
+	} );
+
 	let cardsCalledCorrect = 0;
 	myTeamPlayers.forEach( ( { id, hand } ) => {
 		const cardsCalledForPlayer = input.data.get( id );
@@ -65,7 +73,7 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 		}
 	} );
 
-	let moveData: { type: LitMoveType, turn: LitPlayer } | undefined;
+	let moveData: { type: LitMoveType, turnId: string } | undefined;
 
 	if ( cardsCalledCorrect === 6 ) {
 		await ctx.prisma.litTeam.update( {
@@ -73,14 +81,14 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 			data: { score: { increment: 1 } }
 		} );
 
-		moveData = { type: LitMoveType.CALL_SUCCESS, turn: loggedInPlayer };
+		moveData = { type: LitMoveType.CALL_SUCCESS, turnId: loggedInPlayer.id };
 	} else {
 		await ctx.prisma.litTeam.update( {
 			where: { id: otherTeamId },
 			data: { score: { increment: 1 } }
 		} );
 
-		moveData = { type: LitMoveType.CALL_FAIL, turn: otherTeamPlayers[ 0 ]! };
+		moveData = { type: LitMoveType.CALL_FAIL, turnId: otherTeamPlayers[ 0 ].id };
 	}
 
 	const playersWithCardsCalled = game.players.filter( player => includesSome(
@@ -94,7 +102,7 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 	} ) ) );
 
 	const updatedGame = await ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 		where: { id: input.gameId },
 		data: { moves: { create: [ moveData ] } }
 	} );

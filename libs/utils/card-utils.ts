@@ -52,6 +52,17 @@ export function getCardString( card: GameCard ) {
 	return card.rank + " OF " + card.suit;
 }
 
+export function getCardStringSentence( cardString: string ) {
+	return getCardSentenceString( getGameCard( cardString ) );
+}
+
+export function getCardSentenceString( card: GameCard ) {
+	const rank = card.rank[ 0 ].toUpperCase() + card.rank.substring( 1 ).toLowerCase();
+	const suit = card.suit[ 0 ].toUpperCase() + card.suit.substring( 1 ).toLowerCase();
+
+	return rank + " of " + suit;
+}
+
 export function getCardId( card: GameCard ) {
 	return card.rank.toLowerCase() + "_" + card.suit.toLowerCase();
 }
@@ -66,6 +77,10 @@ export function getCardSuitsFromHand( hand: GameCard[] ): Suit[] {
 	const cardSuitSet = new Set<Suit>();
 	hand.forEach( card => cardSuitSet.add( card.suit ) );
 	return Array.from( cardSuitSet );
+}
+
+export function getNumberOfCardsOfSetInHand( hand: GameCard[], set: CardSet ) {
+	return cardSetMap[ set ].filter( card => isCardInHand( hand, card ) ).length;
 }
 
 export function isCardInHand( hand: GameCard[], { rank, suit }: GameCard ) {
@@ -138,6 +153,16 @@ export const cardSetMap: Record<CardSet, GameCard[]> = {
 	BIG_DIAMONDS: cardSuitMap.DIAMONDS.slice( 7 ),
 	BIG_HEARTS: cardSuitMap.HEARTS.slice( 7 )
 };
+
+export function getCardSetSentenceString( cardSet: CardSet ) {
+	const setType = cardSet.split( "_" )[ 0 ];
+	const suit = cardSet.split( "_" )[ 1 ];
+	return setType[ 0 ].toUpperCase()
+		+ setType.slice( 1 ).toLowerCase()
+		+ " "
+		+ suit[ 0 ].toUpperCase()
+		+ suit.slice( 1 ).toLowerCase();
+}
 
 export function getCardSet( card: GameCard ): CardSet {
 	return CardSet[ (

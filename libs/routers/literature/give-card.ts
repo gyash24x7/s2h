@@ -36,7 +36,7 @@ export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx
 	await Promise.all( [
 		ctx.prisma.litPlayer.update( {
 			where: { id: givingPlayer.id },
-			data: { hand: { set: givingPlayer.hand.splice( cardToGiveIndex, 1 ) } }
+			data: { hand: { set: givingPlayer.hand.filter( ( _, index ) => index !== cardToGiveIndex ) } }
 		} ),
 		ctx.prisma.litPlayer.update( {
 			where: { id: takingPlayer.id },
@@ -45,9 +45,9 @@ export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx
 	] );
 
 	const updatedGame = await ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 		where: { id: input.gameId },
-		data: { moves: { create: [ { type: LitMoveType.GIVEN, turn: takingPlayer } ] } }
+		data: { moves: { create: [ { type: LitMoveType.GIVEN, turnId: takingPlayer.id } ] } }
 	} );
 
 	ctx.ee.emit( updatedGame.id, updatedGame );

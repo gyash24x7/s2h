@@ -7,7 +7,7 @@ export const createGameResolver: LitResolver<CreateGameInput> = async ( { ctx, i
 	const { name, avatar, id } = ctx.res?.locals.user as User;
 
 	return ctx.prisma.litGame.create( {
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "asc" } }, createdBy: true },
+		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 		data: {
 			createdById: id,
 			code: cuid.slug().toUpperCase(),
