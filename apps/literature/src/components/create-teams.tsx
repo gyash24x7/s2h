@@ -25,6 +25,7 @@ export const CreateTeams = function () {
 				isOpen={ isModalOpen }
 				onClose={ () => setIsModalOpen( false ) }
 				title={ "Create Teams" }
+				size={ "xs" }
 			>
 				<Flex direction={ "col" } className={ "space-y-2" }>
 					<TextInput
@@ -41,9 +42,9 @@ export const CreateTeams = function () {
 					/>
 					<div className={ "mt-6" }>
 						<Button
+							size={ "sm" }
 							buttonText={ "Submit" }
 							appearance={ "primary" }
-							fullWidth
 							isLoading={ isLoading }
 							onClick={ () => mutateAsync( { teams: [ team1, team2 ], gameId: params.gameId! } ) }
 						/>

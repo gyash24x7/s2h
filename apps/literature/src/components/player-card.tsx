@@ -11,7 +11,7 @@ export interface PlayerCardProps {
 
 export function PlayerCard( { player, size = "lg" }: PlayerCardProps ) {
 	return (
-		<HStack centered spacing={ "sm" } stackItemClassName={ "mb-6" }>
+		<HStack centered spacing={ "sm" }>
 			<Avatar src={ player?.avatar } size={ size }/>
 			<div>
 				<p className={ "text-lg font-semibold" }>{ player?.name?.split( " " )[ 0 ].toUpperCase() }</p>

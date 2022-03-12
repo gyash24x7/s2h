@@ -10,6 +10,8 @@ import { LitMoveType } from "@prisma/client";
 import { GiveCard } from "./give-card";
 import { DeclineCard } from "./decline-card";
 import { getGameCard, isCardInHand } from "@s2h/utils";
+import { CreateTeams } from "./create-teams";
+import { StartGame } from "./start-game";
 
 export function GameStatus() {
 	const { game, currentMove, mePlayer } = useGame();
@@ -32,15 +34,20 @@ export function GameStatus() {
 
 	return (
 		<Card content={
-			<Flex justify={ "space-between" } align={ "center" }>
-				<div>
+			<Flex
+				justify={ game.status === "IN_PROGRESS" ? "space-between" : "center" }
+				align={ "center" }
+			>
+				{ game.status === "IN_PROGRESS" && (
 					<HStack>
 						<h2 className={ "font-fjalla text-3xl text-dark-700" }>TURN:</h2>
-						<PlayerCard player={ getCurrentMovePlayer()! } size={ "md" }/>
+						<PlayerCard player={ getCurrentMovePlayer() || mePlayer } size={ "md" }/>
 					</HStack>
-				</div>
+				) }
 				<HStack centered>
-					<PreviousMoves/>
+					{ game.status === "IN_PROGRESS" && <PreviousMoves/> }
+					{ game.status === "PLAYERS_READY" && <CreateTeams/> }
+					{ game.status === "TEAMS_CREATED" && <StartGame/> }
 					{ currentMove?.turnId === mePlayer?.id && <AskCard/> }
 					{ currentMove?.type === LitMoveType.ASK && currentMove?.askedFromId === mePlayer?.id && (
 						<Fragment>{ hasAskedCard() ? <GiveCard/> : <DeclineCard/> }</Fragment>

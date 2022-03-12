@@ -15,7 +15,7 @@ export function PlayerLobby() {
 					: undefined }
 				content={ (
 					<div className={ "pt-4" }>
-						<HStack wrap centered>
+						<HStack wrap centered stackItemClassName={ "pb-6" }>
 							{ game.players.map( player => (
 								<PlayerCard player={ player } key={ player.id }/>
 							) ) }

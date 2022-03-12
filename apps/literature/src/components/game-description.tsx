@@ -8,7 +8,7 @@ export const GameDescription = function () {
 		<Flex
 			align={ "center" }
 			direction={ "col" }
-			className={ "bg-light-300 rounded-md p-5 w-full border border-light-700" }
+			className={ "bg-light-100 rounded-md p-5 w-full" }
 		>
 			<p>Game Code</p>
 			<h1 className={ "text-8xl font-fjalla my-2" }>{ game.code }</h1>
