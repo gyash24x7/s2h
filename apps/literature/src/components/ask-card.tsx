@@ -20,6 +20,7 @@ import { RadioSelect } from "@s2h/ui/radio-select";
 import { Stepper } from "@s2h/ui/stepper";
 import { HStack } from "@s2h/ui/stack";
 import { Banner } from "@s2h/ui/banner";
+import { Flex } from "@s2h/ui/flex";
 
 export function AskCard() {
 	const { game, mePlayer } = useGame();
@@ -58,11 +59,11 @@ export function AskCard() {
 
 		return (
 			<HStack spacing={ "xs" }>
-				<h2 className={ `font-fjalla text-5xl ${ colorClass }` }>{ cardSet.split( "_" )[ 0 ] }</h2>
+				<h2 className={ `font-fjalla text-4xl ${ colorClass }` }>{ cardSet.split( "_" )[ 0 ] }</h2>
 				<img
 					src={ cardSetSrcMap[ cardSet ] }
 					alt={ cardSet }
-					className={ "w-10 h-10" }
+					className={ "w-8 h-8" }
 				/>
 			</HStack>
 		);
@@ -83,8 +84,10 @@ export function AskCard() {
 
 	return (
 		<Fragment>
-			<Button buttonText={ "Ask Card" } appearance={ "primary" } fullWidth onClick={ openModal }/>
-			<Modal isOpen={ isModalOpen } onClose={ closeModal }>
+			<Flex justify={ "center" }>
+				<Button buttonText={ "Ask Card" } appearance={ "alt" } onClick={ openModal }/>
+			</Flex>
+			<Modal isOpen={ isModalOpen } onClose={ closeModal } size={ "sm" }>
 				<Stepper
 					steps={ [
 						{

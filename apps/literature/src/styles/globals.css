@@ -23,8 +23,8 @@
 
 .king-yna-bg {
 	background: #1a2a6c;
-	background: -webkit-linear-gradient(to bottom, #fdbb2d, #b21f1f, #1a2a6c);
-	background: linear-gradient(to bottom, #fdbb2d, #b21f1f, #1a2a6c);
+	background: -webkit-linear-gradient(135deg, #fdbb2d00, #b21f1f40, #1a2a6c);
+	background: linear-gradient(135deg, #fdbb2d00, #b21f1f40, #1a2a6c);
 }
 
 .literature-bg {

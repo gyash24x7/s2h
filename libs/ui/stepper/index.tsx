@@ -18,11 +18,11 @@ interface StepperButtonProps {
 }
 
 const PreviousButton = ( props: StepperButtonProps & { disabled?: boolean } ) => (
-	<Button buttonText={ "Previous" } iconBefore={ ArrowLeftIcon } size={ "sm" } appearance={ "default" } { ...props }/>
+	<Button iconBefore={ ArrowLeftIcon } size={ "sm" } appearance={ "default" } { ...props }/>
 );
 
 const NextButton = ( props: StepperButtonProps ) => (
-	<Button buttonText={ "Next" } iconAfter={ ArrowRightIcon } size={ "sm" } appearance={ "primary" } { ...props }/>
+	<Button iconAfter={ ArrowRightIcon } size={ "sm" } appearance={ "primary" } { ...props }/>
 );
 
 const EndButton = ( props: StepperButtonProps ) => (

@@ -7,12 +7,13 @@ export interface BannerProps {
 	icon?: IconType;
 	message: string;
 	isLoading?: boolean;
+	centered?: boolean;
 }
 
-export function Banner( { appearance = "default", isLoading, icon: Icon, message }: BannerProps ) {
+export function Banner( { appearance = "default", isLoading, icon: Icon, message, centered = false }: BannerProps ) {
 	return (
 		<div className={ getClassname( "banner-root", { appearance } ) }>
-			<HStack>
+			<HStack centered={ centered }>
 				{ isLoading && (
 					<Spinner
 						size={ "sm" }

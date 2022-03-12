@@ -50,11 +50,13 @@ export const CreateTeams = function () {
 					</div>
 				</Flex>
 			</Modal>
-			<Button
-				buttonText={ "Create Teams" }
-				appearance={ "primary" }
-				onClick={ () => setIsModalOpen( true ) }
-			/>
+			<Flex justify={ "center" }>
+				<Button
+					buttonText={ "Create Teams" }
+					appearance={ "primary" }
+					onClick={ () => setIsModalOpen( true ) }
+				/>
+			</Flex>
 		</Fragment>
 	);
 };

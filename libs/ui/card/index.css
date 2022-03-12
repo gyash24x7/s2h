@@ -1,5 +1,11 @@
 .card-root {
-	@apply bg-light-300 rounded-md p-5 flex-1 border border-light-700;
+	@apply rounded-md p-4 flex-1 bg-light-100;
+
+	&.card-root--variant-centered {
+		.card-title {
+			@apply text-center;
+		}
+	}
 
 	.card-title {
 		@apply text-xl mb-2 font-semibold;

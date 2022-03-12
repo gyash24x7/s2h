@@ -11,9 +11,10 @@ export const DisplayHand = function () {
 
 	return (
 		<Card
+			centered
 			title={ "Your Hand" }
 			content={ (
-				<HStack wrap spacing={ "sm" } stackItemClassName={ "my-2" }>
+				<HStack wrap spacing={ "sm" } stackItemClassName={ "my-2" } centered>
 					{
 						SORTED_DECK
 							.filter( card => mePlayer.hand.includes( getCardString( card ) ) )

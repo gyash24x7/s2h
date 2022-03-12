@@ -2,6 +2,7 @@ import React from "react";
 import { trpc } from "../utils/trpc";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@s2h/ui/button";
+import { Flex } from "@s2h/ui/flex";
 
 export const StartGame = function () {
 	const params = useParams<{ gameId: string }>();
@@ -18,11 +19,13 @@ export const StartGame = function () {
 	} );
 
 	return (
-		<Button
-			buttonText={ "Start Game" }
-			appearance={ "primary" }
-			isLoading={ isLoading }
-			onClick={ () => mutateAsync( { gameId: params.gameId! } ) }
-		/>
+		<Flex justify={ "center" }>
+			<Button
+				buttonText={ "Start Game" }
+				appearance={ "primary" }
+				isLoading={ isLoading }
+				onClick={ () => mutateAsync( { gameId: params.gameId! } ) }
+			/>
+		</Flex>
 	);
 };

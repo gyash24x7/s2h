@@ -1,21 +1,21 @@
 import React from "react";
 import { HStack, VStack } from "@s2h/ui/stack";
 import { PlayerCard } from "./player-card";
-import type { LitGameData } from "@s2h/utils";
 import { Card } from "@s2h/ui/card";
+import { useGame } from "../utils/game-context";
 
-export interface PlayerLobbyProps {
-	game: LitGameData;
-}
-
-export const PlayerLobby = function ( { game }: PlayerLobbyProps ) {
+export function PlayerLobby() {
+	const { game } = useGame();
 	return (
 		<VStack>
 			<Card
-				title={ "Players Joined" }
+				centered
+				title={ game.status === "NOT_STARTED" ? "Player Lobby" : game.status === "PLAYERS_READY"
+					? "Players"
+					: undefined }
 				content={ (
-					<div className={ "py-4" }>
-						<HStack wrap>
+					<div className={ "pt-4" }>
+						<HStack wrap centered>
 							{ game.players.map( player => (
 								<PlayerCard player={ player } key={ player.id }/>
 							) ) }
@@ -25,4 +25,4 @@ export const PlayerLobby = function ( { game }: PlayerLobbyProps ) {
 			/>
 		</VStack>
 	);
-};
+}
