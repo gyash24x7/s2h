@@ -1,23 +1,29 @@
-import { GameCard, Rank, Suit } from "./types";
 import { shuffle } from "./array-utils";
+import { sentenceCase } from "change-case";
+import type { Prisma } from "@prisma/client";
 
-export const RANKS = [
-	Rank.ACE,
-	Rank.TWO,
-	Rank.THREE,
-	Rank.FOUR,
-	Rank.FIVE,
-	Rank.SIX,
-	Rank.SEVEN,
-	Rank.EIGHT,
-	Rank.NINE,
-	Rank.TEN,
-	Rank.JACK,
-	Rank.QUEEN,
-	Rank.KING
-] as const;
+export enum CardRank {
+	ACE = "ACE",
+	TWO = "TWO",
+	THREE = "THREE",
+	FOUR = "FOUR",
+	FIVE = "FIVE",
+	SIX = "SIX",
+	SEVEN = "SEVEN",
+	EIGHT = "EIGHT",
+	NINE = "NINE",
+	TEN = "TEN",
+	JACK = "JACK",
+	QUEEN = "QUEEN",
+	KING = "KING"
+}
 
-export const SUITS = [ Suit.HEARTS, Suit.CLUBS, Suit.DIAMONDS, Suit.SPADES ] as const;
+export enum CardSuit {
+	HEARTS = "HEARTS",
+	CLUBS = "CLUBS",
+	SPADES = "SPADES",
+	DIAMONDS = "DIAMONDS"
+}
 
 export enum CardSet {
 	SMALL_DIAMONDS = "SMALL_DIAMONDS",
@@ -30,6 +36,24 @@ export enum CardSet {
 	BIG_CLUBS = "BIG_CLUBS"
 }
 
+export const CARD_RANKS = [
+	CardRank.ACE,
+	CardRank.TWO,
+	CardRank.THREE,
+	CardRank.FOUR,
+	CardRank.FIVE,
+	CardRank.SIX,
+	CardRank.SEVEN,
+	CardRank.EIGHT,
+	CardRank.NINE,
+	CardRank.TEN,
+	CardRank.JACK,
+	CardRank.QUEEN,
+	CardRank.KING
+] as const;
+
+export const CARD_SUITS = [ CardSuit.HEARTS, CardSuit.CLUBS, CardSuit.DIAMONDS, CardSuit.SPADES ] as const;
+
 export const CARD_SETS = [
 	CardSet.BIG_DIAMONDS,
 	CardSet.BIG_CLUBS,
@@ -41,51 +65,131 @@ export const CARD_SETS = [
 	CardSet.SMALL_HEARTS
 ] as const;
 
-export function getGameCard( cardString: string ): GameCard {
-	return {
-		rank: RANKS.find( rank => cardString.indexOf( rank ) > -1 )!,
-		suit: SUITS.find( suit => cardString.indexOf( suit ) > -1 )!
-	};
+export class GameCard {
+	rank: CardRank;
+	suit: CardSuit;
+
+	constructor( rank: CardRank, suit: CardSuit ) {
+		this.rank = rank;
+		this.suit = suit;
+	}
+
+	static from( json: Prisma.JsonValue ) {
+		json = json as Prisma.JsonObject;
+		const rank = json[ "rank" ] as CardRank;
+		const suit = json[ "suit" ] as CardSuit;
+		return new GameCard( rank, suit );
+	}
+
+	static getCardId( rank: CardRank, suit: CardSuit ) {
+		return rank + "_OF_" + suit;
+	}
+
+	getCardSet(): CardSet {
+		const cardSetString = CARD_RANKS.indexOf( this.rank ) < 6 ? "SMALL_" + this.suit : "BIG_" + this.suit;
+		return CardSet[ cardSetString as keyof typeof CardSet ];
+	}
+
+	getCardId() {
+		return this.rank + "_OF_" + this.suit;
+	}
+
+	getCardString() {
+		return sentenceCase( this.getCardId() );
+	}
+
+	serialize(): Prisma.JsonObject {
+		return { rank: this.rank, suit: this.suit };
+	}
 }
 
-export function getCardString( card: GameCard ) {
-	return card.rank + " OF " + card.suit;
-}
+export class CardHand {
+	cards: GameCard[] = [];
 
-export function getCardStringSentence( cardString: string ) {
-	return getCardSentenceString( getGameCard( cardString ) );
-}
+	constructor( cards: GameCard[] ) {
+		this.cards = cards;
+	}
 
-export function getCardSentenceString( card: GameCard ) {
-	const rank = card.rank[ 0 ].toUpperCase() + card.rank.substring( 1 ).toLowerCase();
-	const suit = card.suit[ 0 ].toUpperCase() + card.suit.substring( 1 ).toLowerCase();
+	static from( cards: Prisma.JsonValue ) {
+		cards = cards as Prisma.JsonArray;
+		return new CardHand( cards.map( card => GameCard.from( card as Prisma.JsonObject ) ) );
+	}
 
-	return rank + " of " + suit;
-}
+	length() {
+		return this.cards.length;
+	}
 
-export function getCardId( card: GameCard ) {
-	return card.rank.toLowerCase() + "_" + card.suit.toLowerCase();
-}
+	contains( card: GameCard ) {
+		return !!this.cards.find( ( { rank, suit } ) => card.rank === rank && card.suit === suit );
+	}
 
-export function getCardSetsFromHand( hand: GameCard[] ): CardSet[] {
-	const setOfCardSet = new Set<CardSet>();
-	hand.forEach( card => setOfCardSet.add( getCardSet( card ) ) );
-	return Array.from( setOfCardSet );
-}
+	containsAll( cards: GameCard[] ) {
+		for ( const card of cards ) {
+			if ( !this.contains( card ) ) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-export function getCardSuitsFromHand( hand: GameCard[] ): Suit[] {
-	const cardSuitSet = new Set<Suit>();
-	hand.forEach( card => cardSuitSet.add( card.suit ) );
-	return Array.from( cardSuitSet );
-}
+	containsSome( cards: GameCard[] ) {
+		for ( const card of cards ) {
+			if ( this.contains( card ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-export function getNumberOfCardsOfSetInHand( hand: GameCard[], set: CardSet ) {
-	return cardSetMap[ set ].filter( card => isCardInHand( hand, card ) ).length;
-}
+	sorted() {
+		let gameCards: GameCard[] = [];
+		SORTED_DECK.forEach( ( card ) => {
+			if ( this.contains( card ) ) {
+				gameCards.push( card );
+			}
+		} );
 
-export function isCardInHand( hand: GameCard[], { rank, suit }: GameCard ) {
-	const found = hand.find( card => card.rank === rank && card.suit === suit );
-	return !!found;
+		this.cards = gameCards;
+		return this;
+	}
+
+	map<T>( fn: ( card: GameCard ) => T ): T[] {
+		return this.cards.map( fn );
+	}
+
+	removeGameCard( card: GameCard ) {
+		this.cards = this.cards.filter( ( { rank, suit } ) => card.rank !== rank || card.suit !== suit );
+	}
+
+	removeCardsOfSet( cardSet: CardSet ) {
+		this.cards = this.cards.filter( card => card.getCardSet() !== cardSet );
+	}
+
+	addGameCard( card: GameCard ) {
+		this.cards = [ ...this.cards, card ];
+	}
+
+	getCardSetsInHand() {
+		const setOfCardSet = new Set<CardSet>();
+		this.cards.forEach( card => setOfCardSet.add( card.getCardSet() ) );
+		return Array.from( setOfCardSet );
+	}
+
+	getCardSuitsInHand() {
+		const cardSuitSet = new Set<CardSuit>();
+		this.cards.forEach( card => cardSuitSet.add( card.suit ) );
+		return Array.from( cardSuitSet );
+	}
+
+	getCardsOfSet( set: CardSet ) {
+		return cardSetMap[ set ].filter( card => this.contains( card ) );
+	}
+
+	serialize(): Prisma.JsonArray {
+		return this.cards.map( card => (
+			{ ...card }
+		) );
+	}
 }
 
 export class Deck {
@@ -95,52 +199,28 @@ export class Deck {
 		this.cards = shuffle( SORTED_DECK );
 	}
 
-	static handContains( hand: GameCard[], card: GameCard ) {
-		const foundCard = hand.find(
-			( { rank, suit } ) => card.rank === rank && card.suit === suit
-		);
-		return !!foundCard;
-	}
-
-	static sortHand( hand: GameCard[] ) {
-		let sortedHand: GameCard[] = [];
-		SORTED_DECK.forEach( ( card ) => {
-			if ( Deck.handContains( hand, card ) ) {
-				sortedHand.push( card );
-			}
-		} );
-		return sortedHand;
-	}
-
-	removeCardsOfRank( rank: Rank ) {
+	removeCardsOfRank( rank: CardRank ) {
 		this.cards = this.cards.filter( ( card ) => card.rank !== rank );
 		return this;
 	}
 
 	generateHands( handCount: number ) {
 		const handSize = this.cards.length / handCount;
-		return [ ...Array( handCount ) ].map( ( _, i ) =>
-			this.cards.slice(
-				handSize * i,
-				handSize * (
-					i + 1
-				)
-			)
-		);
+		return [ ...Array( handCount ) ]
+			.map( ( _, i ) => this.cards.slice( handSize * i, handSize * i + handSize ) )
+			.map( cards => new CardHand( cards ) );
 	}
 }
 
-export const SORTED_DECK: GameCard[] = SUITS.flatMap( ( suit ) =>
-	RANKS.map( ( rank ) => (
-		{ rank, suit }
-	) )
-);
+export const SORTED_DECK: GameCard[] = CARD_SUITS.flatMap( (
+	suit ) => CARD_RANKS.map( ( rank ) => new GameCard( rank, suit )
+) );
 
-export const cardSuitMap: Record<Suit, GameCard[]> = {
-	CLUBS: SORTED_DECK.filter( card => card.suit === Suit.CLUBS ),
-	SPADES: SORTED_DECK.filter( card => card.suit === Suit.SPADES ),
-	HEARTS: SORTED_DECK.filter( card => card.suit === Suit.HEARTS ),
-	DIAMONDS: SORTED_DECK.filter( card => card.suit === Suit.DIAMONDS )
+export const cardSuitMap: Record<CardSuit, GameCard[]> = {
+	CLUBS: SORTED_DECK.filter( card => card.suit === CardSuit.CLUBS ),
+	SPADES: SORTED_DECK.filter( card => card.suit === CardSuit.SPADES ),
+	HEARTS: SORTED_DECK.filter( card => card.suit === CardSuit.HEARTS ),
+	DIAMONDS: SORTED_DECK.filter( card => card.suit === CardSuit.DIAMONDS )
 };
 
 export const cardSetMap: Record<CardSet, GameCard[]> = {
@@ -153,20 +233,3 @@ export const cardSetMap: Record<CardSet, GameCard[]> = {
 	BIG_DIAMONDS: cardSuitMap.DIAMONDS.slice( 7 ),
 	BIG_HEARTS: cardSuitMap.HEARTS.slice( 7 )
 };
-
-export function getCardSetSentenceString( cardSet: CardSet ) {
-	const setType = cardSet.split( "_" )[ 0 ];
-	const suit = cardSet.split( "_" )[ 1 ];
-	return setType[ 0 ].toUpperCase()
-		+ setType.slice( 1 ).toLowerCase()
-		+ " "
-		+ suit[ 0 ].toUpperCase()
-		+ suit.slice( 1 ).toLowerCase();
-}
-
-export function getCardSet( card: GameCard ): CardSet {
-	return CardSet[ (
-		RANKS.indexOf( card.rank ) < 6 ? "SMALL_" + card.suit.toString() : "BIG_" + card.suit.toString()
-	) as keyof typeof CardSet ];
-
-}

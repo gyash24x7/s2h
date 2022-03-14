@@ -3,7 +3,6 @@ export function includesAll<T>( arr: T[], subset: T[] ) {
 	subset.forEach( entry => {
 		if ( arr.includes( entry ) ) {
 			flag++;
-			flag++;
 		}
 	} );
 	return subset.length === flag;
