@@ -1,3 +1,11 @@
+.radio-select-option {
+	@apply hover:bg-light-300 outline-none cursor-pointer my-2 p-2 rounded-md;
+
+	&.radio-select-option--variant-checked {
+		@apply bg-primary-100 hover:bg-primary-100;
+	}
+}
+
 .select-wrapper {
 	@apply w-full;
 

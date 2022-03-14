@@ -4,9 +4,9 @@ import { CheckCircleIcon, SelectorIcon } from "@heroicons/react/solid";
 import { InputMessage } from "../input-message";
 import { getClassname } from "../utils";
 
-export type SelectOption = { label: string, value: any };
+export type SelectOption<T = any> = { label: string, value: T };
 
-export interface SelectProps {
+export interface ListSelectProps {
 	name: string;
 	options: SelectOption[],
 	label?: string;
@@ -17,7 +17,8 @@ export interface SelectProps {
 	message?: string;
 }
 
-export function Select( { options, label, name, message, appearance, placeholder, value, onChange }: SelectProps ) {
+export function ListSelect( props: ListSelectProps ) {
+	const { options, label, name, message, appearance, placeholder, value, onChange } = props;
 	const [ query, setQuery ] = useState( "" );
 
 	const filteredOptions = query === "" ? options : options.filter(

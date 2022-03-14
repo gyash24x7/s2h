@@ -1,9 +1,9 @@
 import { Meta, Story } from "@storybook/react";
-import { Select, SelectProps } from "@s2h/ui/select";
+import { ListSelect, ListSelectProps } from "@s2h/ui/select/list-select";
 
-export default { component: Select, title: "Select" } as Meta<SelectProps>;
+export default { component: ListSelect, title: "Select" } as Meta<ListSelectProps>;
 
-const Template: Story<SelectProps> = args => <Select { ...args } />;
+const Template: Story<ListSelectProps> = args => <ListSelect { ...args } />;
 
 export const Playground = Template.bind( {} );
 Playground.args = {
@@ -15,4 +15,4 @@ Playground.args = {
 	label: "Select User",
 	message: "Helper Text",
 	placeholder: "Select favourite user"
-} as SelectProps;
+} as ListSelectProps;

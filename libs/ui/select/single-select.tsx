@@ -3,14 +3,14 @@ import { RadioGroup } from "@headlessui/react";
 import { HStack } from "../stack";
 import { getClassname } from "../utils";
 
-export interface RadioSelectProps<T> {
-	value: T;
+export interface SingleSelectProps<T> {
+	value?: T;
 	onChange: ( v: T ) => void | Promise<void>;
 	options: T[];
 	renderOption: ( option: T, checked: boolean ) => ReactNode;
 }
 
-export function RadioSelect<T>( props: RadioSelectProps<T> ) {
+export function SingleSelect<T>( props: SingleSelectProps<T> ) {
 	return (
 		<RadioGroup value={ props.value } onChange={ props.onChange }>
 			<HStack wrap spacing={ "xs" }>
