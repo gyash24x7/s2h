@@ -1,7 +1,7 @@
-import { getCardString, LitResolver, Messages } from "@s2h/utils";
-import { LitMoveType } from "@prisma/client";
+import { LitResolver, Messages } from "@s2h/utils";
 import type { AskCardInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
+import { LitMoveType } from "@prisma/client";
 
 export const askCardResolver: LitResolver<AskCardInput> = async ( { input, ctx } ) => {
 	const userId = ctx.res?.locals.userId as string;
@@ -26,14 +26,12 @@ export const askCardResolver: LitResolver<AskCardInput> = async ( { input, ctx }
 		where: { id: input.gameId },
 		data: {
 			moves: {
-				create: [
-					{
-						askedFrom: { connect: { id: input.askedFrom } },
-						type: LitMoveType.ASK,
-						askedFor: getCardString( input.askedFor ),
-						askedBy: { connect: { id: loggedInPlayer.id } }
-					}
-				]
+				create: {
+					askedFromId: input.askedFrom,
+					askedById: loggedInPlayer.id,
+					askedFor: { ...input.askedFor },
+					type: LitMoveType.ASK
+				}
 			}
 		}
 	} );

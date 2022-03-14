@@ -32,7 +32,7 @@ export const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input
 			status: game.players.length === game.playerCount - 1
 				? LitGameStatus.PLAYERS_READY
 				: LitGameStatus.NOT_STARTED,
-			players: { create: { name, avatar, userId: id } }
+			players: { create: { name, avatar, userId: id, hand: [] } }
 		}
 	} );
 

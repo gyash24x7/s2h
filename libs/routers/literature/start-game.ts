@@ -1,6 +1,6 @@
 import { LitGameStatus, LitMoveType } from "@prisma/client";
 import type { LitResolver } from "@s2h/utils";
-import { Deck, getCardString, Messages, Rank } from "@s2h/utils";
+import { CardRank, Deck, Messages } from "@s2h/utils";
 import type { StartGameInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
@@ -23,13 +23,13 @@ export const startGameResolver: LitResolver<StartGameInput> = async ( { input, c
 	}
 
 	const deck = new Deck();
-	const hands = deck.removeCardsOfRank( Rank.SEVEN ).generateHands( game.playerCount );
+	const hands = deck.removeCardsOfRank( CardRank.SEVEN ).generateHands( game.playerCount );
 
 	await Promise.all(
 		game.players.map(
 			( player, i ) => ctx.prisma.litPlayer.update( {
 				where: { id: player.id },
-				data: { hand: { set: hands[ i ]!.map( getCardString ) } }
+				data: { hand: hands[ i ].serialize() }
 			} )
 		)
 	);

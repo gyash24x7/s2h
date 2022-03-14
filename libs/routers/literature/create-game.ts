@@ -11,7 +11,7 @@ export const createGameResolver: LitResolver<CreateGameInput> = async ( { ctx, i
 		data: {
 			createdById: id,
 			code: cuid.slug().toUpperCase(),
-			players: { create: { name, avatar, userId: id } },
+			players: { create: { name, avatar, userId: id, hand: [] } },
 			playerCount: input.playerCount
 		}
 	} );

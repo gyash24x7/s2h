@@ -1,9 +1,11 @@
 import type { Describe, Infer } from "superstruct";
 import * as s from "superstruct";
-import type { GameCard } from "@s2h/utils";
-import { CARD_SETS, RANKS, SUITS } from "@s2h/utils";
+import { CARD_RANKS, CARD_SUITS, CardRank, CardSuit } from "@s2h/utils";
 
-export const gameCardStruct: Describe<GameCard> = s.object( { rank: s.enums( RANKS ), suit: s.enums( SUITS ) } );
+export const gameCardStruct: Describe<{ rank: CardRank, suit: CardSuit }> = s.object( {
+	rank: s.enums( CARD_RANKS ),
+	suit: s.enums( CARD_SUITS )
+} );
 
 export const askCardInputStruct = s.object( {
 	gameId: s.nonempty( s.string() ),
@@ -15,8 +17,7 @@ export type AskCardInput = Infer<typeof askCardInputStruct>;
 
 export const callSetInputStruct = s.object( {
 	gameId: s.nonempty( s.string() ),
-	set: s.nonempty( s.enums( CARD_SETS ) ),
-	data: s.map( s.string(), s.array( gameCardStruct ) )
+	data: s.record( s.string(), s.array( gameCardStruct ) )
 } );
 
 export type CallSetInput = Infer<typeof callSetInputStruct>;

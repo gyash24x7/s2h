@@ -1,5 +1,5 @@
 import type { LitResolver } from "@s2h/utils";
-import { getCardString, Messages } from "@s2h/utils";
+import { CardHand, GameCard, Messages } from "@s2h/utils";
 import { LitMoveType } from "@prisma/client";
 import type { GiveCardInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
@@ -28,19 +28,25 @@ export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx
 		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.PLAYER_NOT_FOUND } );
 	}
 
-	const cardToGiveIndex = givingPlayer.hand.indexOf( getCardString( input.cardToGive ) );
-	if ( cardToGiveIndex < 0 ) {
+	const cardToGive = new GameCard( input.cardToGive.rank, input.cardToGive.suit );
+	const givingPlayerHand = CardHand.from( givingPlayer.hand );
+	const takingPlayerHand = CardHand.from( takingPlayer.hand );
+
+	if ( givingPlayerHand.contains( cardToGive ) ) {
 		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.INVALID_GIVE_CARD } );
 	}
+
+	givingPlayerHand.removeGameCard( cardToGive );
+	takingPlayerHand.addGameCard( cardToGive );
 
 	await Promise.all( [
 		ctx.prisma.litPlayer.update( {
 			where: { id: givingPlayer.id },
-			data: { hand: { set: givingPlayer.hand.filter( ( _, index ) => index !== cardToGiveIndex ) } }
+			data: { hand: givingPlayerHand.serialize() }
 		} ),
 		ctx.prisma.litPlayer.update( {
 			where: { id: takingPlayer.id },
-			data: { hand: { push: getCardString( input.cardToGive ) } }
+			data: { hand: takingPlayerHand.serialize() }
 		} )
 	] );
 

@@ -1,13 +1,5 @@
 import type { LitResolver } from "@s2h/utils";
-import {
-	cardSetMap,
-	getCardSet,
-	getCardString,
-	includesAll,
-	includesSome,
-	Messages,
-	removeIfPresent
-} from "@s2h/utils";
+import { CardHand, GameCard, includesAll, Messages } from "@s2h/utils";
 import { LitMoveType } from "@prisma/client";
 import type { CallSetInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
@@ -30,26 +22,22 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
 	}
 
-	const cardsCalled = Array.from( input.data.values() ).flat();
-	if ( cardsCalled.length !== 6 ) {
-		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.CALL_ALL_CARDS } );
-	}
+	const cardsCalled = Object.values( input.data ).flat().map( card => new GameCard( card.rank, card.suit ) );
+	const cardSets = Array.from( new Set( cardsCalled.map( card => card.getCardSet() ) ) );
 
-	const cardSet = getCardSet( cardsCalled[ 0 ]! );
-
-	if ( !includesAll( cardSetMap[ cardSet ], cardsCalled ) ) {
+	if ( cardSets.length !== 1 ) {
 		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.CALL_CARDS_OF_SAME_SET } );
 	}
 
-	if ( input.set !== cardSet ) {
-		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.CALL_CARDS_OF_MENTIONED_SET } );
+	if ( cardsCalled.length !== 6 ) {
+		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.CALL_ALL_CARDS } );
 	}
 
 	const myTeamPlayers = game.players.filter( player => player.teamId === loggedInPlayer.teamId );
 	const otherTeamPlayers = game.players.filter( player => player.teamId !== loggedInPlayer.teamId );
 	const otherTeamId = otherTeamPlayers[ 0 ]!.teamId!;
 
-	const playerIdsWithCards = Array.from( input.data.keys() );
+	const playerIdsWithCards = Array.from( Object.keys( input.data ) );
 	if ( !includesAll( myTeamPlayers.map( player => player.id ), playerIdsWithCards ) ) {
 		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.CALL_WITHIN_YOUR_TEAM } );
 	}
@@ -57,7 +45,7 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 	await ctx.prisma.litMove.create( {
 		data: {
 			type: LitMoveType.CALL,
-			callingSet: input.set,
+			callingSet: cardSets[ 0 ],
 			gameId: input.gameId,
 			turnId: loggedInPlayer.id
 		}
@@ -65,9 +53,9 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 
 	let cardsCalledCorrect = 0;
 	myTeamPlayers.forEach( ( { id, hand } ) => {
-		const cardsCalledForPlayer = input.data.get( id );
+		const cardsCalledForPlayer = input.data[ id ].map( ( { rank, suit } ) => new GameCard( rank, suit ) );
 		if ( !!cardsCalledForPlayer ) {
-			if ( includesAll( hand, cardsCalledForPlayer.map( getCardString ) ) ) {
+			if ( CardHand.from( hand ).containsAll( cardsCalledForPlayer ) ) {
 				cardsCalledCorrect += cardsCalledForPlayer.length;
 			}
 		}
@@ -91,15 +79,19 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 		moveData = { type: LitMoveType.CALL_FAIL, turnId: otherTeamPlayers[ 0 ].id };
 	}
 
-	const playersWithCardsCalled = game.players.filter( player => includesSome(
-		player.hand,
-		cardsCalled.map( getCardString )
-	) );
+	const playersWithCardsCalled = game.players.filter(
+		player => CardHand.from( player.hand ).containsSome( cardsCalled )
+	);
 
-	await Promise.all( playersWithCardsCalled.map( player => ctx.prisma.litPlayer.update( {
-		where: { id: player.id },
-		data: { hand: { set: removeIfPresent( player.hand, cardsCalled.map( getCardString ) ) } }
-	} ) ) );
+	await Promise.all( playersWithCardsCalled.map( player => {
+		const newHand = CardHand.from( player.hand );
+		newHand.removeCardsOfSet( cardSets[ 0 ] );
+
+		return ctx.prisma.litPlayer.update( {
+			where: { id: player.id },
+			data: { hand: newHand.serialize() }
+		} );
+	} ) );
 
 	const updatedGame = await ctx.prisma.litGame.update( {
 		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },

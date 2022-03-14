@@ -1,5 +1,5 @@
 import type { LitResolver } from "@s2h/utils";
-import { Messages } from "@s2h/utils";
+import { CardHand, Messages } from "@s2h/utils";
 import type { LitPlayer } from "@prisma/client";
 import { LitGameStatus, LitMoveType } from "@prisma/client";
 import type { TransferTurnInput } from "@s2h/dtos";
@@ -23,7 +23,7 @@ export const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { in
 		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
 	}
 
-	if ( loggedInPlayer.hand.length !== 0 ) {
+	if ( CardHand.from( loggedInPlayer.hand ).length() !== 0 ) {
 		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.INVALID_TRANSFER } );
 	}
 
@@ -31,7 +31,7 @@ export const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { in
 	const otherTeamPlayersWithCards: LitPlayer[] = [];
 
 	game.players.forEach( player => {
-		if ( player.hand.length !== 0 ) {
+		if ( CardHand.from( player.hand ).length() !== 0 ) {
 			if ( player.teamId === loggedInPlayer.teamId ) {
 				myTeamPlayersWithCards.push( player );
 			} else {
