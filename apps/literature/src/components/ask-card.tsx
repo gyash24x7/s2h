@@ -4,42 +4,33 @@ import { Button } from "@s2h/ui/button";
 import { Modal, ModalTitle } from "@s2h/ui/modal";
 import { useGame } from "../utils/game-context";
 import type { GameCard } from "@s2h/utils";
-import {
-	CardSet,
-	cardSetMap,
-	getCardSentenceString,
-	getCardSetsFromHand,
-	getGameCard,
-	getNumberOfCardsOfSetInHand,
-	isCardInHand
-} from "@s2h/utils";
+import { CardHand, CardSet, cardSetMap } from "@s2h/utils";
 import type { LitPlayer } from "@prisma/client";
 import { cardSetSrcMap, PlayingCard } from "./playing-card";
 import { PlayerCard } from "./player-card";
-import { RadioSelect } from "@s2h/ui/radio-select";
+import { SingleSelect } from "@s2h/ui/select";
 import { Stepper } from "@s2h/ui/stepper";
 import { HStack } from "@s2h/ui/stack";
 import { Banner } from "@s2h/ui/banner";
 import { Flex } from "@s2h/ui/flex";
+import type { AskCardInput } from "@s2h/dtos";
+import { askCardInputStruct } from "@s2h/dtos";
 
 export function AskCard() {
 	const { game, mePlayer } = useGame();
+	const myHand = CardHand.from( mePlayer.hand );
 
-	const myHand = mePlayer.hand.map( getGameCard );
+	const cardSetPossibleValues = myHand.getCardSetsInHand()
+		.filter( cardSet => myHand.getCardsOfSet( cardSet ).length < 6 );
 
-	const cardSetPossibleValues = getCardSetsFromHand( myHand )
-		.filter( cardSet => getNumberOfCardsOfSetInHand( myHand, cardSet ) < 6 );
-	const initialCardSet = cardSetPossibleValues[ 0 ];
-	const initialCard = cardSetMap[ initialCardSet ][ 0 ];
-
-	const oppositeTeamPlayersWithCards = game.players
-		.filter( player => player.teamId !== mePlayer.teamId && player.hand.length > 0 );
-	const initialPlayer = oppositeTeamPlayersWithCards[ 0 ];
+	const oppositeTeamPlayersWithCards = game.players.filter(
+		player => player.teamId !== mePlayer.teamId && CardHand.from( player.hand ).length() > 0
+	);
 
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
-	const [ selectedCardSet, setSelectedCardSet ] = useState<CardSet>( initialCardSet );
-	const [ selectedCard, setSelectedCard ] = useState<GameCard>( initialCard );
-	const [ selectedPlayer, setSelectedPlayer ] = useState<LitPlayer>( initialPlayer );
+	const [ selectedCardSet, setSelectedCardSet ] = useState<CardSet>();
+	const [ selectedCard, setSelectedCard ] = useState<GameCard>();
+	const [ selectedPlayer, setSelectedPlayer ] = useState<LitPlayer>();
 
 	const { mutateAsync } = trpc.useMutation( "ask-card", {
 		onError( error ) {
@@ -49,7 +40,12 @@ export function AskCard() {
 	} );
 
 	const handleConfirm = async () => {
-		await mutateAsync( { gameId: game.id, askedFor: selectedCard, askedFrom: selectedPlayer.id } );
+		const input: AskCardInput = { gameId: game.id, askedFor: selectedCard!, askedFrom: selectedPlayer!.id };
+		const [ error ] = askCardInputStruct.validate( input );
+
+		if ( !error ) {
+			await mutateAsync( input );
+		}
 	};
 
 	const renderCardSetOption = ( cardSet: CardSet ) => {
@@ -76,9 +72,9 @@ export function AskCard() {
 	const openModal = () => setIsModalOpen( true );
 
 	const closeModal = () => {
-		setSelectedCardSet( initialCardSet );
-		setSelectedCard( initialCard );
-		setSelectedPlayer( initialPlayer );
+		setSelectedCardSet( undefined );
+		setSelectedCard( undefined );
+		setSelectedPlayer( undefined );
 		setIsModalOpen( false );
 	};
 
@@ -95,7 +91,7 @@ export function AskCard() {
 							content: (
 								<Fragment>
 									<ModalTitle title={ "Select Card Set to Ask From" }/>
-									<RadioSelect
+									<SingleSelect
 										value={ selectedCardSet }
 										onChange={ setSelectedCardSet }
 										options={ cardSetPossibleValues }
@@ -109,11 +105,11 @@ export function AskCard() {
 							content: (
 								<Fragment>
 									<ModalTitle title={ "Select Card to Ask" }/>
-									<RadioSelect
+									<SingleSelect
 										value={ selectedCard }
 										onChange={ setSelectedCard }
-										options={ cardSetMap[ selectedCardSet ]
-											.filter( card => !isCardInHand( myHand, card ) )
+										options={ !selectedCardSet ? [] : cardSetMap[ selectedCardSet ]
+											.filter( card => !myHand.contains( card ) )
 										}
 										renderOption={ renderCardOption }
 									/>
@@ -125,7 +121,7 @@ export function AskCard() {
 							content: (
 								<Fragment>
 									<ModalTitle title={ "Select Player to Ask From" }/>
-									<RadioSelect
+									<SingleSelect
 										value={ selectedPlayer }
 										onChange={ setSelectedPlayer }
 										options={ oppositeTeamPlayersWithCards }
@@ -140,10 +136,7 @@ export function AskCard() {
 								<Fragment>
 									<ModalTitle title={ "Confirm your Ask" }/>
 									<Banner
-										message={ `
-											Ask ${ selectedPlayer.name } for 
-											${ getCardSentenceString( selectedCard ) }
-										` }
+										message={ `Ask ${ selectedPlayer?.name } for ${ selectedCard?.getCardString() }` }
 									/>
 								</Fragment>
 							)

@@ -9,15 +9,22 @@ import { AskCard } from "./ask-card";
 import { LitMoveType } from "@prisma/client";
 import { GiveCard } from "./give-card";
 import { DeclineCard } from "./decline-card";
-import { getGameCard, isCardInHand } from "@s2h/utils";
 import { CreateTeams } from "./create-teams";
 import { StartGame } from "./start-game";
+import { CallSet } from "./call-set";
+import { CardHand, GameCard } from "@s2h/utils";
+import { TransferTurn } from "./transfer-turn";
 
 export function GameStatus() {
 	const { game, currentMove, mePlayer } = useGame();
-	const myHand = mePlayer?.hand.map( getGameCard );
+	const myHand = CardHand.from( mePlayer.hand );
 
-	const hasAskedCard = () => isCardInHand( myHand!, getGameCard( currentMove?.askedFor! ) );
+	const hasAskedCard = () => {
+		if ( !currentMove ) {
+			return false;
+		}
+		return myHand.contains( GameCard.from( currentMove.askedFor ) );
+	};
 
 	const getCurrentMovePlayer = () => {
 		if ( !currentMove ) {
@@ -48,7 +55,19 @@ export function GameStatus() {
 					{ game.status === "IN_PROGRESS" && <PreviousMoves/> }
 					{ game.status === "PLAYERS_READY" && <CreateTeams/> }
 					{ game.status === "TEAMS_CREATED" && <StartGame/> }
-					{ currentMove?.turnId === mePlayer?.id && <AskCard/> }
+					{ currentMove?.turnId === mePlayer?.id && (
+						<Fragment>
+							{ myHand.length() > 0
+								? (
+									<HStack>
+										<AskCard/>
+										<CallSet/>
+									</HStack>
+								)
+								: <TransferTurn/>
+							}
+						</Fragment>
+					) }
 					{ currentMove?.type === LitMoveType.ASK && currentMove?.askedFromId === mePlayer?.id && (
 						<Fragment>{ hasAskedCard() ? <GiveCard/> : <DeclineCard/> }</Fragment>
 					) }

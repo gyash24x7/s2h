@@ -21,7 +21,7 @@ export function PreviousMoves() {
 	return (
 		<Fragment>
 			<Flex justify={ "center" }>
-				<Button buttonText={ "Previous Moves" } appearance={ "info" } onClick={ openModal }/>
+				<Button buttonText={ "Previous Moves" } appearance={ "default" } onClick={ openModal }/>
 			</Flex>
 			<Modal isOpen={ isModalOpen } onClose={ closeModal } title={ "Previous Moves" }>
 				<VStack>

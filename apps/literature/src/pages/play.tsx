@@ -56,6 +56,8 @@ export default function () {
 		);
 	}
 
+	console.log( game )
+
 	return (
 		<GameContext.Provider value={ { game, mePlayer, meTeam, currentMove: moves[ 0 ] } }>
 			<VStack className={ "p-4 bg-light-300 min-h-screen" } spacing={ "lg" }>

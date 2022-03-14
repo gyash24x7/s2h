@@ -2,7 +2,7 @@ import { Button } from "@s2h/ui/button";
 import React from "react";
 import { useGame } from "../utils/game-context";
 import { trpc } from "../utils/trpc";
-import { getGameCard } from "@s2h/utils";
+import { GameCard } from "@s2h/utils";
 
 export function DeclineCard() {
 	const { game, currentMove } = useGame();
@@ -10,7 +10,7 @@ export function DeclineCard() {
 
 	const declineCard = () => mutateAsync( {
 		gameId: game.id,
-		cardDeclined: getGameCard( currentMove?.askedFor! )
+		cardDeclined: GameCard.from( currentMove!.askedFor )
 	} );
 
 	return (
