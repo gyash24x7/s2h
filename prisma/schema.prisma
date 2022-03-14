@@ -50,7 +50,7 @@ model LitTeam {
 model LitPlayer {
     id              String          @id @default(cuid())
     name            String
-    hand            String[]
+    hand            Json
     avatar          String
 
     game            LitGame         @relation("LitGamePartOf", fields:[gameId], references:[id])
@@ -70,7 +70,7 @@ model LitPlayer {
 model LitMove {
     id                String          @id @default(cuid())
     type              LitMoveType
-    askedFor          String?
+    askedFor          Json?
     callingSet        String?
 
     turn              LitPlayer?      @relation("LitTurnPlayer", fields:[turnId], references:[id])

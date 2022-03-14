@@ -44,7 +44,8 @@ async function seed() {
 					{
 						name: user.name,
 						avatar: user.avatar,
-						userId: user.id
+						userId: user.id,
+						hand: []
 					}
 				) )
 			}
