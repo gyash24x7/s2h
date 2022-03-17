@@ -29,18 +29,24 @@ export function CallSet() {
 
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const [ selectedCardSet, setSelectedCardSet ] = useState<CardSet>();
+	const [ cardOptions, setCardOptions ] = useState<GameCard[]>( [] );
 	const [ cardMap, setCardMap ] = useState<Record<string, GameCard[]>>( mapDefaultValue );
 
 
 	const { mutateAsync } = trpc.useMutation( "call-set", {
-		onSettled() {
-			closeModal();
-		},
 		onError( error ) {
 			console.log( error );
 			alert( error.message );
 		}
 	} );
+
+	const handleCardSetSelect = ( cardSet: CardSet ) => {
+		setSelectedCardSet( cardSet );
+		setCardOptions( cardSetMap[ cardSet ].filter( card => !myHand.contains( card ) ) );
+		const newCardMap = { ...cardMap };
+		newCardMap[ mePlayer.id ] = myHand.getCardsOfSet( cardSet );
+		setCardMap( newCardMap );
+	};
 
 	const handleCardSelect = ( playerId: string ) => ( cards: SelectOption<GameCard>[] ) => {
 		const newCardMap = { ...cardMap };
@@ -83,6 +89,7 @@ export function CallSet() {
 
 	const closeModal = () => {
 		setSelectedCardSet( undefined );
+		setCardOptions( [] );
 		setCardMap( mapDefaultValue );
 		setIsModalOpen( false );
 	};
@@ -102,37 +109,48 @@ export function CallSet() {
 									<ModalTitle title={ "Select Card Set to Call" }/>
 									<SingleSelect
 										value={ selectedCardSet }
-										onChange={ setSelectedCardSet }
+										onChange={ handleCardSetSelect }
 										options={ cardSetPossibleValues }
 										renderOption={ renderCardSetOption }
 									/>
 								</Fragment>
 							)
 						},
-						...myTeamPlayers.map( player => (
-							{
-								name: `cardsWith${ player.id }`,
-								content: (
-									<Fragment key={ player.id }>
-										<ModalTitle
-											title={ `${ sentenceCase( selectedCardSet || "" ) } With ${ player.name }` }
-										/>
-										<MultiSelect
-											values={ cardMap[ player.id ].map( card => (
-												{ label: card.getCardId(), value: card }
-											) ) }
-											onChange={ handleCardSelect( player.id ) }
-											options={ !selectedCardSet
-												? []
-												: cardSetMap[ selectedCardSet ].map( card => (
-													{ label: card.getCardId(), value: card }
-												) ) }
-											renderOption={ renderCardOption }
-										/>
-									</Fragment>
-								)
-							}
-						) ),
+						...myTeamPlayers
+							.filter( player => CardHand.from( player.hand ).length() > 0 && player.id !== mePlayer.id )
+							.map( ( player, i ) => {
+								const alreadySelectedCardHand = new CardHand( [] );
+								for ( let j = 0; j < i; j++ ) {
+									alreadySelectedCardHand.addCard( ...cardMap[ myTeamPlayers[ j ].id ] );
+								}
+								return (
+									{
+										name: player.id,
+										content: (
+											<Fragment key={ player.id }>
+												<ModalTitle
+													title={ `${ sentenceCase( selectedCardSet
+														|| "" ) } With ${ player.name }` }
+												/>
+												<MultiSelect
+													values={ cardMap[ player.id ].map( card => (
+														{ label: card.getCardId(), value: card }
+													) ) }
+													onChange={ handleCardSelect( player.id ) }
+													options={ cardOptions
+														.filter( cardOption => !alreadySelectedCardHand.contains(
+															cardOption ) )
+														.map( card => (
+															{ label: card.getCardId(), value: card }
+														) )
+													}
+													renderOption={ renderCardOption }
+												/>
+											</Fragment>
+										)
+									}
+								);
+							} ),
 						{
 							name: "confirm",
 							content: (

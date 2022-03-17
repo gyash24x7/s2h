@@ -1,28 +1,29 @@
 import React from "react";
-import { HStack, VStack } from "@s2h/ui/stack";
-import { PlayerCard } from "./player-card";
-import { Card } from "@s2h/ui/card";
+import { HStack } from "@s2h/ui/stack";
 import { useGame } from "../utils/game-context";
+import { Avatar } from "@s2h/ui/avatar";
 
 export function PlayerLobby() {
 	const { game } = useGame();
 	return (
-		<VStack>
-			<Card
-				centered
-				title={ game.status === "NOT_STARTED" ? "Player Lobby" : game.status === "PLAYERS_READY"
-					? "Players"
-					: undefined }
-				content={ (
-					<div className={ "pt-4" }>
-						<HStack wrap centered stackItemClassName={ "pb-6" }>
-							{ game.players.map( player => (
-								<PlayerCard player={ player } key={ player.id }/>
-							) ) }
+		<table className={ "min-w-full my-2" }>
+			<thead>
+			<th>
+				<h4 className={ "font-semibold text-lg text-left" }>Players Joined</h4>
+			</th>
+			</thead>
+			<tbody>
+			{ game.players.map( player => (
+				<tr className={ "border-b" } key={ player.id }>
+					<td className={ "py-2" }>
+						<HStack>
+							<Avatar size={ "xs" } name={ player.name } src={ player.avatar }/>
+							<h4 className={ "text-base" }>{ player.name }</h4>
 						</HStack>
-					</div>
-				) }
-			/>
-		</VStack>
+					</td>
+				</tr>
+			) ) }
+			</tbody>
+		</table>
 	);
 }

@@ -1,34 +1,44 @@
-import React from "react";
-import { HStack } from "@s2h/ui/stack";
+import React, { Fragment } from "react";
+import { HStack, VStack } from "@s2h/ui/stack";
 import { useGame } from "../utils/game-context";
-import { Card } from "@s2h/ui/card";
 import { Avatar } from "@s2h/ui/avatar";
-import { Flex } from "@s2h/ui/flex";
+import { CardHand } from "@s2h/utils";
 
 export function DisplayTeams() {
 	const { game } = useGame();
 
 	return (
-		<Card content={
-			<Flex justify={ "center" } align={ "center" }>
-				<HStack>
-					{ game.players.filter( player => player.teamId === game.teams[ 0 ].id ).map( player => (
-						<Avatar src={ player.avatar } key={ player.id } size={ "lg" }/>
-					) ) }
-				</HStack>
-				<Flex className={ "flex-1" } justify={ "center" } align={ "center" }>
-					<h2 className={ "font-fjalla text-3xl text-right pr-8" }>{ game.teams[ 0 ].name }</h2>
-					<h2 className={ "font-fjalla text-3xl" }>{ game.teams[ 0 ].score }</h2>
-					<h2 className={ "font-fjalla text-3xl" }>-</h2>
-					<h2 className={ "font-fjalla text-3xl" }>{ game.teams[ 1 ].score }</h2>
-					<h2 className={ "font-fjalla text-3xl text-left pl-8" }>{ game.teams[ 1 ].name }</h2>
-				</Flex>
-				<HStack>
-					{ game.players.filter( player => player.teamId === game.teams[ 1 ].id ).map( player => (
-						<Avatar src={ player.avatar } key={ player.id } size={ "lg" }/>
-					) ) }
-				</HStack>
-			</Flex>
-		}/>
+		<Fragment>
+			<VStack>
+				{ game.teams.map( ( team ) => (
+					<table className={ "min-w-full my-2" } key={ team.id }>
+						<thead>
+						<tr>
+							<th colSpan={ 2 }>
+								<h4 className={ "font-semibold text-lg text-left" }>Team { team.name }</h4>
+							</th>
+						</tr>
+						</thead>
+						<tbody>
+						{ game.players.filter( player => player.teamId === team.id ).map( player => (
+							<tr key={ player.id }>
+								<td className={ "py-2" }>
+									<HStack>
+										<Avatar size={ "xs" } name={ player.name } src={ player.avatar }/>
+										<h4 className={ "text-base" }>{ player.name }</h4>
+									</HStack>
+								</td>
+								<td className={ "w-28" }>
+									<h4 className={ "text-base text-right" }>
+										{ CardHand.from( player.hand ).length() } Cards
+									</h4>
+								</td>
+							</tr>
+						) ) }
+						</tbody>
+					</table>
+				) ) }
+			</VStack>
+		</Fragment>
 	);
 }

@@ -98,6 +98,10 @@ export class GameCard {
 		return sentenceCase( this.getCardId() );
 	}
 
+	equals( card: GameCard ) {
+		return card.suit === this.suit && card.rank === this.rank;
+	}
+
 	serialize(): Prisma.JsonObject {
 		return { rank: this.rank, suit: this.suit };
 	}
@@ -165,8 +169,8 @@ export class CardHand {
 		this.cards = this.cards.filter( card => card.getCardSet() !== cardSet );
 	}
 
-	addGameCard( card: GameCard ) {
-		this.cards = [ ...this.cards, card ];
+	addCard( ...card: GameCard[] ) {
+		this.cards = [ ...this.cards, ...card ];
 	}
 
 	getCardSetsInHand() {

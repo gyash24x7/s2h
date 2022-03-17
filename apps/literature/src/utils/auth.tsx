@@ -8,10 +8,8 @@ const SERVER_URL = "http://localhost:8000";
 const GOOGLE_CLIENT_ID = "920568500477-5jjt1bhogad9lh4qmj8h8p7ja7d2s2fn.apps.googleusercontent.com";
 const GOOGLE_REDIRECT_URL = "http://localhost:8000/api/auth/callback/google";
 
-export type UserWithSession = User & { session: string }
-
 export interface IAuthContext {
-	user?: UserWithSession;
+	user?: User;
 	login: VoidFunction;
 	logout: VoidFunction;
 }
@@ -19,7 +17,7 @@ export interface IAuthContext {
 const AuthContext = createContext<IAuthContext>( null! );
 
 export function AuthProvider( props: { children: ReactNode } ) {
-	const [ user, setUser ] = useState<UserWithSession>();
+	const [ user, setUser ] = useState<User>();
 
 	const login = () => {
 		window.location.href = getGoogleAuthUrl();
@@ -37,7 +35,7 @@ export function AuthProvider( props: { children: ReactNode } ) {
 	const { isLoading } = useQuery(
 		"me",
 		() => fetch( `${ SERVER_URL }/api/me`, { credentials: "include" } ).then( res => res.json() ).catch(),
-		{ onSuccess: ( data: UserWithSession ) => setUser( data ) }
+		{ onSuccess: ( data: User ) => setUser( data ) }
 	);
 
 	if ( isLoading ) {

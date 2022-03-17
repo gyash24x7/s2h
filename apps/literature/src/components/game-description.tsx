@@ -1,18 +1,17 @@
 import { Flex } from "@s2h/ui/flex";
 import React from "react";
 import { useGame } from "../utils/game-context";
+import { DuplicateIcon } from "@heroicons/react/outline";
 
 export const GameDescription = function () {
 	const { game } = useGame();
 	return (
-		<Flex
-			align={ "center" }
-			direction={ "col" }
-			className={ "bg-light-100 rounded-md p-5 w-full" }
-		>
+		<div className={ "my-2" }>
 			<p>Game Code</p>
-			<h1 className={ "text-8xl font-fjalla my-2" }>{ game.code }</h1>
-			<p>Share game code with other players</p>
-		</Flex>
+			<Flex justify={ "space-between" } align={ "center" } className={ "w-full" }>
+				<h1 className={ "text-6xl font-fjalla" }>{ game.code }</h1>
+				<DuplicateIcon width={ 40 } height={ 40 }/>
+			</Flex>
+		</div>
 	);
 };

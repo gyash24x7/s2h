@@ -32,12 +32,12 @@ export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx
 	const givingPlayerHand = CardHand.from( givingPlayer.hand );
 	const takingPlayerHand = CardHand.from( takingPlayer.hand );
 
-	if ( givingPlayerHand.contains( cardToGive ) ) {
+	if ( !givingPlayerHand.contains( cardToGive ) ) {
 		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.INVALID_GIVE_CARD } );
 	}
 
 	givingPlayerHand.removeGameCard( cardToGive );
-	takingPlayerHand.addGameCard( cardToGive );
+	takingPlayerHand.addCard( cardToGive );
 
 	await Promise.all( [
 		ctx.prisma.litPlayer.update( {

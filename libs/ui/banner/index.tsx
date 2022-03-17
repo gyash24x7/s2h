@@ -3,6 +3,7 @@ import { HStack } from "../stack";
 import { Spinner } from "../spinner";
 
 export interface BannerProps {
+	className?: string;
 	appearance?: Appearance;
 	icon?: IconType;
 	message: string;
@@ -10,9 +11,10 @@ export interface BannerProps {
 	centered?: boolean;
 }
 
-export function Banner( { appearance = "default", isLoading, icon: Icon, message, centered = false }: BannerProps ) {
+export function Banner( props: BannerProps ) {
+	const { appearance = "default", isLoading, icon: Icon, message, centered = false, className } = props;
 	return (
-		<div className={ getClassname( "banner-root", { appearance } ) }>
+		<div className={ `${ getClassname( "banner-root", { appearance } ) } ${ className }` }>
 			<HStack centered={ centered }>
 				{ isLoading && (
 					<Spinner

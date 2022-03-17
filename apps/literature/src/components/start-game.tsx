@@ -18,13 +18,16 @@ export const StartGame = function () {
 		}
 	} );
 
+	const startGame = () => mutateAsync( { gameId: params.gameId! } );
+
 	return (
-		<Flex justify={ "center" }>
+		<Flex justify={ "center" } className={ "mt-4" }>
 			<Button
+				fullWidth
 				buttonText={ "Start Game" }
 				appearance={ "primary" }
 				isLoading={ isLoading }
-				onClick={ () => mutateAsync( { gameId: params.gameId! } ) }
+				onClick={ startGame }
 			/>
 		</Flex>
 	);

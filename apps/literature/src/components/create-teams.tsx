@@ -51,8 +51,9 @@ export const CreateTeams = function () {
 					</div>
 				</Flex>
 			</Modal>
-			<Flex justify={ "center" }>
+			<Flex justify={ "center" } className={ "mt-4" }>
 				<Button
+					fullWidth
 					buttonText={ "Create Teams" }
 					appearance={ "primary" }
 					onClick={ () => setIsModalOpen( true ) }
