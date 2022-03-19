@@ -9,7 +9,7 @@ export const DisplayHand = function () {
 	const { mePlayer } = useGame();
 
 	return (
-		<div className={ "w-full" }>
+		<div className={ "w-full py-4 lg:py-0" }>
 			<h3 className={ "text-xl mb-2 font-semibold" }>Your Hand</h3>
 			<HStack wrap spacing={ "sm" } stackItemClassName={ "my-2" }>
 				{ CardHand.from( mePlayer.hand ).sorted().map( card => (

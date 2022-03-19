@@ -38,7 +38,7 @@ export function GameStatus() {
 	};
 
 	return (
-		<VStack className={ "w-full" }>
+		<VStack className={ "w-full py-4 lg:py-0" } spacing={ "2xl" }>
 			<Banner message={ getMoveDescription( game.players, game.moves[ 0 ], game.moves[ 1 ] ) }/>
 			{ game.status === "IN_PROGRESS" && (
 				<HStack>

@@ -34,6 +34,9 @@ export function CallSet() {
 
 
 	const { mutateAsync } = trpc.useMutation( "call-set", {
+		onSuccess() {
+			closeModal()
+		},
 		onError( error ) {
 			console.log( error );
 			alert( error.message );

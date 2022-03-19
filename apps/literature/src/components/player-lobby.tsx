@@ -14,7 +14,7 @@ export function PlayerLobby() {
 			</thead>
 			<tbody>
 			{ game.players.map( player => (
-				<tr className={ "border-b" } key={ player.id }>
+				<tr key={ player.id }>
 					<td className={ "py-2" }>
 						<HStack>
 							<Avatar size={ "xs" } name={ player.name } src={ player.avatar }/>
