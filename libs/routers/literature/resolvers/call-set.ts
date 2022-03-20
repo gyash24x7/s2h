@@ -1,26 +1,12 @@
 import type { LitResolver } from "@s2h/utils";
-import { CardHand, GameCard, includesAll, Messages } from "@s2h/utils";
-import { LitMoveType } from "@prisma/client";
+import { CardHand, GameCard, includesAll, LitGameWithPlayers, Messages } from "@s2h/utils";
+import { LitMoveType, LitPlayer } from "@prisma/client";
 import type { CallSetInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
-export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx } ) => {
-	const userId = ctx.res?.locals.userId as string;
-
-	const game = await ctx.prisma.litGame.findUnique( {
-		where: { id: input.gameId },
-		include: { players: true }
-	} );
-
-	if ( !game ) {
-		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
-	}
-
-	const loggedInPlayer = game.players.find( player => player.userId === userId );
-
-	if ( !loggedInPlayer ) {
-		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
-	}
+const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx } ) => {
+	const game: LitGameWithPlayers = ctx.res?.locals.currentGame;
+	const loggedInPlayer: LitPlayer = ctx.res?.locals.loggedInPlayer;
 
 	const cardsCalled = Object.values( input.data ).flat().map( card => new GameCard( card.rank, card.suit ) );
 	const cardSets = Array.from( new Set( cardsCalled.map( card => card.getCardSet() ) ) );
@@ -102,3 +88,5 @@ export const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx }
 	ctx.ee.emit( updatedGame.id, updatedGame );
 	return updatedGame;
 };
+
+export default callSetResolver;

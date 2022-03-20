@@ -5,6 +5,7 @@ importers:
   .:
     specifiers:
       '@prisma/client': 3.10.0
+      '@types/node': 17.0.21
       change-case: 4.1.2
       npm-run-all: 4.1.5
       prisma: 3.10.0
@@ -16,10 +17,11 @@ importers:
       '@prisma/client': 3.10.0_prisma@3.10.0
       change-case: 4.1.2
     devDependencies:
+      '@types/node': 17.0.21
       npm-run-all: 4.1.5
       prisma: 3.10.0
       rimraf: 3.0.2
-      ts-node: 10.5.0_typescript@4.5.5
+      ts-node: 10.5.0_99a448058f874aec2a353d0e974167cc
       turbo: 1.1.6
       typescript: 4.5.5
 
@@ -28,7 +30,7 @@ importers:
       '@s2h/config': workspace:*
       '@s2h/routers': workspace:*
       '@s2h/utils': workspace:*
-      '@trpc/server': 9.20.0
+      '@trpc/server': 9.20.2
       '@types/bcryptjs': 2.4.2
       '@types/cookie-parser': ^1.4.2
       '@types/cors': 2.8.12
@@ -46,12 +48,13 @@ importers:
       jsonwebtoken: 8.5.1
       morgan: 1.10.0
       nodemon: 2.0.15
+      socket.io: 4.4.1
       superstruct: 0.15.3
       ts-node: 10.5.0
       ws: 8.5.0
     dependencies:
       '@s2h/routers': link:../../libs/routers
-      '@trpc/server': 9.20.0
+      '@trpc/server': 9.20.2
       axios: 0.26.0
       bcryptjs: 2.4.3
       cookie-parser: 1.4.6
@@ -60,6 +63,7 @@ importers:
       express: 4.17.3
       jsonwebtoken: 8.5.1
       morgan: 1.10.0
+      socket.io: 4.4.1
       superstruct: 0.15.3
       ws: 8.5.0
     devDependencies:
@@ -84,8 +88,8 @@ importers:
       '@s2h/routers': workspace:*
       '@s2h/ui': workspace:*
       '@s2h/utils': workspace:*
-      '@trpc/client': 9.19.0
-      '@trpc/react': 9.19.0
+      '@trpc/client': 9.20.2
+      '@trpc/react': 9.20.2
       '@types/node': 17.0.18
       '@types/react': 17.0.39
       '@types/react-dom': 17.0.11
@@ -108,8 +112,8 @@ importers:
       '@s2h/dtos': link:../../libs/dtos
       '@s2h/ui': link:../../libs/ui
       '@s2h/utils': link:../../libs/utils
-      '@trpc/client': 9.19.0
-      '@trpc/react': 9.19.0_a09bb1dc022e231d8bdb579cef482134
+      '@trpc/client': 9.20.2
+      '@trpc/react': 9.20.2_cb5448be69eb1ac31d3537169a93d9bb
       classnames: 2.3.1
       gsap: 3.9.1
       react: 17.0.2
@@ -195,13 +199,15 @@ importers:
       '@s2h/config': workspace:*
       '@s2h/dtos': workspace:*
       '@s2h/utils': workspace:*
-      '@trpc/server': 9.20.0
+      '@trpc/server': 9.20.2
       cuid: 2.1.8
+      socket.io: 4.4.1
     dependencies:
       '@s2h/dtos': link:../dtos
       '@s2h/utils': link:../utils
-      '@trpc/server': 9.20.0
+      '@trpc/server': 9.20.2
       cuid: 2.1.8
+      socket.io: 4.4.1
     devDependencies:
       '@s2h/config': link:../config
 
@@ -224,11 +230,13 @@ importers:
       '@s2h/config': workspace:*
       '@types/express': 4.17.13
       '@types/node': 17.0.19
+      socket.io: 4.4.1
     devDependencies:
       '@prisma/client': 3.10.0_prisma@3.10.0
       '@s2h/config': link:../config
       '@types/express': 4.17.13
       '@types/node': 17.0.19
+      socket.io: 4.4.1
 
 packages:
 
@@ -2177,6 +2185,10 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /@socket.io/base64-arraybuffer/1.0.2:
+    resolution: {integrity: sha512-dOlCBKnDw4iShaIsH/bxujKTM18+2TOAsYz+KSc11Am38H4q5Xw8Bbz97ZYdrVNM+um3p7w86Bvvmcn9q+5+eQ==}
+    engines: {node: '>= 0.6.0'}
+
   /@storybook/addon-actions/6.4.19_b8fdba992ce7d797017dc07106486496:
     resolution: {integrity: sha512-GpSvP8xV8GfNkmtGJjfCgaOx6mbjtyTK0aT9FqX9pU0s+KVMmoCTrBh43b7dWrwxxas01yleBK9VpYggzhi/Fw==}
     peerDependencies:
@@ -3867,32 +3879,32 @@ packages:
       defer-to-connect: 1.1.3
     dev: true
 
-  /@trpc/client/9.19.0:
-    resolution: {integrity: sha512-pL7E3Bd0KrbSUosmycld2Ff+VatKhE36dLx5iNAJUMfx9XvEtWo1eVyrDQSfjTBva7qxN6jB1we0wMiy+CWqIw==}
+  /@trpc/client/9.20.2:
+    resolution: {integrity: sha512-gp3l/tvoLneZYX8VMmq/KgPB+ygIQLVuhfg2CMsYSo5RJ5oJUc19j9mIoyXGymw7JlaMfGRv/vSm8R0kgnYegg==}
     peerDependencies:
-      '@trpc/server': 9.19.0
+      '@trpc/server': 9.20.2
     dependencies:
       '@babel/runtime': 7.17.2
     dev: false
 
-  /@trpc/react/9.19.0_a09bb1dc022e231d8bdb579cef482134:
-    resolution: {integrity: sha512-NqXUdBbo0BqCbQCMndxvOdwSQ5YTd84oO+O43W+MlwZGH18abEBx39fJnob2QT+K4pdqMR6mozbyW8cEcIr+Xw==}
+  /@trpc/react/9.20.2_cb5448be69eb1ac31d3537169a93d9bb:
+    resolution: {integrity: sha512-t+fLDJVWTo2fUSilNFjHOV2pm0mav+5SX8xH+yrEBpKqHC2nZY896iTCKINPDiAAEJZHpeNvLG5ckSk+iUxpGA==}
     peerDependencies:
-      '@trpc/client': 9.19.0
-      '@trpc/server': 9.19.0
+      '@trpc/client': 9.20.2
+      '@trpc/server': 9.20.2
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
       react-query: ^3.31.0 || ^4.0.0-alpha.4
     dependencies:
       '@babel/runtime': 7.17.2
-      '@trpc/client': 9.19.0
+      '@trpc/client': 9.20.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-query: 3.34.16_react-dom@17.0.2+react@17.0.2
     dev: false
 
-  /@trpc/server/9.20.0:
-    resolution: {integrity: sha512-mB6Pizyd9ge0wk1YrPmx9oC54LoS9R6Sip7c9lL40/z2wt0ulddJJ/zZ/WymQvBh7yHYp8aYrbanlX3zh0BD0Q==}
+  /@trpc/server/9.20.2:
+    resolution: {integrity: sha512-iPCwfJ1My/GPJA6g0tqcNKhBIHp+SkS9E9fVO5ilaS5KtMLvYAaKDuSubAJzikWO0AeQEg4PtgnkcHBoiyvSrw==}
     dependencies:
       tslib: 2.3.1
     dev: false
@@ -3934,6 +3946,9 @@ packages:
     resolution: {integrity: sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==}
     dev: true
 
+  /@types/component-emitter/1.2.11:
+    resolution: {integrity: sha512-SRXjM+tfsSlA9VuG8hGO2nft2p8zjXCK1VcC6N4NXbBbYbSia9kzCChYQajIjzIqOOOuh5Ock6MmV2oux4jDZQ==}
+
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
@@ -3946,9 +3961,11 @@ packages:
       '@types/express': 4.17.13
     dev: true
 
+  /@types/cookie/0.4.1:
+    resolution: {integrity: sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==}
+
   /@types/cors/2.8.12:
     resolution: {integrity: sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==}
-    dev: true
 
   /@types/eslint-scope/3.7.3:
     resolution: {integrity: sha512-PB3ldyrcnAicT35TWPs5IcwKD8S333HMaa2VVv4+wdvebJkjWuW/xESoB8IwRcog8HYVYamb1g/R31Qv5Bx03g==}
@@ -4091,7 +4108,6 @@ packages:
 
   /@types/node/17.0.21:
     resolution: {integrity: sha512-DBZCJbhII3r90XbQxI8Y9IjjiiOGlZ0Hr32omXIZvwwZ7p4DMMXGrKXVyPfuoBOri9XNtL0UK69jYIBIsRX3QQ==}
-    dev: true
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -5083,6 +5099,10 @@ packages:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
     dev: true
 
+  /base64id/2.0.0:
+    resolution: {integrity: sha512-lGe34o6EHj9y3Kts9R4ZYs/Gr+6N7MCaMlIFA3F1R2O5/m7K06AxfSeO5530PEERE6/WyEg3lsuyw4GHlPZHog==}
+    engines: {node: ^4.5.0 || >= 5.9}
+
   /basic-auth/2.0.1:
     resolution: {integrity: sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==}
     engines: {node: '>= 0.8'}
@@ -5760,7 +5780,6 @@ packages:
 
   /component-emitter/1.3.0:
     resolution: {integrity: sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==}
-    dev: true
 
   /compressible/2.0.18:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==}
@@ -5915,7 +5934,6 @@ packages:
     dependencies:
       object-assign: 4.1.1
       vary: 1.1.2
-    dev: false
 
   /cosmiconfig/6.0.0:
     resolution: {integrity: sha512-xb3ZL6+L8b9JLLCx3ZdoZy4+2ECphCMo2PwqgP1tlfVq6M6YReyzBJtvWWtbDSpNr9hn96pkCiZqUcFEc+54Qg==}
@@ -6150,7 +6168,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /decode-uri-component/0.2.0:
     resolution: {integrity: sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=}
@@ -6492,6 +6509,31 @@ packages:
       fast-json-parse: 1.0.3
       objectorarray: 1.0.5
     dev: true
+
+  /engine.io-parser/5.0.3:
+    resolution: {integrity: sha512-BtQxwF27XUNnSafQLvDi0dQ8s3i6VgzSoQMJacpIcGNrlUdfHSKbgm3jmjCVvQluGzqwujQMPAoMai3oYSTurg==}
+    engines: {node: '>=10.0.0'}
+    dependencies:
+      '@socket.io/base64-arraybuffer': 1.0.2
+
+  /engine.io/6.1.3:
+    resolution: {integrity: sha512-rqs60YwkvWTLLnfazqgZqLa/aKo+9cueVfEi/dZ8PyGyaf8TLOxj++4QMIgeG3Gn0AhrWiFXvghsoY9L9h25GA==}
+    engines: {node: '>=10.0.0'}
+    dependencies:
+      '@types/cookie': 0.4.1
+      '@types/cors': 2.8.12
+      '@types/node': 17.0.21
+      accepts: 1.3.8
+      base64id: 2.0.0
+      cookie: 0.4.2
+      cors: 2.8.5
+      debug: 4.3.3
+      engine.io-parser: 5.0.3
+      ws: 8.2.3
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
 
   /enhanced-resolve/4.5.0:
     resolution: {integrity: sha512-Nv9m36S/vxpsI+Hc4/ZGRs0n9mXqSWGGq49zxb/cJfPAQMbUtttJAlNPS4AQzaBdw/pKskw5bMbekT/Y7W/Wlg==}
@@ -9305,7 +9347,6 @@ packages:
 
   /ms/2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
-    dev: true
 
   /ms/2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -10102,7 +10143,7 @@ packages:
         optional: true
     dependencies:
       lilconfig: 2.0.4
-      ts-node: 10.5.0_typescript@4.5.5
+      ts-node: 10.5.0_99a448058f874aec2a353d0e974167cc
       yaml: 1.10.2
     dev: true
 
@@ -11476,6 +11517,34 @@ packages:
       use: 3.1.1
     dev: true
 
+  /socket.io-adapter/2.3.3:
+    resolution: {integrity: sha512-Qd/iwn3VskrpNO60BeRyCyr8ZWw9CPZyitW4AQwmRZ8zCiyDiL+znRnWX6tDHXnWn1sJrM1+b6Mn6wEDJJ4aYQ==}
+
+  /socket.io-parser/4.0.4:
+    resolution: {integrity: sha512-t+b0SS+IxG7Rxzda2EVvyBZbvFPBCjJoyHuE0P//7OAsN23GItzDRdWa6ALxZI/8R5ygK7jAR6t028/z+7295g==}
+    engines: {node: '>=10.0.0'}
+    dependencies:
+      '@types/component-emitter': 1.2.11
+      component-emitter: 1.3.0
+      debug: 4.3.3
+    transitivePeerDependencies:
+      - supports-color
+
+  /socket.io/4.4.1:
+    resolution: {integrity: sha512-s04vrBswdQBUmuWJuuNTmXUVJhP0cVky8bBDhdkf8y0Ptsu7fKU2LuLbts9g+pdmAdyMMn8F/9Mf1/wbtUN0fg==}
+    engines: {node: '>=10.0.0'}
+    dependencies:
+      accepts: 1.3.8
+      base64id: 2.0.0
+      debug: 4.3.3
+      engine.io: 6.1.3
+      socket.io-adapter: 2.3.3
+      socket.io-parser: 4.0.4
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
   /source-list-map/2.0.1:
     resolution: {integrity: sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw==}
     dev: true
@@ -12223,6 +12292,37 @@ packages:
     resolution: {integrity: sha512-Z86EW+fFFh/IFB1fqQ3/+7Zpf9t2ebOAxNI/V6Wo7r5gqiqtxmgTlQ1qbqQcjLKYeSHPTsEmvlJUDg/EuL0uHQ==}
     dev: false
 
+  /ts-node/10.5.0_99a448058f874aec2a353d0e974167cc:
+    resolution: {integrity: sha512-6kEJKwVxAJ35W4akuiysfKwKmjkbYxwQMTBaAxo9KKAx/Yd26mPUyhGz3ji+EsJoAgrLqVsYHNuuYwQe22lbtw==}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': '>=1.2.50'
+      '@swc/wasm': '>=1.2.50'
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
+    dependencies:
+      '@cspotcode/source-map-support': 0.7.0
+      '@tsconfig/node10': 1.0.8
+      '@tsconfig/node12': 1.0.9
+      '@tsconfig/node14': 1.0.1
+      '@tsconfig/node16': 1.0.2
+      '@types/node': 17.0.21
+      acorn: 8.7.0
+      acorn-walk: 8.2.0
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 4.5.5
+      v8-compile-cache-lib: 3.0.0
+      yn: 3.1.1
+    dev: true
+
   /ts-node/10.5.0_f3bd4037939c2ed2942ba074291f8ef2:
     resolution: {integrity: sha512-6kEJKwVxAJ35W4akuiysfKwKmjkbYxwQMTBaAxo9KKAx/Yd26mPUyhGz3ji+EsJoAgrLqVsYHNuuYwQe22lbtw==}
     hasBin: true
@@ -12243,36 +12343,6 @@ packages:
       '@tsconfig/node14': 1.0.1
       '@tsconfig/node16': 1.0.2
       '@types/node': 17.0.18
-      acorn: 8.7.0
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      typescript: 4.5.5
-      v8-compile-cache-lib: 3.0.0
-      yn: 3.1.1
-    dev: true
-
-  /ts-node/10.5.0_typescript@4.5.5:
-    resolution: {integrity: sha512-6kEJKwVxAJ35W4akuiysfKwKmjkbYxwQMTBaAxo9KKAx/Yd26mPUyhGz3ji+EsJoAgrLqVsYHNuuYwQe22lbtw==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.7.0
-      '@tsconfig/node10': 1.0.8
-      '@tsconfig/node12': 1.0.9
-      '@tsconfig/node14': 1.0.1
-      '@tsconfig/node16': 1.0.2
       acorn: 8.7.0
       acorn-walk: 8.2.0
       arg: 4.1.3
@@ -13151,6 +13221,18 @@ packages:
       signal-exit: 3.0.7
       typedarray-to-buffer: 3.1.5
     dev: true
+
+  /ws/8.2.3:
+    resolution: {integrity: sha512-wBuoj1BDpC6ZQ1B7DWQBYVLphPWkm8i9Y0/3YdHjHKHiohOJ1ws+3OccDWtH+PoC9DZD5WOTrJvNbWvjS6JWaA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
 
   /ws/8.5.0:
     resolution: {integrity: sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==}

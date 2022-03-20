@@ -12,8 +12,9 @@
   "dependencies": {
     "@s2h/dtos": "workspace:*",
     "@s2h/utils": "workspace:*",
-    "@trpc/server": "9.20.0",
-    "cuid": "2.1.8"
+    "@trpc/server": "9.20.2",
+    "cuid": "2.1.8",
+    "socket.io": "4.4.1"
   },
   "devDependencies": {
     "@s2h/config": "workspace:*"

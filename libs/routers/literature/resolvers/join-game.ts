@@ -4,7 +4,7 @@ import { LitGameStatus, User } from "@prisma/client";
 import type { JoinGameInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
-export const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input } ) => {
+const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input } ) => {
 	const { name, avatar, id } = ctx.res?.locals.user as User;
 
 	const game = await ctx.prisma.litGame.findUnique( {
@@ -39,3 +39,5 @@ export const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input
 	ctx.ee.emit( updatedGame.id, updatedGame );
 	return updatedGame;
 };
+
+export default joinGameResolver;

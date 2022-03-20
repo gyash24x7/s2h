@@ -1,15 +1,15 @@
 import * as trpc from "@trpc/server";
 import type { TrpcContext } from "@s2h/utils";
-import { createGameResolver } from "./create-game";
-import { joinGameResolver } from "./join-game";
-import { createTeamsResolver } from "./create-teams";
-import { startGameResolver } from "./start-game";
-import { askCardResolver } from "./ask-card";
-import { giveCardResolver } from "./give-card";
-import { declineCardResolver } from "./decline-card";
-import { getGameResolver } from "./get-game";
-import { callSetResolver } from "./call-set";
-import { transferTurnResolver } from "./transfer-turn";
+import createGameResolver from "./resolvers/create-game";
+import joinGameResolver from "./resolvers/join-game";
+import createTeamsResolver from "./resolvers/create-teams";
+import startGameResolver from "./resolvers/start-game";
+import askCardResolver from "./resolvers/ask-card";
+import giveCardResolver from "./resolvers/give-card";
+import declineCardResolver from "./resolvers/decline-card";
+import getGameResolver from "./resolvers/get-game";
+import callSetResolver from "./resolvers/call-set";
+import transferTurnResolver from "./resolvers/transfer-turn";
 import {
 	askCardInputStruct,
 	callSetInputStruct,
@@ -22,19 +22,22 @@ import {
 	startGameInputStruct,
 	transferTurnInputStruct
 } from "@s2h/dtos";
-import { gameUpdateResolver } from "./game-update";
+import requireGame from "./middlewares/require-game";
+import requirePlayer from "./middlewares/require-player";
+
 
 export const literatureRouter = trpc.router<TrpcContext>()
+	.mutation( "create-game", { input: createGameInputStruct, resolve: createGameResolver } )
+	.mutation( "join-game", { input: joinGameInputStruct, resolve: joinGameResolver } )
+	.middleware( requireGame )
+	.middleware( requirePlayer )
 	.query( "get-game", { input: getGameInputStruct, resolve: getGameResolver } )
 	.mutation( "transfer-turn", { input: transferTurnInputStruct, resolve: transferTurnResolver } )
 	.mutation( "call-set", { input: callSetInputStruct, resolve: callSetResolver } )
 	.mutation( "decline-card", { input: declineCardInputStruct, resolve: declineCardResolver } )
 	.mutation( "give-card", { input: giveCardInputStruct, resolve: giveCardResolver } )
 	.mutation( "ask-card", { input: askCardInputStruct, resolve: askCardResolver } )
-	.mutation( "start-lit-game", { input: startGameInputStruct, resolve: startGameResolver } )
-	.mutation( "create-lit-teams", { input: createTeamsInputStruct, resolve: createTeamsResolver } )
-	.mutation( "join-lit-game", { input: joinGameInputStruct, resolve: joinGameResolver } )
-	.mutation( "create-lit-game", { input: createGameInputStruct, resolve: createGameResolver } )
-	.subscription( "lit-game", { input: getGameInputStruct, resolve: gameUpdateResolver } );
+	.mutation( "start-game", { input: startGameInputStruct, resolve: startGameResolver } )
+	.mutation( "create-teams", { input: createTeamsInputStruct, resolve: createTeamsResolver } );
 
 export type LiteratureRouter = typeof literatureRouter;

@@ -3,7 +3,7 @@ import type { LitResolver } from "@s2h/utils";
 import type { CreateGameInput } from "@s2h/dtos";
 import type { User } from "@prisma/client";
 
-export const createGameResolver: LitResolver<CreateGameInput> = async ( { ctx, input } ) => {
+const createGameResolver: LitResolver<CreateGameInput> = async ( { ctx, input } ) => {
 	const { name, avatar, id } = ctx.res?.locals.user as User;
 
 	return ctx.prisma.litGame.create( {
@@ -16,3 +16,5 @@ export const createGameResolver: LitResolver<CreateGameInput> = async ( { ctx, i
 		}
 	} );
 };
+
+export default createGameResolver;

@@ -1,26 +1,12 @@
 import type { LitResolver } from "@s2h/utils";
-import { CardHand, GameCard, Messages } from "@s2h/utils";
-import { LitMoveType } from "@prisma/client";
+import { CardHand, GameCard, LitGameWithPlayers, Messages } from "@s2h/utils";
+import { LitMoveType, LitPlayer } from "@prisma/client";
 import type { GiveCardInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
-export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx } ) => {
-	const userId = ctx.res?.locals.userId as string;
-
-	const game = await ctx.prisma.litGame.findUnique( {
-		where: { id: input.gameId },
-		include: { players: true }
-	} );
-
-	if ( !game ) {
-		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
-	}
-
-	const givingPlayer = game.players.find( player => player.userId === userId );
-
-	if ( !givingPlayer ) {
-		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
-	}
+const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx } ) => {
+	const game: LitGameWithPlayers = ctx.res?.locals.currentGame;
+	const givingPlayer: LitPlayer = ctx.res?.locals.loggedInPlayer;
 
 	const takingPlayer = game.players.find( player => player.id === input.giveTo );
 
@@ -59,3 +45,5 @@ export const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx
 	ctx.ee.emit( updatedGame.id, updatedGame );
 	return updatedGame;
 };
+
+export default giveCardResolver;

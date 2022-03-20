@@ -1,27 +1,13 @@
 import type { LitResolver } from "@s2h/utils";
-import { CardHand, Messages } from "@s2h/utils";
+import { CardHand, LitGameWithPlayers, Messages } from "@s2h/utils";
 import type { LitPlayer } from "@prisma/client";
 import { LitGameStatus, LitMoveType } from "@prisma/client";
 import type { TransferTurnInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
-export const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { input, ctx } ) => {
-	const userId = ctx.res?.locals.userId as string;
-
-	const game = await ctx.prisma.litGame.findUnique( {
-		where: { id: input.gameId },
-		include: { players: true }
-	} );
-
-	if ( !game ) {
-		throw new TRPCError( { code: "NOT_FOUND", message: Messages.GAME_NOT_FOUND } );
-	}
-
-	const loggedInPlayer = game.players.find( player => player.userId === userId );
-
-	if ( !loggedInPlayer ) {
-		throw new TRPCError( { code: "FORBIDDEN", message: Messages.NOT_PART_OF_GAME } );
-	}
+const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { input, ctx } ) => {
+	const game: LitGameWithPlayers = ctx.res?.locals.currentGame;
+	const loggedInPlayer: LitPlayer = ctx.res?.locals.loggedInPlayer;
 
 	if ( CardHand.from( loggedInPlayer.hand ).length() !== 0 ) {
 		throw new TRPCError( { code: "BAD_REQUEST", message: Messages.INVALID_TRANSFER } );
@@ -64,3 +50,5 @@ export const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { in
 	ctx.ee.emit( updatedGame.id, updatedGame );
 	return updatedGame;
 };
+
+export default transferTurnResolver;

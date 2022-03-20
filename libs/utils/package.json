@@ -8,8 +8,10 @@
   "license": "ISC",
   "devDependencies": {
     "@prisma/client": "3.10.0",
+    "@trpc/server": "9.20.2",
     "@s2h/config": "workspace:*",
     "@types/express": "4.17.13",
-    "@types/node": "17.0.19"
+    "@types/node": "17.0.19",
+    "socket.io": "4.4.1"
   }
 }

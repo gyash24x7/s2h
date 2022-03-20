@@ -42,7 +42,7 @@ export const declineCardInputStruct = s.object( {
 
 export type DeclineCardInput = Infer<typeof declineCardInputStruct>;
 
-export const getGameInputStruct = s.object( {
+export const getGameInputStruct = s.type( {
 	gameId: s.nonempty( s.string() )
 } );
 
