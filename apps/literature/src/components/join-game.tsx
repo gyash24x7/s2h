@@ -11,7 +11,7 @@ export const JoinGame = function () {
 	const [ code, setCode ] = useState( "" );
 	const navigate = useNavigate();
 
-	const { mutateAsync, isLoading } = trpc.useMutation( "join-lit-game", {
+	const { mutateAsync, isLoading } = trpc.useMutation( "join-game", {
 		async onSuccess( data ) {
 			const { id } = data as LitGame;
 			await navigate( `/play/${ id }` );

@@ -27,7 +27,7 @@ const declineCardResolver: LitResolver<DeclineCardInput> = async ( { ctx, input 
 		}
 	} );
 
-	ctx.ee.emit( updatedGame.id, updatedGame );
+	ctx.namespace?.emit( updatedGame.id, updatedGame );
 	return updatedGame;
 };
 

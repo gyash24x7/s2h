@@ -33,7 +33,7 @@ const createTeamsResolver: LitResolver<CreateTeamsInput> = async ( { input, ctx 
 		}
 	} );
 
-	ctx.ee.emit( updatedGame.id, updatedGame );
+	ctx.namespace?.emit( game.id, updatedGame );
 	return updatedGame;
 };
 

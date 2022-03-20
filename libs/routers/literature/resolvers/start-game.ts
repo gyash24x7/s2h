@@ -28,7 +28,7 @@ const startGameResolver: LitResolver<StartGameInput> = async ( { input, ctx } ) 
 		}
 	} );
 
-	ctx.ee.emit( updatedGame.id, updatedGame );
+	ctx.namespace?.emit( game.id, updatedGame );
 	return updatedGame;
 };
 

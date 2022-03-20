@@ -85,7 +85,7 @@ const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx } ) => {
 		data: { moves: { create: [ moveData ] } }
 	} );
 
-	ctx.ee.emit( updatedGame.id, updatedGame );
+	ctx.namespace?.emit( game.id, updatedGame );
 	return updatedGame;
 };
 

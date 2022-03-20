@@ -42,7 +42,7 @@ const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx } ) =>
 		data: { moves: { create: [ { type: LitMoveType.GIVEN, turnId: takingPlayer.id } ] } }
 	} );
 
-	ctx.ee.emit( updatedGame.id, updatedGame );
+	ctx.namespace?.emit( game.id, updatedGame );
 	return updatedGame;
 };
 

@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import { trpc } from "./trpc";
 import { Flex } from "@s2h/ui/flex";
 import { Spinner } from "@s2h/ui/spinner";
+import { useMount } from "react-use";
+import { io } from "socket.io-client";
 
 export interface IGameContext {
 	game: LitGameData;
@@ -33,11 +35,17 @@ export function GameProvider( props: { children: ReactNode } ) {
 		}
 	} );
 
-	trpc.useSubscription( [ "lit-game", { gameId: params.gameId! } ], {
-		onNext( data: LitGameData ) {
-			console.log( "On Next Called" );
+	useMount( () => {
+		const socket = io( "http://localhost:8000/literature" );
+		socket.on( "welcome", ( data ) => {
+			console.log( data );
+		} );
+
+		socket.on( params.gameId!, ( data: LitGameData ) => {
 			setGame( data );
-		}
+		} )
+
+		return () => socket.close();
 	} );
 
 	if ( isLoading || !game || !mePlayer ) {

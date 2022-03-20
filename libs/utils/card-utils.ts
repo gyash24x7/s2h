@@ -95,7 +95,7 @@ export class GameCard {
 	}
 
 	getCardString() {
-		return sentenceCase( this.getCardId() );
+		return sentenceCase( this.rank ) + " of " + sentenceCase( this.suit );
 	}
 
 	equals( card: GameCard ) {

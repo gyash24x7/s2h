@@ -2,12 +2,16 @@ import { CreateExpressContextOptions, createExpressMiddleware } from "@trpc/serv
 import type { ExpressMiddleware, TrpcContext } from "@s2h/utils";
 import prisma from "../utils/prisma";
 import { literatureRouter as router } from "@s2h/routers";
-import ee from "../utils/events";
+import type { Namespace } from "socket.io";
 
-export function createContext( { req, res }: CreateExpressContextOptions ): TrpcContext {
-	return { req, res, prisma, ee };
+export function createContextFactory( namespace: Namespace ) {
+	return function ( { req, res }: CreateExpressContextOptions ): TrpcContext {
+		return { req, res, prisma, namespace };
+	};
 }
 
-const handleTrpc: ExpressMiddleware = createExpressMiddleware( { router, createContext } );
+const handleTrpc = function ( namespace: Namespace ): ExpressMiddleware {
+	return createExpressMiddleware( { router, createContext: createContextFactory( namespace ) } );
+};
 
 export default handleTrpc;

@@ -6,7 +6,7 @@ import { Button } from "@s2h/ui/button";
 export const CreateGame = function () {
 	const navigate = useNavigate();
 
-	const { mutateAsync, isLoading } = trpc.useMutation( "create-lit-game", {
+	const { mutateAsync, isLoading } = trpc.useMutation( "create-game", {
 		async onSuccess( { id } ) {
 			navigate( `/play/${ id }` );
 		},

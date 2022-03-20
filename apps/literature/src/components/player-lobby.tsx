@@ -8,9 +8,11 @@ export function PlayerLobby() {
 	return (
 		<table className={ "min-w-full my-2" }>
 			<thead>
-			<th>
-				<h4 className={ "font-semibold text-lg text-left" }>Players Joined</h4>
-			</th>
+			<tr>
+				<th>
+					<h4 className={ "font-semibold text-lg text-left" }>Players Joined</h4>
+				</th>
+			</tr>
 			</thead>
 			<tbody>
 			{ game.players.map( player => (

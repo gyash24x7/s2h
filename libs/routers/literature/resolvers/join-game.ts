@@ -36,7 +36,7 @@ const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input } ) =>
 		}
 	} );
 
-	ctx.ee.emit( updatedGame.id, updatedGame );
+	ctx.namespace?.emit( game.id, updatedGame );
 	return updatedGame;
 };
 

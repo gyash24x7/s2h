@@ -33,7 +33,7 @@ const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { input, ct
 			data: { status: LitGameStatus.COMPLETED }
 		} );
 
-		ctx.ee.emit( updatedGame.id, updatedGame );
+		ctx.namespace?.emit( game.id, updatedGame );
 		return updatedGame;
 	}
 
@@ -47,7 +47,7 @@ const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { input, ct
 		data: { moves: { create: [ { type: LitMoveType.TURN, turnId: nextPlayer.id } ] } }
 	} );
 
-	ctx.ee.emit( updatedGame.id, updatedGame );
+	ctx.namespace?.emit( game.id, updatedGame );
 	return updatedGame;
 };
 

@@ -8,7 +8,7 @@ export const StartGame = function () {
 	const params = useParams<{ gameId: string }>();
 	const navigate = useNavigate();
 
-	const { mutateAsync, isLoading } = trpc.useMutation( "start-lit-game", {
+	const { mutateAsync, isLoading } = trpc.useMutation( "start-game", {
 		async onSuccess( { id } ) {
 			navigate( `/play/${ id }` );
 		},
