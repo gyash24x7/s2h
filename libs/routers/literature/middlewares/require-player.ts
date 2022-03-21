@@ -1,9 +1,10 @@
-import { LitGameWithPlayers, Messages, TrpcMiddleware } from "@s2h/utils";
+import { Messages, TrpcMiddleware } from "@s2h/utils";
+import type { LitGame } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 const requirePlayer: TrpcMiddleware = async function ( { ctx, next } ) {
 	const userId = ctx.res?.locals.userId as string;
-	const game: LitGameWithPlayers = ctx.res?.locals.currentGame;
+	const game: LitGame = ctx.res?.locals.currentGame;
 
 	const loggedInPlayer = game.players.find( player => player.userId === userId );
 

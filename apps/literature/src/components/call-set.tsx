@@ -3,9 +3,9 @@ import { trpc } from "../utils/trpc";
 import { Button } from "@s2h/ui/button";
 import { Modal, ModalTitle } from "@s2h/ui/modal";
 import { useGame } from "../utils/game-context";
-import type { GameCard } from "@s2h/utils";
-import { CardHand, CardSet, cardSetMap } from "@s2h/utils";
-import { cardSetSrcMap, PlayingCard } from "./playing-card";
+import type { CardSet, PlayingCard } from "@prisma/client";
+import { CardHand, cardSetMap, getCardId } from "@s2h/utils";
+import { cardSetSrcMap, DisplayCard } from "./display-card";
 import { MultiSelect, SingleSelect } from "@s2h/ui/select";
 import { Stepper } from "@s2h/ui/stepper";
 import { HStack } from "@s2h/ui/stack";
@@ -24,18 +24,18 @@ export function CallSet() {
 	const cardSetPossibleValues = myHand.getCardSetsInHand()
 		.filter( cardSet => myHand.getCardsOfSet( cardSet ).length <= 6 );
 
-	const mapDefaultValue: Record<string, GameCard[]> = {};
+	const mapDefaultValue: Record<string, PlayingCard[]> = {};
 	myTeamPlayers.forEach( player => mapDefaultValue[ player.id ] = [] );
 
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const [ selectedCardSet, setSelectedCardSet ] = useState<CardSet>();
-	const [ cardOptions, setCardOptions ] = useState<GameCard[]>( [] );
-	const [ cardMap, setCardMap ] = useState<Record<string, GameCard[]>>( mapDefaultValue );
+	const [ cardOptions, setCardOptions ] = useState<PlayingCard[]>( [] );
+	const [ cardMap, setCardMap ] = useState<Record<string, PlayingCard[]>>( mapDefaultValue );
 
 
 	const { mutateAsync } = trpc.useMutation( "call-set", {
 		onSuccess() {
-			closeModal()
+			closeModal();
 		},
 		onError( error ) {
 			console.log( error );
@@ -51,7 +51,7 @@ export function CallSet() {
 		setCardMap( newCardMap );
 	};
 
-	const handleCardSelect = ( playerId: string ) => ( cards: SelectOption<GameCard>[] ) => {
+	const handleCardSelect = ( playerId: string ) => ( cards: SelectOption<PlayingCard>[] ) => {
 		const newCardMap = { ...cardMap };
 		newCardMap[ playerId ] = cards.map( card => card.value );
 		setCardMap( newCardMap );
@@ -86,7 +86,7 @@ export function CallSet() {
 		);
 	};
 
-	const renderCardOption = ( { value }: SelectOption<GameCard> ) => <PlayingCard card={ value }/>;
+	const renderCardOption = ( { value }: SelectOption<PlayingCard> ) => <DisplayCard card={ value }/>;
 
 	const openModal = () => setIsModalOpen( true );
 
@@ -122,7 +122,7 @@ export function CallSet() {
 						...myTeamPlayers
 							.filter( player => CardHand.from( player.hand ).length() > 0 && player.id !== mePlayer.id )
 							.map( ( player, i ) => {
-								const alreadySelectedCardHand = new CardHand( [] );
+								const alreadySelectedCardHand = CardHand.from( [] );
 								for ( let j = 0; j < i; j++ ) {
 									alreadySelectedCardHand.addCard( ...cardMap[ myTeamPlayers[ j ].id ] );
 								}
@@ -137,14 +137,14 @@ export function CallSet() {
 												/>
 												<MultiSelect
 													values={ cardMap[ player.id ].map( card => (
-														{ label: card.getCardId(), value: card }
+														{ label: getCardId( card ), value: card }
 													) ) }
 													onChange={ handleCardSelect( player.id ) }
 													options={ cardOptions
 														.filter( cardOption => !alreadySelectedCardHand.contains(
 															cardOption ) )
 														.map( card => (
-															{ label: card.getCardId(), value: card }
+															{ label: getCardId( card ), value: card }
 														) )
 													}
 													renderOption={ renderCardOption }

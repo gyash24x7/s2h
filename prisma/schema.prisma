@@ -1,21 +1,21 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "mongodb"
+  url      = env("MONGODB_URL")
 }
 
 model User {
-    id                  String          @id @default(cuid())
+    id                  String          @id @default(auto()) @map("_id") @db.ObjectId
     name                String
     email               String          @unique
     avatar              String
     salt                String          @unique
 
     litGamesCreated     LitGame[]       @relation("LitGameCreatedBy")
-    litPlayers          LitPlayer[]     @relation("LitProfile")
 }
 
 enum LitGameStatus {
@@ -36,69 +36,84 @@ enum LitMoveType {
     CALL_FAIL
 }
 
-model LitTeam {
-    id          String          @id @default(cuid())
+enum CardRank {
+	ACE
+	TWO
+	THREE
+	FOUR
+	FIVE
+	SIX
+	SEVEN
+	EIGHT
+	NINE
+	TEN
+	JACK
+	QUEEN
+	KING
+}
+
+enum CardSuit {
+	HEARTS
+	CLUBS
+	SPADES
+	DIAMONDS
+}
+
+enum CardSet {
+	SMALL_DIAMONDS
+	BIG_DIAMONDS
+	SMALL_HEARTS
+	BIG_HEARTS
+	SMALL_SPADES
+	BIG_SPADES
+	SMALL_CLUBS
+	BIG_CLUBS
+}
+
+type DisplayCard {
+    rank            CardRank
+    suit            CardSuit
+}
+
+type LitTeam {
+    id          String          @default(cuid())
     name        String
-    players     LitPlayer[]     @relation("LitTeamPartOf")
     score       Int             @default(0)
-
-    // Not going to use below fields but required for prisma
-    game        LitGame         @relation("TeamOfLitGame", fields:[gameId], references:[id])
-    gameId      String
+    players     String[]
 }
 
-model LitPlayer {
-    id              String          @id @default(cuid())
+type LitPlayer {
+    id              String      @default(cuid())
     name            String
-    hand            Json
+    hand            DisplayCard[]
     avatar          String
-
-    game            LitGame         @relation("LitGamePartOf", fields:[gameId], references:[id])
-    gameId          String
-
-    user            User            @relation("LitProfile", fields:[userId], references:[id])
     userId          String
-
-    team            LitTeam?        @relation("LitTeamPartOf", fields:[teamId], references:[id])
     teamId          String?
-
-    turnMoves       LitMove[]       @relation("LitTurnPlayer")
-    askedFromMoves  LitMove[]       @relation("LitAskedFrom")
-    askedByMoves    LitMove[]       @relation("LitAskedBy")
 }
 
-model LitMove {
-    id                String          @id @default(cuid())
+type LitMove {
     type              LitMoveType
-    askedFor          Json?
-    callingSet        String?
-
-    turn              LitPlayer?      @relation("LitTurnPlayer", fields:[turnId], references:[id])
+    askedFor          DisplayCard?
+    callingSet        CardSet?
     turnId            String?
-
-    askedFrom         LitPlayer?      @relation("LitAskedFrom", fields:[askedFromId], references:[id])
     askedFromId       String?
-
-    askedBy           LitPlayer?      @relation("LitAskedBy", fields:[askedById], references:[id])
     askedById         String?
-
-    game              LitGame         @relation("LitGameMoves", fields:[gameId], references:[id])
-    gameId            String
-
     createdAt         DateTime        @default(now())
 }
 
 model LitGame {
-    id            String          @id @default(cuid())
+    id            String          @id @default(auto()) @map("_id") @db.ObjectId
     code          String          @unique
     status        LitGameStatus   @default(NOT_STARTED)
     playerCount   Int             @default(2)
 
     createdBy     User            @relation("LitGameCreatedBy", fields:[createdById], references:[id])
-    createdById   String
+    createdById   String          @db.ObjectId
 
-    players       LitPlayer[]     @relation("LitGamePartOf")
-    teams         LitTeam[]       @relation("TeamOfLitGame")
+    createdAt     DateTime        @default(now())
+    updatedAt     DateTime        @updatedAt
 
-    moves         LitMove[]       @relation("LitGameMoves")
+    players       LitPlayer[]
+    teams         LitTeam[]
+    moves         LitMove[]
 }

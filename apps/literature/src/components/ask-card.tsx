@@ -3,10 +3,9 @@ import { trpc } from "../utils/trpc";
 import { Button } from "@s2h/ui/button";
 import { Modal, ModalTitle } from "@s2h/ui/modal";
 import { useGame } from "../utils/game-context";
-import type { GameCard } from "@s2h/utils";
-import { CardHand, CardSet, cardSetMap } from "@s2h/utils";
-import type { LitPlayer } from "@prisma/client";
-import { cardSetSrcMap, PlayingCard } from "./playing-card";
+import { CardHand, cardSetMap, getCardString } from "@s2h/utils";
+import type { CardSet, LitPlayer, PlayingCard } from "@prisma/client";
+import { cardSetSrcMap, DisplayCard } from "./display-card";
 import { PlayerCard } from "./player-card";
 import { SingleSelect } from "@s2h/ui/select";
 import { Stepper } from "@s2h/ui/stepper";
@@ -29,10 +28,10 @@ export function AskCard() {
 
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const [ selectedCardSet, setSelectedCardSet ] = useState<CardSet>();
-	const [ selectedCard, setSelectedCard ] = useState<GameCard>();
+	const [ selectedCard, setSelectedCard ] = useState<PlayingCard>();
 	const [ selectedPlayer, setSelectedPlayer ] = useState<LitPlayer>();
 
-	const { mutateAsync } = trpc.useMutation( "ask-card", {
+	const { mutateAsync, isLoading } = trpc.useMutation( "ask-card", {
 		onError( error ) {
 			console.log( error );
 			alert( error.message );
@@ -45,6 +44,8 @@ export function AskCard() {
 
 		if ( !error ) {
 			await mutateAsync( input );
+		} else {
+			console.log( error );
 		}
 	};
 
@@ -65,7 +66,7 @@ export function AskCard() {
 		);
 	};
 
-	const renderCardOption = ( card: GameCard ) => <PlayingCard card={ card }/>;
+	const renderCardOption = ( card: PlayingCard ) => <DisplayCard card={ card }/>;
 
 	const renderPlayerOption = ( player: LitPlayer ) => <PlayerCard player={ player }/>;
 
@@ -136,13 +137,15 @@ export function AskCard() {
 								<Fragment>
 									<ModalTitle title={ "Confirm your Ask" }/>
 									<Banner
-										message={ `Ask ${ selectedPlayer?.name } for ${ selectedCard?.getCardString() }` }
+										message={ `Ask ${ selectedPlayer?.name } for ${ !!selectedCard && getCardString(
+											selectedCard ) }` }
 									/>
 								</Fragment>
 							)
 						}
 					] }
 					onEnd={ handleConfirm }
+					isLoading={ isLoading }
 				/>
 			</Modal>
 		</Fragment>

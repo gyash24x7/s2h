@@ -11,10 +11,12 @@ export interface StepperStep {
 export interface StepperProps {
 	steps: StepperStep[];
 	onEnd: () => void | Promise<void>;
+	isLoading?: boolean;
 }
 
 interface StepperButtonProps {
 	onClick: () => void | Promise<void>;
+	isLoading?: boolean;
 }
 
 const PreviousButton = ( props: StepperButtonProps & { disabled?: boolean } ) => (
@@ -66,7 +68,7 @@ export function Stepper( props: StepperProps ) {
 			{ activeStep === stepNames[ stepNames.length - 1 ] ? (
 				<HStack className={ "mt-6" } spacing={ "sm" }>
 					<PreviousButton onClick={ handlePrevious }/>
-					<EndButton onClick={ props.onEnd }/>
+					<EndButton onClick={ props.onEnd } isLoading={ props.isLoading }/>
 				</HStack>
 			) : (
 				<HStack className={ "mt-6" } spacing={ "sm" }>

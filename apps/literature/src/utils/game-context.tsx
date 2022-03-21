@@ -1,6 +1,5 @@
-import type { LitGameData } from "@s2h/utils";
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import type { LitMove, LitPlayer, LitTeam } from "@prisma/client";
+import type { LitGame, LitMove, LitPlayer, LitTeam } from "@prisma/client";
 import { useAuth } from "./auth";
 import { useParams } from "react-router-dom";
 import { trpc } from "./trpc";
@@ -10,7 +9,7 @@ import { useMount } from "react-use";
 import { io } from "socket.io-client";
 
 export interface IGameContext {
-	game: LitGameData;
+	game: LitGame;
 	mePlayer: LitPlayer;
 	meTeam?: LitTeam;
 	currentMove?: LitMove;
@@ -22,7 +21,7 @@ export const useGame = () => useContext<IGameContext>( GameContext );
 
 export function GameProvider( props: { children: ReactNode } ) {
 	const { user } = useAuth();
-	const [ game, setGame ] = useState<LitGameData>();
+	const [ game, setGame ] = useState<LitGame>();
 	const params = useParams<{ gameId: string }>();
 
 	const mePlayer = game?.players.find( player => player.userId === user?.id );
@@ -31,6 +30,7 @@ export function GameProvider( props: { children: ReactNode } ) {
 
 	const { isLoading } = trpc.useQuery( [ "get-game", { gameId: params.gameId! } ], {
 		onSuccess( data ) {
+			console.log( data );
 			setGame( data );
 		}
 	} );
@@ -41,9 +41,9 @@ export function GameProvider( props: { children: ReactNode } ) {
 			console.log( data );
 		} );
 
-		socket.on( params.gameId!, ( data: LitGameData ) => {
+		socket.on( params.gameId!, ( data: LitGame ) => {
 			setGame( data );
-		} )
+		} );
 
 		return () => socket.close();
 	} );

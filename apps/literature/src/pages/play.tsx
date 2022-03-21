@@ -15,27 +15,26 @@ import { GameStatus } from "../components/game-status";
 import { useWindowSize } from "react-use";
 
 export default function () {
-	const { game: { status, createdBy }, mePlayer } = useGame();
+	const { game: { status, createdById }, mePlayer } = useGame();
 
 	const { width } = useWindowSize();
 
-	const isCreator = () => createdBy.id === mePlayer.userId;
+	const isCreator = () => createdById === mePlayer.userId;
 
 	const renderBasedOnStatus = () => {
 		switch ( status ) {
 			case LitGameStatus.NOT_STARTED:
 				return [
 					<PlayerLobby/>,
-					<Banner message={ "Waiting For Players to Join" } isLoading/>
+					<Banner message={ "Waiting For Players to Join" } isLoading className={ "mt-4" }/>
 				];
 			case LitGameStatus.PLAYERS_READY:
 				return [
 					<PlayerLobby/>,
 					<Fragment>
-						{
-							!isCreator()
-								? <Banner message={ `Waiting Teams to get Created` } className={ "mt-4" } isLoading/>
-								: <CreateTeams/>
+						{ !isCreator()
+							? <Banner message={ `Waiting For Teams to get Created` } className={ "mt-4" } isLoading/>
+							: <CreateTeams/>
 						}
 					</Fragment>
 				];
@@ -43,10 +42,9 @@ export default function () {
 				return [
 					<DisplayTeams/>,
 					<Fragment>
-						{
-							!isCreator()
-								? <Banner message={ `Waiting for the game to Start` } className={ "mt-4" } isLoading/>
-								: <StartGame/>
+						{ !isCreator()
+							? <Banner message={ `Waiting for the game to Start` } className={ "mt-4" } isLoading/>
+							: <StartGame/>
 						}
 					</Fragment>
 				];
@@ -68,7 +66,8 @@ export default function () {
 	return (
 		<Flex className={ "lg:h-screen w-screen bg-light-300 divide-x divide-dashed divide-light-700 bg-light-200" }>
 			<VStack
-				className={ "p-5 lg:w-1/3 w-full divide-light-700 divide-y divide-dashed lg:h-full bg-light-100" }>
+				className={ "p-5 lg:w-1/3 w-full divide-light-700 divide-y divide-dashed lg:h-full bg-light-100" }
+			>
 				<img src={ LiteratureIcon } width={ 80 } height={ 80 } alt={ "literature" }/>
 				<GameDescription/>
 				{ renderBasedOnStatus() }

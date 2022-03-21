@@ -1,15 +1,16 @@
 import type { Describe, Infer } from "superstruct";
 import * as s from "superstruct";
-import { CARD_RANKS, CARD_SUITS, CardRank, CardSuit } from "@s2h/utils";
+import { CARD_RANKS, CARD_SUITS } from "@s2h/utils";
+import type { PlayingCard } from "@prisma/client";
 
-export const gameCardStruct: Describe<{ rank: CardRank, suit: CardSuit }> = s.object( {
+export const playingCardStruct: Describe<PlayingCard> = s.object( {
 	rank: s.enums( CARD_RANKS ),
 	suit: s.enums( CARD_SUITS )
 } );
 
 export const askCardInputStruct = s.object( {
 	gameId: s.nonempty( s.string() ),
-	askedFor: gameCardStruct,
+	askedFor: playingCardStruct,
 	askedFrom: s.nonempty( s.string() )
 } );
 
@@ -17,7 +18,7 @@ export type AskCardInput = Infer<typeof askCardInputStruct>;
 
 export const callSetInputStruct = s.object( {
 	gameId: s.nonempty( s.string() ),
-	data: s.record( s.string(), s.array( gameCardStruct ) )
+	data: s.record( s.string(), s.array( playingCardStruct ) )
 } );
 
 export type CallSetInput = Infer<typeof callSetInputStruct>;
@@ -37,7 +38,7 @@ export type CreateTeamsInput = Infer<typeof createTeamsInputStruct>;
 
 export const declineCardInputStruct = s.object( {
 	gameId: s.nonempty( s.string() ),
-	cardDeclined: gameCardStruct
+	cardDeclined: playingCardStruct
 } );
 
 export type DeclineCardInput = Infer<typeof declineCardInputStruct>;
@@ -50,7 +51,7 @@ export type GetGameInput = Infer<typeof getGameInputStruct>;
 
 export const giveCardInputStruct = s.object( {
 	gameId: s.nonempty( s.string() ),
-	cardToGive: gameCardStruct,
+	cardToGive: playingCardStruct,
 	giveTo: s.nonempty( s.string() )
 } );
 

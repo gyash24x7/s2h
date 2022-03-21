@@ -7,7 +7,7 @@ import { LitMoveType } from "@prisma/client";
 import { GiveCard } from "./give-card";
 import { DeclineCard } from "./decline-card";
 import { CallSet } from "./call-set";
-import { CardHand, GameCard } from "@s2h/utils";
+import { CardHand } from "@s2h/utils";
 import { TransferTurn } from "./transfer-turn";
 import { PreviousMoves } from "./previous-moves";
 import { Banner } from "@s2h/ui/banner";
@@ -21,7 +21,7 @@ export function GameStatus() {
 		if ( !currentMove ) {
 			return false;
 		}
-		return myHand.contains( GameCard.from( currentMove.askedFor ) );
+		return myHand.contains( currentMove.askedFor! );
 	};
 
 	const getCurrentMovePlayer = () => {

@@ -1,12 +1,12 @@
 import type { LitResolver } from "@s2h/utils";
-import { CardHand, LitGameWithPlayers, Messages } from "@s2h/utils";
-import type { LitPlayer } from "@prisma/client";
+import { CardHand, Messages } from "@s2h/utils";
+import type { LitGame, LitPlayer } from "@prisma/client";
 import { LitGameStatus, LitMoveType } from "@prisma/client";
 import type { TransferTurnInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
 const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { input, ctx } ) => {
-	const game: LitGameWithPlayers = ctx.res?.locals.currentGame;
+	const game: LitGame = ctx.res?.locals.currentGame;
 	const loggedInPlayer: LitPlayer = ctx.res?.locals.loggedInPlayer;
 
 	if ( CardHand.from( loggedInPlayer.hand ).length() !== 0 ) {
@@ -28,7 +28,6 @@ const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { input, ct
 
 	if ( myTeamPlayersWithCards.length === 0 && otherTeamPlayersWithCards.length === 0 ) {
 		const updatedGame = await ctx.prisma.litGame.update( {
-			include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 			where: { id: input.gameId },
 			data: { status: LitGameStatus.COMPLETED }
 		} );
@@ -42,9 +41,12 @@ const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { input, ct
 		: myTeamPlayersWithCards[ 0 ]!;
 
 	const updatedGame = await ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 		where: { id: input.gameId },
-		data: { moves: { create: [ { type: LitMoveType.TURN, turnId: nextPlayer.id } ] } }
+		data: {
+			moves: {
+				set: [ { type: LitMoveType.TURN, turnId: nextPlayer.id }, ...game.moves ]
+			}
+		}
 	} );
 
 	ctx.namespace?.emit( game.id, updatedGame );

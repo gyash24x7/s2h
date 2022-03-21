@@ -12,7 +12,7 @@ export const CreateTeams = function () {
 	const [ team2, setTeam2 ] = useState( "" );
 	const params = useParams<{ gameId: string }>();
 
-	const { mutateAsync, isLoading } = trpc.useMutation( "create-lit-teams", {
+	const { mutateAsync, isLoading } = trpc.useMutation( "create-teams", {
 		onError( error ) {
 			console.log( error );
 			alert( error.message );

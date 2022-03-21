@@ -2,7 +2,6 @@ import { Button } from "@s2h/ui/button";
 import React from "react";
 import { trpc } from "../utils/trpc";
 import { useGame } from "../utils/game-context";
-import { GameCard } from "@s2h/utils";
 
 export function GiveCard() {
 	const { game, currentMove } = useGame();
@@ -10,7 +9,7 @@ export function GiveCard() {
 
 	const giveCard = () => mutateAsync( {
 		gameId: game.id,
-		cardToGive: GameCard.from( currentMove!.askedFor ),
+		cardToGive: currentMove?.askedFor!,
 		giveTo: currentMove?.askedById!
 	} );
 

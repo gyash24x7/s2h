@@ -1,4 +1,4 @@
-import type { LitGame, LitMove, LitPlayer, LitTeam, PrismaClient, User } from "@prisma/client";
+import type { LitGame, PrismaClient } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
 import type { Namespace } from "socket.io";
 import type { MiddlewareFunction } from "@trpc/server/dist/declarations/src/internals/middlewares";
@@ -19,16 +19,7 @@ export type TrpcResolverOptions<I = any> = {
 
 export type TrpcResolver<I = any, R = any> = ( options: TrpcResolverOptions<I> ) => R | Promise<R>
 
-export type LitGameWithPlayers = LitGame & { players: LitPlayer[] }
-
-export type LitGameData =
-	LitGame
-	& { players: LitPlayer[] }
-	& { teams: LitTeam[] }
-	& { moves: LitMove[] }
-	& { createdBy: User }
-
-export type LitResolver<I = unknown> = TrpcResolver<I, LitGameData>;
+export type LitResolver<I = unknown> = TrpcResolver<I, LitGame>;
 
 export type ExpressMiddleware = ( req: Request, res: Response, next: NextFunction ) => any | Promise<any>
 

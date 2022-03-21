@@ -11,8 +11,7 @@ const requireGame: TrpcMiddleware = async function ( { ctx, rawInput, next } ) {
 	}
 
 	const game = await ctx.prisma.litGame.findUnique( {
-		where: { id: input.gameId },
-		include: { players: true }
+		where: { id: input.gameId }
 	} );
 
 	if ( !game ) {

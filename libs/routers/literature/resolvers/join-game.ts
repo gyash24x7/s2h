@@ -7,9 +7,8 @@ import { TRPCError } from "@trpc/server";
 const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input } ) => {
 	const { name, avatar, id } = ctx.res?.locals.user as User;
 
-	const game = await ctx.prisma.litGame.findUnique( {
-		where: { code: input.code },
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true }
+	const game = await ctx.prisma.litGame.findFirst( {
+		where: { code: input.code }
 	} );
 
 	if ( !game ) {
@@ -26,13 +25,14 @@ const joinGameResolver: LitResolver<JoinGameInput> = async ( { ctx, input } ) =>
 	}
 
 	const updatedGame = await ctx.prisma.litGame.update( {
-		include: { players: true, teams: true, moves: { orderBy: { createdAt: "desc" } }, createdBy: true },
 		where: { id: game.id },
 		data: {
 			status: game.players.length === game.playerCount - 1
 				? LitGameStatus.PLAYERS_READY
 				: LitGameStatus.NOT_STARTED,
-			players: { create: { name, avatar, userId: id, hand: [] } }
+			players: {
+				push: { name, avatar, userId: id }
+			}
 		}
 	} );
 
