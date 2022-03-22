@@ -9,7 +9,6 @@ import { cardSetSrcMap, DisplayCard } from "./display-card";
 import { MultiSelect, SingleSelect } from "@s2h/ui/select";
 import { Stepper } from "@s2h/ui/stepper";
 import { HStack } from "@s2h/ui/stack";
-import { Banner } from "@s2h/ui/banner";
 import { Flex } from "@s2h/ui/flex";
 import type { CallSetInput } from "@s2h/dtos";
 import { callSetInputStruct } from "@s2h/dtos";
@@ -33,7 +32,7 @@ export function CallSet() {
 	const [ cardMap, setCardMap ] = useState<Record<string, PlayingCard[]>>( mapDefaultValue );
 
 
-	const { mutateAsync } = trpc.useMutation( "call-set", {
+	const { mutateAsync, isLoading } = trpc.useMutation( "call-set", {
 		onSuccess() {
 			closeModal();
 		},
@@ -160,12 +159,12 @@ export function CallSet() {
 								<Fragment>
 									<ModalTitle
 										title={ `Confirm Call for ${ sentenceCase( selectedCardSet || "" ) }` }/>
-									<Banner message={ `` }/>
 								</Fragment>
 							)
 						}
 					] }
 					onEnd={ handleConfirm }
+					isLoading={ isLoading }
 				/>
 			</Modal>
 		</Fragment>

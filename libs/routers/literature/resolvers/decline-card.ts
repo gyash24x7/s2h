@@ -1,11 +1,10 @@
 import type { LitResolver } from "@s2h/utils";
 import { CardHand, Messages } from "@s2h/utils";
-import { LitGame, LitMoveType, LitPlayer } from "@prisma/client";
+import { LitMoveType, LitPlayer } from "@prisma/client";
 import type { DeclineCardInput } from "@s2h/dtos";
 import { TRPCError } from "@trpc/server";
 
 const declineCardResolver: LitResolver<DeclineCardInput> = async ( { ctx, input } ) => {
-	const game: LitGame = ctx.res?.locals.currentGame;
 	const loggedInPlayer: LitPlayer = ctx.res?.locals.loggedInPlayer;
 	const playerHand = CardHand.from( loggedInPlayer.hand );
 
@@ -17,10 +16,7 @@ const declineCardResolver: LitResolver<DeclineCardInput> = async ( { ctx, input 
 		where: { id: input.gameId },
 		data: {
 			moves: {
-				set: [
-					{ type: LitMoveType.DECLINED, turnId: loggedInPlayer.id },
-					...game.moves
-				]
+				push: { type: LitMoveType.DECLINED, turnId: loggedInPlayer.id }
 			}
 		}
 	} );

@@ -44,7 +44,7 @@ const transferTurnResolver: LitResolver<TransferTurnInput> = async ( { input, ct
 		where: { id: input.gameId },
 		data: {
 			moves: {
-				set: [ { type: LitMoveType.TURN, turnId: nextPlayer.id }, ...game.moves ]
+				push: { type: LitMoveType.TURN, turnId: nextPlayer.id }
 			}
 		}
 	} );

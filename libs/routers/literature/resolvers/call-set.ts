@@ -72,7 +72,7 @@ const callSetResolver: LitResolver<CallSetInput> = async ( { input, ctx } ) => {
 	const updatedGame = await ctx.prisma.litGame.update( {
 		where: { id: input.gameId },
 		data: {
-			moves: { set: [ ...moveData, ...game.moves ] },
+			moves: { push: moveData },
 			teams: { set: Object.values( teamData ) },
 			players: { set: Object.values( playerData ) }
 		}

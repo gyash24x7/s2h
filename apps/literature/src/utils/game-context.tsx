@@ -26,10 +26,10 @@ export function GameProvider( props: { children: ReactNode } ) {
 
 	const mePlayer = game?.players.find( player => player.userId === user?.id );
 	const meTeam = game?.teams.find( team => team.id === mePlayer?.teamId );
-	const moves = game?.moves || [];
 
 	const { isLoading } = trpc.useQuery( [ "get-game", { gameId: params.gameId! } ], {
 		onSuccess( data ) {
+			data.moves = data.moves.reverse();
 			console.log( data );
 			setGame( data );
 		}
@@ -42,6 +42,7 @@ export function GameProvider( props: { children: ReactNode } ) {
 		} );
 
 		socket.on( params.gameId!, ( data: LitGame ) => {
+			data.moves = data.moves.reverse();
 			setGame( data );
 		} );
 
@@ -57,7 +58,7 @@ export function GameProvider( props: { children: ReactNode } ) {
 	}
 
 	return (
-		<GameContext.Provider value={ { game, mePlayer, meTeam, currentMove: moves[ 0 ] } }>
+		<GameContext.Provider value={ { game, mePlayer, meTeam, currentMove: game.moves[ 0 ] } }>
 			{ props.children }
 		</GameContext.Provider>
 	);

@@ -28,10 +28,7 @@ const giveCardResolver: LitResolver<GiveCardInput> = async ( { input, ctx } ) =>
 		where: { id: input.gameId },
 		data: {
 			moves: {
-				set: [
-					{ type: LitMoveType.GIVEN, turnId: takingPlayer.id },
-					...game.moves
-				]
+				push: { type: LitMoveType.GIVEN, turnId: takingPlayer.id }
 			},
 			players: {
 				set: game.players.map( player => {

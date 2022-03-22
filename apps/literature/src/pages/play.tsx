@@ -13,9 +13,13 @@ import { CreateTeams } from "../components/create-teams";
 import { DisplayHand } from "../components/display-hand";
 import { GameStatus } from "../components/game-status";
 import { useWindowSize } from "react-use";
+import { Avatar } from "@s2h/ui/avatar";
+import { useAuth } from "../utils/auth";
+import { GameCompleted } from "../components/game-completed";
 
 export default function () {
 	const { game: { status, createdById }, mePlayer } = useGame();
+	const { user } = useAuth();
 
 	const { width } = useWindowSize();
 
@@ -58,7 +62,10 @@ export default function () {
 				];
 			case LitGameStatus.COMPLETED:
 				return [
-					<DisplayTeams/>
+					<DisplayTeams/>,
+					<Fragment>
+						{ width < 1024 && <GameCompleted/> }
+					</Fragment>
 				];
 		}
 	};
@@ -68,7 +75,10 @@ export default function () {
 			<VStack
 				className={ "p-5 lg:w-1/3 w-full divide-light-700 divide-y divide-dashed lg:h-full bg-light-100" }
 			>
-				<img src={ LiteratureIcon } width={ 80 } height={ 80 } alt={ "literature" }/>
+				<Flex justify={ "space-between" } align={ "center" }>
+					<img src={ LiteratureIcon } width={ 80 } height={ 80 } alt={ "literature" }/>
+					<Avatar size={ "lg" } src={ user?.avatar } name={ user?.name }/>
+				</Flex>
 				<GameDescription/>
 				{ renderBasedOnStatus() }
 			</VStack>
@@ -80,6 +90,7 @@ export default function () {
 							<GameStatus/>
 						</Fragment>
 					) }
+					{ status === LitGameStatus.COMPLETED && <GameCompleted/> }
 				</Flex>
 			) }
 		</Flex>
