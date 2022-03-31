@@ -4,13 +4,10 @@ import { useGame } from "../utils/game-context";
 import { trpc } from "../utils/trpc";
 
 export function DeclineCard() {
-	const { game, currentMove } = useGame();
+	const { id: gameId, currentMove } = useGame();
 	const { mutateAsync, isLoading } = trpc.useMutation( "decline-card" );
 
-	const declineCard = () => mutateAsync( {
-		gameId: game.id,
-		cardDeclined: currentMove?.askedFor!
-	} );
+	const declineCard = () => mutateAsync( { gameId, cardDeclined: currentMove?.askedFor! } );
 
 	return (
 		<Button

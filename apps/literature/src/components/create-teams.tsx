@@ -3,14 +3,14 @@ import { Flex } from "@s2h/ui/flex";
 import { Modal } from "@s2h/ui/modal";
 import React, { Fragment, useState } from "react";
 import { trpc } from "../utils/trpc";
-import { useParams } from "react-router-dom";
 import { Button } from "@s2h/ui/button";
+import { useGame } from "../utils/game-context";
 
 export const CreateTeams = function () {
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const [ team1, setTeam1 ] = useState( "" );
 	const [ team2, setTeam2 ] = useState( "" );
-	const params = useParams<{ gameId: string }>();
+	const { id } = useGame();
 
 	const { mutateAsync, isLoading } = trpc.useMutation( "create-teams", {
 		onError( error ) {
@@ -18,6 +18,10 @@ export const CreateTeams = function () {
 			alert( error.message );
 		}
 	} );
+
+	const createTeams = () => mutateAsync( { teams: [ team1, team2 ], gameId: id } );
+
+	const openModal = () => setIsModalOpen( true );
 
 	return (
 		<Fragment>
@@ -46,7 +50,7 @@ export const CreateTeams = function () {
 							buttonText={ "Submit" }
 							appearance={ "primary" }
 							isLoading={ isLoading }
-							onClick={ () => mutateAsync( { teams: [ team1, team2 ], gameId: params.gameId! } ) }
+							onClick={ createTeams }
 						/>
 					</div>
 				</Flex>
@@ -56,7 +60,7 @@ export const CreateTeams = function () {
 					fullWidth
 					buttonText={ "Create Teams" }
 					appearance={ "primary" }
-					onClick={ () => setIsModalOpen( true ) }
+					onClick={ openModal }
 				/>
 			</Flex>
 		</Fragment>

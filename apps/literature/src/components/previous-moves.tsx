@@ -8,7 +8,7 @@ import { Flex } from "@s2h/ui/flex";
 import { getMoveDescription } from "@s2h/utils/literature-utils";
 
 export function PreviousMoves() {
-	const { game } = useGame();
+	const { moves, players } = useGame();
 
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 
@@ -25,10 +25,18 @@ export function PreviousMoves() {
 			</Flex>
 			<Modal isOpen={ isModalOpen } onClose={ closeModal } title={ "Previous Moves" }>
 				<VStack>
-					<Banner message={ getMoveDescription( game.players, game.moves[ 0 ], game.moves[ 1 ] ) }/>
-					<Banner message={ getMoveDescription( game.players, game.moves[ 1 ], game.moves[ 2 ] ) }/>
-					<Banner message={ getMoveDescription( game.players, game.moves[ 2 ], game.moves[ 3 ] ) }/>
-					<Banner message={ getMoveDescription( game.players, game.moves[ 3 ], game.moves[ 4 ] ) }/>
+					{ moves[ 0 ] && (
+						<Banner message={ getMoveDescription( players, moves[ 0 ], moves[ 1 ] ) }/>
+					) }
+					{ moves[ 1 ] && (
+						<Banner message={ getMoveDescription( players, moves[ 1 ], moves[ 2 ] ) }/>
+					) }
+					{ moves[ 2 ] && (
+						<Banner message={ getMoveDescription( players, moves[ 2 ], moves[ 3 ] ) }/>
+					) }
+					{ moves[ 3 ] && (
+						<Banner message={ getMoveDescription( players, moves[ 3 ], moves[ 4 ] ) }/>
+					) }
 				</VStack>
 			</Modal>
 		</Fragment>

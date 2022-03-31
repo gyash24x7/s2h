@@ -1,11 +1,12 @@
 import React from "react";
 import { trpc } from "../utils/trpc";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@s2h/ui/button";
 import { Flex } from "@s2h/ui/flex";
+import { useGame } from "../utils/game-context";
 
 export const StartGame = function () {
-	const params = useParams<{ gameId: string }>();
+	const { id: gameId } = useGame();
 	const navigate = useNavigate();
 
 	const { mutateAsync, isLoading } = trpc.useMutation( "start-game", {
@@ -18,7 +19,7 @@ export const StartGame = function () {
 		}
 	} );
 
-	const startGame = () => mutateAsync( { gameId: params.gameId! } );
+	const startGame = () => mutateAsync( { gameId } );
 
 	return (
 		<Flex justify={ "center" } className={ "mt-4" }>

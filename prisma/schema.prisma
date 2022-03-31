@@ -70,7 +70,7 @@ enum CardSet {
 	BIG_CLUBS
 }
 
-type DisplayCard {
+type PlayingCard {
     rank            CardRank
     suit            CardSuit
 }
@@ -85,7 +85,7 @@ type LitTeam {
 type LitPlayer {
     id              String      @default(cuid())
     name            String
-    hand            DisplayCard[]
+    hand            PlayingCard[]
     avatar          String
     userId          String
     teamId          String?
@@ -93,7 +93,7 @@ type LitPlayer {
 
 type LitMove {
     type              LitMoveType
-    askedFor          DisplayCard?
+    askedFor          PlayingCard?
     callingSet        CardSet?
     turnId            String?
     askedFromId       String?

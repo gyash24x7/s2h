@@ -6,7 +6,7 @@ import React from "react";
 
 export const trpc = createReactQueryHooks<LiteratureRouter>();
 
-const trpcClient = trpc.createClient( {
+export const trpcClient = trpc.createClient( {
 	url: "http://localhost:8000/api/literature",
 	fetch: ( input, init ) => fetch( input, { ...init, credentials: "include" } )
 } );

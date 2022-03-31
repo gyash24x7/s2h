@@ -7,50 +7,48 @@ import { LitMoveType } from "@prisma/client";
 import { GiveCard } from "./give-card";
 import { DeclineCard } from "./decline-card";
 import { CallSet } from "./call-set";
-import { CardHand } from "@s2h/utils";
 import { TransferTurn } from "./transfer-turn";
 import { PreviousMoves } from "./previous-moves";
 import { Banner } from "@s2h/ui/banner";
 import { getMoveDescription } from "@s2h/utils/literature-utils";
 
 export function GameStatus() {
-	const { game, currentMove, mePlayer } = useGame();
-	const myHand = CardHand.from( mePlayer.hand );
+	const { status, loggedInPlayer, loggedInPlayerHand, players, moves } = useGame();
 
 	const hasAskedCard = () => {
-		if ( !currentMove ) {
+		if ( !moves[ 0 ] ) {
 			return false;
 		}
-		return myHand.contains( currentMove.askedFor! );
+		return loggedInPlayerHand.contains( moves[ 0 ].askedFor! );
 	};
 
 	const getCurrentMovePlayer = () => {
-		if ( !currentMove ) {
+		if ( !moves[ 0 ] ) {
 			return;
 		}
 
-		switch ( currentMove.type ) {
+		switch ( moves[ 0 ].type ) {
 			case "ASK":
-				return game.players.find( player => player.id === currentMove.askedFromId );
+				return players.find( player => player.id === moves[ 0 ].askedFromId );
 			default:
-				return game.players.find( player => player.id === currentMove.turnId );
+				return players.find( player => player.id === moves[ 0 ].turnId );
 		}
 	};
 
 	return (
 		<VStack className={ "w-full py-4 lg:py-0" } spacing={ "2xl" }>
-			<Banner message={ getMoveDescription( game.players, game.moves[ 0 ], game.moves[ 1 ] ) }/>
-			{ game.status === "IN_PROGRESS" && (
+			<Banner message={ getMoveDescription( players, moves[ 0 ], moves[ 1 ] ) }/>
+			{ status === "IN_PROGRESS" && (
 				<HStack>
 					<h2 className={ "font-fjalla text-3xl text-dark-700" }>TURN:</h2>
-					<PlayerCard player={ getCurrentMovePlayer() || mePlayer } size={ "md" }/>
+					<PlayerCard player={ getCurrentMovePlayer() || loggedInPlayer } size={ "md" }/>
 				</HStack>
 			) }
 			<HStack>
 				<PreviousMoves/>
-				{ currentMove?.turnId === mePlayer?.id && (
+				{ moves[ 0 ]?.turnId === loggedInPlayer?.id && (
 					<Fragment>
-						{ myHand.length() > 0
+						{ loggedInPlayerHand.length() > 0
 							? (
 								<HStack>
 									<AskCard/>
@@ -61,7 +59,7 @@ export function GameStatus() {
 						}
 					</Fragment>
 				) }
-				{ currentMove?.type === LitMoveType.ASK && currentMove?.askedFromId === mePlayer?.id && (
+				{ moves[ 0 ]?.type === LitMoveType.ASK && moves[ 0 ]?.askedFromId === loggedInPlayer?.id && (
 					<Fragment>{ hasAskedCard() ? <GiveCard/> : <DeclineCard/> }</Fragment>
 				) }
 			</HStack>

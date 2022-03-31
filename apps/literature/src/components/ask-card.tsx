@@ -3,7 +3,7 @@ import { trpc } from "../utils/trpc";
 import { Button } from "@s2h/ui/button";
 import { Modal, ModalTitle } from "@s2h/ui/modal";
 import { useGame } from "../utils/game-context";
-import { CardHand, cardSetMap, getCardString } from "@s2h/utils";
+import { cardSetMap, getCardString } from "@s2h/utils";
 import type { CardSet, LitPlayer, PlayingCard } from "@prisma/client";
 import { cardSetSrcMap, DisplayCard } from "./display-card";
 import { PlayerCard } from "./player-card";
@@ -16,15 +16,7 @@ import type { AskCardInput } from "@s2h/dtos";
 import { askCardInputStruct } from "@s2h/dtos";
 
 export function AskCard() {
-	const { game, mePlayer } = useGame();
-	const myHand = CardHand.from( mePlayer.hand );
-
-	const cardSetPossibleValues = myHand.getCardSetsInHand()
-		.filter( cardSet => myHand.getCardsOfSet( cardSet ).length < 6 );
-
-	const oppositeTeamPlayersWithCards = game.players.filter(
-		player => player.teamId !== mePlayer.teamId && CardHand.from( player.hand ).length() > 0
-	);
+	const { id: gameId, loggedInPlayerHand, askableCardSets, askablePlayers } = useGame();
 
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const [ selectedCardSet, setSelectedCardSet ] = useState<CardSet>();
@@ -39,7 +31,7 @@ export function AskCard() {
 	} );
 
 	const handleConfirm = async () => {
-		const input: AskCardInput = { gameId: game.id, askedFor: selectedCard!, askedFrom: selectedPlayer!.id };
+		const input: AskCardInput = { gameId, askedFor: selectedCard!, askedFrom: selectedPlayer!.id };
 		const [ error ] = askCardInputStruct.validate( input );
 
 		if ( !error ) {
@@ -95,7 +87,7 @@ export function AskCard() {
 									<SingleSelect
 										value={ selectedCardSet }
 										onChange={ setSelectedCardSet }
-										options={ cardSetPossibleValues }
+										options={ askableCardSets }
 										renderOption={ renderCardSetOption }
 									/>
 								</Fragment>
@@ -110,7 +102,7 @@ export function AskCard() {
 										value={ selectedCard }
 										onChange={ setSelectedCard }
 										options={ !selectedCardSet ? [] : cardSetMap[ selectedCardSet ]
-											.filter( card => !myHand.contains( card ) )
+											.filter( card => !loggedInPlayerHand.contains( card ) )
 										}
 										renderOption={ renderCardOption }
 									/>
@@ -125,7 +117,7 @@ export function AskCard() {
 									<SingleSelect
 										value={ selectedPlayer }
 										onChange={ setSelectedPlayer }
-										options={ oppositeTeamPlayersWithCards }
+										options={ askablePlayers }
 										renderOption={ renderPlayerOption }
 									/>
 								</Fragment>

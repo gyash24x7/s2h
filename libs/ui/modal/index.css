@@ -54,6 +54,9 @@
 	.modal-content {
 		@apply inline-block p-6 my-8 overflow-hidden text-left align-middle;
 		@apply transition-all transform bg-light-100 shadow-xl rounded-md;
+		@apply w-5/6 sm:w-4/5 md:w-3/5 lg:w-1/2;
+
+		max-width: 600px;
 
 		.modal-title {
 			@apply text-xl font-semibold leading-6 mb-4;
@@ -61,42 +64,6 @@
 
 		.modal-body {
 			@apply text-base;
-		}
-	}
-
-	&.modal-root--variant-size-xs {
-		.modal-content {
-			@apply w-2/5;
-		}
-	}
-
-	&.modal-root--variant-size-sm {
-		.modal-content {
-			@apply w-1/2;
-		}
-	}
-
-	&.modal-root--variant-size-md {
-		.modal-content {
-			@apply w-3/5;
-		}
-	}
-
-	&.modal-root--variant-size-lg {
-		.modal-content {
-			@apply w-2/3;
-		}
-	}
-
-	&.modal-root--variant-size-xl {
-		.modal-content {
-			@apply w-3/4;
-		}
-	}
-
-	&.modal-root--variant-size-2xl {
-		.modal-content {
-			@apply w-5/6;
 		}
 	}
 }

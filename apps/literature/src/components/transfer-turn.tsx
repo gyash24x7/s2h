@@ -4,10 +4,10 @@ import { useGame } from "../utils/game-context";
 import { trpc } from "../utils/trpc";
 
 export function TransferTurn() {
-	const { game } = useGame();
+	const { id: gameId } = useGame();
 	const { mutateAsync, isLoading } = trpc.useMutation( "transfer-turn" );
 
-	const transferTurn = () => mutateAsync( { gameId: game.id } );
+	const transferTurn = () => mutateAsync( { gameId } );
 
 	return (
 		<Button

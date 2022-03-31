@@ -18,12 +18,10 @@ import { useAuth } from "../utils/auth";
 import { GameCompleted } from "../components/game-completed";
 
 export default function () {
-	const { game: { status, createdById }, mePlayer } = useGame();
+	const { status, loggedInPlayer, creator } = useGame();
 	const { user } = useAuth();
 
 	const { width } = useWindowSize();
-
-	const isCreator = () => createdById === mePlayer.userId;
 
 	const renderBasedOnStatus = () => {
 		switch ( status ) {
@@ -36,7 +34,7 @@ export default function () {
 				return [
 					<PlayerLobby/>,
 					<Fragment>
-						{ !isCreator()
+						{ loggedInPlayer.id !== creator.id
 							? <Banner message={ `Waiting For Teams to get Created` } className={ "mt-4" } isLoading/>
 							: <CreateTeams/>
 						}
@@ -46,7 +44,7 @@ export default function () {
 				return [
 					<DisplayTeams/>,
 					<Fragment>
-						{ !isCreator()
+						{ loggedInPlayer.id !== creator.id
 							? <Banner message={ `Waiting for the game to Start` } className={ "mt-4" } isLoading/>
 							: <StartGame/>
 						}

@@ -1,12 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, ReactNode } from "react";
-import { getClassname, Size } from "../utils";
+import { getClassname } from "../utils";
 
 export interface ModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	title?: string;
-	size?: Size;
 	children?: ReactNode;
 }
 
@@ -18,12 +17,12 @@ export const useModal = ( props: Omit<ModalProps, "children"> ) => {
 	return { Render: ( { children }: { children: ReactNode } ) => <Modal { ...props }>{ children }</Modal> };
 };
 
-export function Modal( { isOpen, onClose, children, title, size }: ModalProps ) {
+export function Modal( { isOpen, onClose, children, title }: ModalProps ) {
 	return (
 		<Transition appear show={ isOpen } as={ Fragment }>
 			<Dialog
 				as="div"
-				className={ getClassname( "modal-root", { size: size || "md", withTitle: !!title } ) }
+				className={ getClassname( "modal-root", { withTitle: !!title } ) }
 				onClose={ onClose }
 			>
 				<div>

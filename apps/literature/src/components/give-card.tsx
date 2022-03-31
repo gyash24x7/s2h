@@ -4,11 +4,11 @@ import { trpc } from "../utils/trpc";
 import { useGame } from "../utils/game-context";
 
 export function GiveCard() {
-	const { game, currentMove } = useGame();
+	const { id: gameId, currentMove } = useGame();
 	const { mutateAsync, isLoading } = trpc.useMutation( "give-card" );
 
 	const giveCard = () => mutateAsync( {
-		gameId: game.id,
+		gameId,
 		cardToGive: currentMove?.askedFor!,
 		giveTo: currentMove?.askedById!
 	} );

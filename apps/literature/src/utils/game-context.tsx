@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import type { LitGame, LitMove, LitPlayer, LitTeam } from "@prisma/client";
+import type { CardSet, LitGame, LitGameStatus, LitMove, LitPlayer, LitTeam, User } from "@prisma/client";
 import { useAuth } from "./auth";
 import { useParams } from "react-router-dom";
 import { trpc } from "./trpc";
@@ -7,31 +7,76 @@ import { Flex } from "@s2h/ui/flex";
 import { Spinner } from "@s2h/ui/spinner";
 import { useMount } from "react-use";
 import { io } from "socket.io-client";
+import { CardHand } from "@s2h/utils";
 
-export interface IGameContext {
-	game: LitGame;
-	mePlayer: LitPlayer;
-	meTeam?: LitTeam;
+export class LitGameContext implements LitGame {
+	players: LitPlayer[];
+	teams: LitTeam[];
+	moves: LitMove[];
+	id: string;
+	code: string;
+	status: LitGameStatus;
+	playerCount: number;
+	createdById: string;
+	createdAt: Date;
+	updatedAt: Date;
+	loggedInUser?: User;
+
+	loggedInPlayer: LitPlayer;
+	creator: LitPlayer;
+	loggedInPlayerHand: CardHand;
+	askableCardSets: CardSet[];
+	callableCardSets: CardSet[];
+
+	myTeam: LitTeam;
+	oppositeTeam: LitTeam;
+	myTeamMembers: LitPlayer[];
+	oppositeTeamMembers: LitPlayer[];
+	askablePlayers: LitPlayer[];
+
 	currentMove?: LitMove;
+
+	constructor( game: LitGame, user?: User ) {
+		this.loggedInUser = user;
+		this.players = game.players;
+		this.teams = game.teams;
+		this.moves = game.moves.reverse();
+		this.id = game.id;
+		this.code = game.code;
+		this.status = game.status;
+		this.playerCount = game.playerCount;
+		this.createdAt = game.createdAt;
+		this.createdById = game.createdById;
+		this.updatedAt = game.updatedAt;
+
+		this.loggedInPlayer = this.players.find( player => player.userId === this.loggedInUser?.id )!;
+		this.creator = this.players.find( player => player.userId === this.createdById )!;
+		this.loggedInPlayerHand = CardHand.from( this.loggedInPlayer.hand );
+		this.askableCardSets = this.loggedInPlayerHand.getCardSetsInHand()
+			.filter( cardSet => this.loggedInPlayerHand.getCardsOfSet( cardSet ).length < 6 );
+		this.callableCardSets = this.loggedInPlayerHand.getCardSetsInHand()
+			.filter( cardSet => this.loggedInPlayerHand.getCardsOfSet( cardSet ).length <= 6 );
+
+		this.myTeam = this.teams[ 0 ]?.id === this.loggedInPlayer.teamId ? this.teams[ 0 ] : this.teams[ 1 ];
+		this.oppositeTeam = this.teams[ 0 ]?.id !== this.loggedInPlayer.teamId ? this.teams[ 0 ] : this.teams[ 1 ];
+		this.myTeamMembers = this.players.filter( player => player.teamId === this.loggedInPlayer.teamId );
+		this.oppositeTeamMembers = this.players.filter( player => player.teamId !== this.loggedInPlayer.teamId );
+		this.askablePlayers = this.oppositeTeamMembers.filter( player => CardHand.from( player.hand ).length() > 0 );
+	}
 }
 
-export const GameContext = createContext<IGameContext>( null! );
+const litGameContext = createContext<LitGameContext>( null! );
 
-export const useGame = () => useContext<IGameContext>( GameContext );
+export const useGame = () => useContext( litGameContext );
 
 export function GameProvider( props: { children: ReactNode } ) {
 	const { user } = useAuth();
-	const [ game, setGame ] = useState<LitGame>();
+	const [ ctx, setCtx ] = useState<LitGameContext>();
 	const params = useParams<{ gameId: string }>();
-
-	const mePlayer = game?.players.find( player => player.userId === user?.id );
-	const meTeam = game?.teams.find( team => team.id === mePlayer?.teamId );
 
 	const { isLoading } = trpc.useQuery( [ "get-game", { gameId: params.gameId! } ], {
 		onSuccess( data ) {
-			data.moves = data.moves.reverse();
-			console.log( data );
-			setGame( data );
+			setCtx( new LitGameContext( data, user ) );
 		}
 	} );
 
@@ -42,14 +87,13 @@ export function GameProvider( props: { children: ReactNode } ) {
 		} );
 
 		socket.on( params.gameId!, ( data: LitGame ) => {
-			data.moves = data.moves.reverse();
-			setGame( data );
+			setCtx( new LitGameContext( data, user ) );
 		} );
 
 		return () => socket.close();
 	} );
 
-	if ( isLoading || !game || !mePlayer ) {
+	if ( isLoading || !ctx ) {
 		return (
 			<Flex className={ "h-screen w-screen" } align={ "center" } justify={ "center" }>
 				<Spinner size={ "xl" } appearance={ "primary" }/>
@@ -58,8 +102,8 @@ export function GameProvider( props: { children: ReactNode } ) {
 	}
 
 	return (
-		<GameContext.Provider value={ { game, mePlayer, meTeam, currentMove: game.moves[ 0 ] } }>
+		<litGameContext.Provider value={ ctx }>
 			{ props.children }
-		</GameContext.Provider>
+		</litGameContext.Provider>
 	);
 }

@@ -16,15 +16,10 @@ import type { SelectOption } from "@s2h/ui/select/list-select";
 import { sentenceCase } from "change-case";
 
 export function CallSet() {
-	const { game, mePlayer } = useGame();
-
-	const myHand = CardHand.from( mePlayer.hand );
-	const myTeamPlayers = game.players.filter( player => player.teamId === mePlayer.teamId );
-	const cardSetPossibleValues = myHand.getCardSetsInHand()
-		.filter( cardSet => myHand.getCardsOfSet( cardSet ).length <= 6 );
+	const { id: gameId, loggedInPlayer, loggedInPlayerHand, myTeamMembers, callableCardSets } = useGame();
 
 	const mapDefaultValue: Record<string, PlayingCard[]> = {};
-	myTeamPlayers.forEach( player => mapDefaultValue[ player.id ] = [] );
+	myTeamMembers.forEach( player => mapDefaultValue[ player.id ] = [] );
 
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const [ selectedCardSet, setSelectedCardSet ] = useState<CardSet>();
@@ -44,9 +39,9 @@ export function CallSet() {
 
 	const handleCardSetSelect = ( cardSet: CardSet ) => {
 		setSelectedCardSet( cardSet );
-		setCardOptions( cardSetMap[ cardSet ].filter( card => !myHand.contains( card ) ) );
+		setCardOptions( cardSetMap[ cardSet ].filter( card => !loggedInPlayerHand.contains( card ) ) );
 		const newCardMap = { ...cardMap };
-		newCardMap[ mePlayer.id ] = myHand.getCardsOfSet( cardSet );
+		newCardMap[ loggedInPlayer.id ] = loggedInPlayerHand.getCardsOfSet( cardSet );
 		setCardMap( newCardMap );
 	};
 
@@ -57,7 +52,7 @@ export function CallSet() {
 	};
 
 	const handleConfirm = async () => {
-		const input: CallSetInput = { gameId: game.id, data: cardMap };
+		const input: CallSetInput = { gameId, data: cardMap };
 		const [ error ] = callSetInputStruct.validate( input );
 
 		if ( !error ) {
@@ -112,18 +107,21 @@ export function CallSet() {
 									<SingleSelect
 										value={ selectedCardSet }
 										onChange={ handleCardSetSelect }
-										options={ cardSetPossibleValues }
+										options={ callableCardSets }
 										renderOption={ renderCardSetOption }
 									/>
 								</Fragment>
 							)
 						},
-						...myTeamPlayers
-							.filter( player => CardHand.from( player.hand ).length() > 0 && player.id !== mePlayer.id )
+						...myTeamMembers
+							.filter( player => CardHand.from( player.hand ).length()
+								> 0
+								&& player.id
+								!== loggedInPlayer.id )
 							.map( ( player, i ) => {
 								const alreadySelectedCardHand = CardHand.from( [] );
 								for ( let j = 0; j < i; j++ ) {
-									alreadySelectedCardHand.addCard( ...cardMap[ myTeamPlayers[ j ].id ] );
+									alreadySelectedCardHand.addCard( ...cardMap[ myTeamMembers[ j ].id ] );
 								}
 								return (
 									{
