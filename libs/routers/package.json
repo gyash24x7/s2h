@@ -7,12 +7,12 @@
   "author": "Yash Gupta",
   "license": "ISC",
   "peerDependencies": {
-    "@prisma/client": "3.10.0"
+    "@prisma/client": "3.12.0"
   },
   "dependencies": {
     "@s2h/dtos": "workspace:*",
     "@s2h/utils": "workspace:*",
-    "@trpc/server": "9.20.2",
+    "@trpc/server": "9.22.0",
     "cuid": "2.1.8",
     "socket.io": "4.4.1"
   },

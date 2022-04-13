@@ -10,7 +10,7 @@ export type TrpcContext = {
 	namespace?: Namespace;
 }
 
-export type TrpcMiddleware = MiddlewareFunction<TrpcContext, TrpcContext>
+export type TrpcMiddleware = MiddlewareFunction<TrpcContext, TrpcContext, any>
 
 export type TrpcResolverOptions<I = any> = {
 	input: I;

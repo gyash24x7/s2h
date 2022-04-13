@@ -7,10 +7,10 @@
   "author": "Yash Gupta",
   "license": "ISC",
   "devDependencies": {
-    "@trpc/server": "9.20.2",
+    "@trpc/server": "9.22.0",
     "@s2h/config": "workspace:*",
     "@types/express": "4.17.13",
-    "@types/node": "17.0.19",
+    "@types/node": "17.0.23",
     "socket.io": "4.4.1"
   }
 }
