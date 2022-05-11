@@ -62,6 +62,8 @@ export class LitGameContext implements LitGame {
 		this.myTeamMembers = this.players.filter( player => player.teamId === this.loggedInPlayer.teamId );
 		this.oppositeTeamMembers = this.players.filter( player => player.teamId !== this.loggedInPlayer.teamId );
 		this.askablePlayers = this.oppositeTeamMembers.filter( player => CardHand.from( player.hand ).length() > 0 );
+
+		this.currentMove = this.moves[ 0 ];
 	}
 }
 

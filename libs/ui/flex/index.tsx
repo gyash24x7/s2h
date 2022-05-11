@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { ReactNode } from "react";
 import { getClassname } from "../utils";
 
 export interface FlexProps {
@@ -8,9 +8,10 @@ export interface FlexProps {
 	align?: "center" | "start" | "end" | "baseline" | "stretch";
 	direction?: "row" | "col" | "col-reverse" | "row-reverse";
 	wrap?: boolean;
+	children: ReactNode;
 }
 
-export const Flex: FC<FlexProps> = function ( props ) {
+export const Flex = function ( props: FlexProps ) {
 	const baseClassName = getClassname( "flex-root", {
 		justify: props.justify || "start",
 		align: props.align || "start",

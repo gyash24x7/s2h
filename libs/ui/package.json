@@ -12,6 +12,7 @@
     "react-use": "17.3.2"
   },
   "devDependencies": {
-    "@s2h/config": "workspace:*"
+    "@s2h/config": "workspace:*",
+    "@types/react": "18.0.9"
   }
 }

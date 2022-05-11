@@ -7,10 +7,10 @@ interface BaseStackProps {
 	className?: string;
 	centered?: boolean;
 	stackItemClassName?: string;
+	children: ReactNode;
 }
 
-export interface VStackProps extends BaseStackProps {
-}
+export interface VStackProps extends BaseStackProps {}
 
 export interface HStackProps extends BaseStackProps {
 	wrap?: boolean;
@@ -21,7 +21,7 @@ function getValidChildren( children: ReactNode ) {
 	return Children.toArray( children ).filter( ( child ) => isValidElement( child ) ) as ReactElement[];
 }
 
-export const HStack: FC<HStackProps> = function ( props ) {
+export const HStack = function ( props: HStackProps ) {
 	const validChildren = getValidChildren( props.children );
 	return (
 		<Flex

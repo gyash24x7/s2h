@@ -76,7 +76,7 @@ export function AskCard() {
 			<Flex justify={ "center" }>
 				<Button buttonText={ "Ask Card" } appearance={ "alt" } onClick={ openModal }/>
 			</Flex>
-			<Modal isOpen={ isModalOpen } onClose={ closeModal } size={ "sm" }>
+			<Modal isOpen={ isModalOpen } onClose={ closeModal }>
 				<Stepper
 					steps={ [
 						{

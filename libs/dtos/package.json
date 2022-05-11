@@ -7,7 +7,7 @@
   "author": "Yash Gupta",
   "license": "ISC",
   "peerDependencies": {
-    "@prisma/client": "3.13.0"
+    "@prisma/client": "3.14.0"
   },
   "dependencies": {
     "@s2h/utils": "workspace:*",
